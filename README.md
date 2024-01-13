@@ -5,6 +5,7 @@ Guess the minecraft ingame location based off a 360 panorama view and use the ma
 a game has 5 rounds. 5000 score per round max, the closer the more points. (count in chunks?)  
 If the guess is within 1-2 chunks it should be considered perfect.  
 
+achivements?
 
 ## /
 Should actually be a home page. no weird state changes. if you go `/` you always get the home page.

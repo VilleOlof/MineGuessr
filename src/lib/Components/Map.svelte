@@ -2,18 +2,17 @@
 	import MapCore from './MapCore.svelte';
 	import * as THREE from 'three';
 	import { current_pos } from '$lib';
-	import { BlueMapApp, PoiMarker } from '$lib/BlueMap/BlueMap';
+	import { BlueMapApp } from '$lib/BlueMap/BlueMap';
 
 	let show_map_force: boolean = true;
-	let pos_marker: PoiMarker | null = null;
 
 	let bluemap: BlueMapApp | null = null;
 
 	function UpdatePOIMarker(map: BlueMapApp, pos: THREE.Vector3) {
 		map.popupMarkerSet.updateMarkerFromData('current_pos', {
 			position: { x: pos.x, y: pos.y, z: pos.z },
-			anchor: { x: 0, y: 0 },
-			iconAnchor: { x: 0, y: 0 },
+			anchor: { x: 0.5, y: 0.5 },
+			iconAnchor: { x: 0.5, y: 0.5 },
 			label: '',
 			detail: '',
 			sorting: 1000,
@@ -59,7 +58,7 @@
 	}
 </script>
 
-<div class="mapcontainer absolute bottom-0 right-0 flex aspect-video h-2/4 w-auto flex-row-reverse">
+<div class="mapcontainer absolute bottom-0 right-0 flex aspect-video h-auto w-2/6 flex-row-reverse">
 	<div class="mapWrapper h-full w-full" class:hidden={!show_map_force}>
 		<MapCore
 			bind:bluemap
@@ -98,29 +97,8 @@
 	</button>
 </div>
 
-<h1 class="absolute left-0 top-0 m-2 rounded-md bg-gray-900 p-2 text-4xl font-bold text-cyan-400">
-	{#if $current_pos}
-		{$current_pos.x}, {$current_pos.y}, {$current_pos.z}
-	{:else}
-		No position
-	{/if}
-</h1>
-
 <style>
 	.hidden {
 		display: none;
-	}
-
-	:global(.current_pos) {
-		background-color: rgb(17 24 39);
-		padding: 0.5rem;
-		font-size: 1.5rem;
-		border-radius: 0.5rem;
-	}
-
-	:global(.bm-marker-poi-icon) {
-		filter: invert(70%) sepia(30%) saturate(2641%) hue-rotate(148deg) brightness(104%) contrast(87%);
-		width: 100%;
-		height: 100%;
 	}
 </style>

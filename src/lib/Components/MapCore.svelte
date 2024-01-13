@@ -2,6 +2,7 @@
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { BlueMapApp } from '$lib/BlueMap/BlueMapApp';
 	import { loadLanguageSettings } from '$lib/i18n';
+	import { curr_bluemap } from '$lib';
 
 	let map_container: HTMLDivElement;
 	export let bluemap: BlueMapApp | null = null;
@@ -13,6 +14,7 @@
 			await loadLanguageSettings();
 
 			await bluemap.load();
+			bluemap.setFlatView(0);
 
 			map_container.addEventListener('bluemapMapInteraction', (evt) => {
 				dispatch('mapInteraction', {
@@ -20,6 +22,8 @@
 					detail: evt.detail
 				});
 			});
+
+			$curr_bluemap = bluemap;
 		} catch (e) {
 			console.error(e);
 		}
