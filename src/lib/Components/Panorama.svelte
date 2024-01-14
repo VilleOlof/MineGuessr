@@ -45,8 +45,10 @@
 	cameraControls.touches.two = CameraControls.ACTION.TOUCH_ZOOM_TRUCK;
 	cameraControls.saveState();
 
-	onMount(() => {
+	onMount(async () => {
 		three_wrapper.appendChild(renderer.domElement);
+
+		document.getElementById('loading')?.remove();
 
 		let stats = new Stats();
 		// document.body.appendChild(stats.dom);
@@ -73,4 +75,10 @@
 	});
 </script>
 
+<div
+	id="loading"
+	class="loadingContainer absolute left-0 top-0 flex h-full w-full items-center justify-center"
+>
+	<p class="text-5xl text-cyan-400">Laddar panorama screenshot...</p>
+</div>
 <div id="threewrapper" bind:this={three_wrapper}></div>

@@ -31,9 +31,13 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@types/canvas-confetti": "^1.6.4",
+		"@types/node": "^20.11.0",
 		"camera-controls": "^2.7.3",
+		"canvas-confetti": "^1.9.2",
 		"hammerjs": "^2.0.8",
 		"hocon-parser": "^1.0.1",
+		"svelte-persisted-store": "^0.9.0",
 		"three": "^0.160.0",
 		"vue": "^3.4.8",
 		"vue-i18n": "^9.9.0"

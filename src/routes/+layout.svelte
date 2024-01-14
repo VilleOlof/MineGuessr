@@ -13,7 +13,7 @@
 </svelte:head>
 
 <main
-	class="siteWrapper font-body no-scrollbar flex h-screen w-screen flex-col items-center justify-center overflow-hidden bg-gray-900 text-gray-100"
+	class="siteWrapper no-scrollbar flex h-screen w-screen flex-col items-center justify-center overflow-hidden bg-gray-900 font-Minecraft text-gray-100"
 >
 	<slot />
 </main>

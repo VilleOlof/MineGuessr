@@ -3,50 +3,78 @@
 	import Panorama from '$lib/Components/Panorama.svelte';
 	import { Game } from '$lib/Game';
 	import type { PageData } from './$types';
-	import { current_pos } from '$lib';
-	import * as THREE from 'three';
+	import Endscreen from '$lib/Components/Endscreen.svelte';
+	import { writable, type Writable } from 'svelte/store';
+	import confetti from 'canvas-confetti';
+	import GuessButton from '$lib/Components/GuessButton.svelte';
+	import XPBar from '$lib/Components/XPBar.svelte';
 
 	export let data: PageData;
 
 	let game = new Game(data.random_locations);
 	let rounds = game.rounds;
 	let curr_round = game.current_round;
+	let game_finished = game.game_finished;
 
-	rounds.subscribe(() => console.log($rounds));
+	let show_end_map: Writable<boolean> = writable(false);
+
+	addEventListener('perfect_guess', (event: Event) => {
+		confetti({
+			particleCount: 150,
+			spread: 100,
+			origin: {
+				y: 0.7
+			},
+			drift: 0.2
+		});
+	});
 </script>
 
-<Panorama index={0} />
+<!-- Just dont show the panorama when the map is in fullscreen, no need to load it -->
+{#if !$game_finished}
+	<!--Need key since it doesnt refresh the panorama otherwise-->
+	{#key $curr_round}
+		<Panorama index={$rounds[$curr_round].panorama_id} />
+	{/key}
+{/if}
 
-<Map />
+<XPBar {game} />
+
+<a
+	class="rounds absolute left-0 top-0 aspect-square h-auto w-16 transition-transform hover:-rotate-6 hover:scale-110 active:scale-90 sm:w-24"
+	title="Tillbaka till menyn"
+	href="/"
+	class:ontop={$show_end_map}
+>
+	<img src="/Earth.webp" alt="Tillbaka" />
+</a>
 
 <div
-	class="absolute left-0 top-0 m-2 flex flex-col gap-2 rounded-md bg-gray-900 p-2 text-4xl font-bold text-cyan-400"
+	class="topbar pointer-events-none absolute bottom-0 left-0 hidden w-full items-start justify-center p-2 lg:bottom-0 lg:flex"
 >
-	<p>Round: {$curr_round + 1}</p>
-
-	<p>
-		{#if $current_pos}
-			{$current_pos.x}, {$current_pos.y}
-		{:else}
-			No position
-		{/if}
-	</p>
-
-	<div class="rounds flex flex-col gap-2 border border-cyan-200">
-		{#each $rounds as round, i}
-			{#if round.distance != 0}
-				<p>Round: {i + 1}, score: {round.score}</p>
-			{/if}
-		{/each}
-	</div>
-
-	{#if $rounds[$curr_round].distance == 0}
-		<button on:click={() => game.submit_guess(new THREE.Vector2($current_pos?.x, $current_pos?.z))}
-			>Submit guess</button
-		>
-	{:else}
-		<button on:click={() => game.next_round()}>Next round</button>
-	{/if}
+	<GuessButton {game} />
 </div>
 
-<p class="absolute bottom-0 left-0 m-1 text-white/80">{game.game_id}</p>
+{#if $game_finished && !$show_end_map}
+	<Endscreen {game} bind:show_end_map={$show_end_map} />
+{/if}
+
+<Map fullscreen={$game_finished} game_instance={game}>
+	<GuessButton {game} />
+</Map>
+
+<p class="absolute bottom-0 left-0 m-1 text-sm text-white/80 md:text-base" title="Spel id">
+	{game.game_id}
+</p>
+
+<style>
+	:global(.xp-finished) {
+		background-color: rgb(149, 204, 101);
+	}
+	:global(.xp-not_finished) {
+		background-color: rgb(55 65 81);
+	}
+	:global(.ontop) {
+		z-index: 10;
+	}
+</style>

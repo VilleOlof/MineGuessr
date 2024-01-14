@@ -1,8 +1,9 @@
-import { curr_bluemap, current_pos, type location_metadata } from "$lib";
+import { UpdatePOIMarker, curr_bluemap, current_pos, type location_metadata } from "$lib";
 import { get, writable, type Writable } from "svelte/store";
 import * as THREE from "three";
+import { Stats } from "./Stats";
 
-export module Game {
+export module GameModule {
     export type Round = {
         location: THREE.Vector2;
         guess_location: THREE.Vector2;
@@ -10,6 +11,7 @@ export module Game {
         time: number;
         score: number;
         panorama_id: number;
+        finished: boolean;
     }
 }
 
@@ -17,8 +19,10 @@ export class Game {
 
     game_id: string;
 
-    rounds: Writable<Game.Round[]> = writable([]);
+    rounds: Writable<GameModule.Round[]> = writable([]);
     current_round: Writable<number> = writable(0);
+
+    game_finished: Writable<boolean> = writable(false);
 
     private static markers_to_remove: string[] = ["guess_line", "current_pos", "correct_pos"];
 
@@ -27,6 +31,11 @@ export class Game {
 
     constructor(random_locations: location_metadata[]) {
         this.game_id = uuidv4();
+
+        Stats.update((stats) => {
+            stats.games_played += 1;
+            return stats;
+        });
 
         // Init rounds
         this.rounds.update(() => random_locations.map((loc) => {
@@ -37,13 +46,15 @@ export class Game {
                 time: 0,
                 score: 0,
                 panorama_id: loc.id,
+                finished: false
             };
         }));
+        console.log(get(this.rounds));
 
         console.log("Game created with id: " + this.game_id);
     }
 
-    get_current_round(): Game.Round {
+    get_current_round(): GameModule.Round {
         let index = get(this.current_round);
         let rounds = get(this.rounds);
 
@@ -51,23 +62,66 @@ export class Game {
     }
 
     submit_guess(guess: THREE.Vector2) {
+        if (get(current_pos) === null) {
+            return;
+        }
+
         let current_round = this.get_current_round();
-        console.log("Guess submitted: " + guess.x + ", " + guess.y);
 
         current_round.guess_location = guess;
         current_round.distance = current_round.location.distanceTo(guess);
         current_round.score = this.calculate_score(current_round.distance);
+        current_round.finished = true;
+
+        if (current_round.distance === 0) {
+            dispatchEvent(new CustomEvent("perfect_guess", { detail: current_round }));
+        }
 
         this.rounds.update((rounds) => {
             rounds[get(this.current_round)] = current_round;
             return rounds;
         });
 
+        Stats.update((stats) => {
+            stats.total_score += current_round.score;
+            stats.total_distance += current_round.distance;
+
+            stats.average_score = stats.total_score / get(this.rounds).length;
+            stats.average_distance = stats.total_distance / get(this.rounds).length;
+
+            if (current_round.score > stats.best_score) {
+                stats.best_score = current_round.score;
+            }
+
+            if (current_round.score < stats.worst_score) {
+                stats.worst_score = current_round.score;
+            }
+            return stats;
+        });
+
         this.draw_line_to_guess(current_round.location, guess);
         this.place_correct_marker(current_round.location);
+
+        this.move_camera_to_pos(current_round.location);
     }
 
     next_round() {
+        if (get(this.game_finished)) return;
+
+        // Check if game is finished
+        if (get(this.current_round) >= get(this.rounds).length - 1) {
+            this.game_finished.update(() => true);
+
+            this.clear_markers();
+
+            Stats.update((stats) => {
+                stats.games_finished += 1;
+                return stats;
+            });
+
+            return;
+        }
+
         this.current_round.update((i) => {
             let new_i = i + 1;
             if (new_i >= get(this.rounds).length) {
@@ -89,17 +143,22 @@ export class Game {
     private calculate_score(distance: number): number {
         // if the distanceis below 16 meters, the score is a perfect 5000.
         // and for each meter after that, the score is reduced by 0.25.
+        const MAX_SCORE = 5000;
+        const MIN_DISTANCE = 16;
 
-        let score = 5000 - (distance - 16) * 0.25;
+        let score = MAX_SCORE - (distance - MIN_DISTANCE) * 0.25;
 
         if (score < 0) {
             score = 0;
+        }
+        else if (score > MAX_SCORE) {
+            score = MAX_SCORE;
         }
 
         return Math.round(score);
     }
 
-    draw_line_to_guess(correct_loc: THREE.Vector2, guess_loc: THREE.Vector2) {
+    draw_line_to_guess(correct_loc: THREE.Vector2, guess_loc: THREE.Vector2, index?: number) {
         let map = get(curr_bluemap);
 
         if (map === null) {
@@ -110,7 +169,7 @@ export class Game {
             (correct_loc.x + guess_loc.x) / 2,
             (correct_loc.y + guess_loc.y) / 2
         );
-        map.popupMarkerSet.updateMarkerFromData('guess_line', {
+        map.popupMarkerSet.updateMarkerFromData(`guess_line${index !== undefined ? `_${index}` : ''}`, {
             position: { x: mid_loc.x, y: Game.MARKER_Y_OFFSET, z: mid_loc.y },
             label: '',
             detail: '',
@@ -120,23 +179,36 @@ export class Game {
             ],
             link: '',
             newTab: false,
-            depthTest: false,
+            depthTest: true,
             lineWidth: 5,
-            lineColor: { r: 255, g: 0, b: 0, a: 1 },
+            lineColor: { r: 255, g: 8, b: 8, a: 1 },
             minDistance: 0,
             maxDistance: 10000000,
             type: 'line'
         });
     }
 
-    place_correct_marker(correct_loc: THREE.Vector2) {
+    draw_all_guess_lines() {
+        let rounds = get(this.rounds);
+
+        for (let i = 0; i < rounds.length; i++) {
+            let round = rounds[i];
+            this.draw_line_to_guess(round.location, round.guess_location, i);
+            this.place_correct_marker(round.location, i);
+
+            let bluemap = get(curr_bluemap);
+            if (bluemap) UpdatePOIMarker(bluemap, new THREE.Vector3(round.guess_location.x, Game.MARKER_Y_OFFSET, round.guess_location.y), i);
+        }
+    }
+
+    place_correct_marker(correct_loc: THREE.Vector2, index?: number) {
         let map = get(curr_bluemap);
 
         if (map === null) {
             throw new Error("BlueMap is not initialized");
         }
 
-        map.popupMarkerSet.updateMarkerFromData('correct_pos', {
+        map.popupMarkerSet.updateMarkerFromData(`correct_pos${index !== undefined ? `_${index}` : ''}`, {
             position: { x: correct_loc.x, y: Game.MARKER_Y_OFFSET, z: correct_loc.y },
             anchor: { x: Game.MARKER_CENTER_OFFSET, y: Game.MARKER_CENTER_OFFSET },
             iconAnchor: { x: Game.MARKER_CENTER_OFFSET, y: Game.MARKER_CENTER_OFFSET },
@@ -162,9 +234,21 @@ export class Game {
 
         // Remove markers
         for (let marker_id of Game.markers_to_remove) {
+
+            // Remove clean markers
             let marker = map.popupMarkerSet.markers.get(marker_id);
             if (marker) {
                 map.popupMarkerSet.remove(marker);
+            }
+
+            // Remove round specific tagged markers
+            for (let round_id of get(this.rounds)) {
+                let marker_name = `${marker_id}_${round_id}`;
+
+                let marker = map.popupMarkerSet.markers.get(marker_name);
+                if (marker) {
+                    map.popupMarkerSet.remove(marker);
+                }
             }
         }
     }
@@ -177,6 +261,30 @@ export class Game {
         }
 
         map.resetCamera();
+    }
+
+    move_camera_to_pos(pos: THREE.Vector2) {
+        let map = get(curr_bluemap);
+
+        if (map === null) {
+            throw new Error("BlueMap is not initialized");
+        }
+
+        let map_viewer = map.mapViewer.map;
+        let controls = map.mapViewer.controlsManager;
+
+        if (map_viewer) {
+            controls.position.set(pos.x, 0, pos.y);
+            controls.distance = 500;
+            controls.angle = 0;
+            controls.rotation = 0;
+            controls.tilt = 0;
+            controls.ortho = 0;
+        }
+        map.setFlatView(0);
+
+        controls.controls = map.mapControls;
+
     }
 }
 

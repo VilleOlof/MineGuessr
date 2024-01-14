@@ -282,10 +282,8 @@ export class BlueMapApp {
         }
 
         controls.controls = this.mapControls;
-        this.appState.controls.state = "perspective";
-        if (this.settings.defaultToFlatView) {
-            this.setFlatView();
-        }
+        this.appState.controls.state = "flat";
+        this.setFlatView();
 
         this.updatePageAddress();
     }

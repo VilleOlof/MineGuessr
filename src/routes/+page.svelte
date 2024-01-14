@@ -2,6 +2,7 @@
 	import MenuInstruction from '$lib/Components/MenuInstruction.svelte';
 	import Button from '$lib/Components/Button.svelte';
 	import PopupWrapper from '$lib/Components/PopupWrapper.svelte';
+	import Stats from '$lib/Components/Stats.svelte';
 
 	let show_info = false;
 	let show_stats = false;
@@ -16,10 +17,10 @@
 			alt="Minecraft Earth"
 			class="h-full transition-transform hover:-translate-y-4 hover:-rotate-12"
 		/>
-		<h1 class="text-5xl font-bold md:text-6xl lg:text-7xl">90gQ Guessr</h1>
+		<h1 class="text-5xl font-bold md:text-6xl xl:text-7xl">90gQ Guessr</h1>
 	</header>
 
-	<p class="text-2xl">
+	<p class="text-lg md:text-2xl">
 		Gissa platsen från Minecraft servern <a
 			href="https://90gq.se"
 			target="_blank"
@@ -29,37 +30,23 @@
 	</p>
 
 	<div class="instructions flex flex-col items-start justify-start gap-1">
-		<MenuInstruction text="Text that somehow easily describes the game" />
-		<MenuInstruction text="Text that somehow easily describes the game" />
-		<MenuInstruction text="Text that somehow easily describes the game" />
-		<MenuInstruction text="Text that somehow easily describes the game" />
-		<MenuInstruction text="Text that somehow easily describes the game" />
+		<MenuInstruction text="Du kommer få en slumpmässig plats" />
+		<MenuInstruction text="Ditt mål är att använda kartan för att gissa rätt" />
+		<MenuInstruction text="Desto nämre platsen, desto mer poäng får du!" />
+		<MenuInstruction text="Exakt som riktiga GeoGuessr fast för 90gQ!" />
 	</div>
 
 	<div class="buttons flex items-center justify-between gap-4">
-		<Button>Spela</Button>
+		<Button on:click={() => (location.href = '/play')}>Spela</Button>
 
-		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			height="24"
-			viewBox="0 -960 960 960"
-			width="24"
-			fill="currentColor"
-			role="button"
-			tabindex="0"
-			class="c-shadow aspect-square h-10 w-10 cursor-pointer bg-gray-700 p-2 shadow-cyan-400 transition-transform hover:-translate-x-1 hover:-translate-y-1 active:scale-90"
-			on:click={() => (show_info = true)}
-			><path
-				d="M424-320q0-81 14.5-116.5T500-514q41-36 62.5-62.5T584-637q0-41-27.5-68T480-732q-51 0-77.5 31T365-638l-103-44q21-64 77-111t141-47q105 0 161.5 58.5T698-641q0 50-21.5 85.5T609-475q-49 47-59.5 71.5T539-320H424Zm56 240q-33 0-56.5-23.5T400-160q0-33 23.5-56.5T480-240q33 0 56.5 23.5T560-160q0 33-23.5 56.5T480-80Z"
-			/></svg
-		>
+		<Button on:click={() => (show_info = true)}>?</Button>
 	</div>
 
-	<div class="credits flex flex-col items-center text-gray-400">
+	<div class="credits flex flex-col items-center text-gray-400 md:text-lg">
 		<p>
 			Karta från <a
 				href="https://map.90gq.se"
+				target="_blank"
 				class="font-bold text-cyan-600 underline underline-offset-2 transition-colors hover:text-cyan-400"
 				>map.90gq.se</a
 			>
@@ -67,6 +54,7 @@
 		<p>
 			Panorama screenshots från <a
 				href="https://www.twitch.tv/liiindaa_"
+				target="_blank"
 				class="font-bold text-cyan-600 underline underline-offset-2 transition-colors hover:text-cyan-400"
 				>Liiindaa</a
 			>
@@ -99,6 +87,6 @@
 	</PopupWrapper>
 {:else if show_stats}
 	<PopupWrapper title="Statistik" on:click={() => (show_stats = false)}>
-		<!-- <Stats /> -->
+		<Stats />
 	</PopupWrapper>
 {/if}

@@ -12,11 +12,10 @@ export function get_random_locations(amount: number, possible_locations: locatio
         let random_location = possible_locations[random_index];
 
         // Check if location is already in the array
-        // TODO UNCOMMENT THIS WHEN WE GOT loc_metadata.json DATA
-        // if (loc_metadata.find((loc) => loc.id === random_location.id)) {
-        //     i--;
-        //     continue;
-        // }
+        if (loc_metadata.find((loc) => loc.id === random_location.id)) {
+            i--;
+            continue;
+        }
 
         loc_metadata.push({
             id: random_location.id,
