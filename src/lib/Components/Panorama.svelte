@@ -5,19 +5,28 @@
 	import Stats from 'three/addons/libs/stats.module.js';
 
 	let three_wrapper: HTMLDivElement;
+	let loading: boolean = true;
 
 	export let index: number;
+	$: ChangeBackground(index);
 
-	let background = new THREE.CubeTextureLoader()
-		.setPath(`/locations/${index}/`)
-		.load([
-			'panorama_1.png',
-			'panorama_3.png',
-			'panorama_4.png',
-			'panorama_5.png',
-			'panorama_0.png',
-			'panorama_2.png'
-		]);
+	function ChangeBackground(index: number) {
+		let ext = 'webp';
+		loading = true;
+		let background = new THREE.CubeTextureLoader()
+			.setPath(`/locations/${index}/`)
+			.load([
+				`panorama_1.${ext}`,
+				`panorama_3.${ext}`,
+				`panorama_4.${ext}`,
+				`panorama_5.${ext}`,
+				`panorama_0.${ext}`,
+				`panorama_2.${ext}`
+			]);
+
+		loading = false;
+		scene.background = background;
+	}
 
 	CameraControls.install({ THREE: THREE });
 
@@ -27,7 +36,7 @@
 	const clock = new THREE.Clock();
 
 	const scene = new THREE.Scene();
-	scene.background = background;
+	ChangeBackground(index);
 
 	const camera = new THREE.PerspectiveCamera(60, width / height, 0.01, 100);
 	camera.position.set(0, 0, 1e-5);
@@ -48,7 +57,7 @@
 	onMount(async () => {
 		three_wrapper.appendChild(renderer.domElement);
 
-		document.getElementById('loading')?.remove();
+		loading = false;
 
 		let stats = new Stats();
 		// document.body.appendChild(stats.dom);
@@ -75,10 +84,11 @@
 	});
 </script>
 
-<div
-	id="loading"
-	class="loadingContainer absolute left-0 top-0 flex h-full w-full items-center justify-center"
->
-	<p class="text-5xl text-cyan-400">Laddar panorama screenshot...</p>
-</div>
+{#if loading}
+	<div
+		class="loadingContainer absolute left-0 top-0 flex h-full w-full items-center justify-center"
+	>
+		<p class="text-5xl text-cyan-400">Laddar panorama screenshot...</p>
+	</div>
+{/if}
 <div id="threewrapper" bind:this={three_wrapper}></div>

@@ -32,10 +32,7 @@
 
 <!-- Just dont show the panorama when the map is in fullscreen, no need to load it -->
 {#if !$game_finished}
-	<!--Need key since it doesnt refresh the panorama otherwise-->
-	{#key $curr_round}
-		<Panorama index={$rounds[$curr_round].panorama_id} />
-	{/key}
+	<Panorama bind:index={$rounds[$curr_round].panorama_id} />
 {/if}
 
 <XPBar {game} />
