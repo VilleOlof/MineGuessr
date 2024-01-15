@@ -57,7 +57,7 @@ fn convert(image_path: &Path, out_dir: &PathBuf, out_file: &Path) {
 
     let encoder: Encoder = Encoder::from_image(&old_img).expect("Failed to create encoder");
 
-    let webp: WebPMemory = encoder.encode(90f32);
+    let webp: WebPMemory = encoder.encode(90.0);
 
     fs::create_dir_all(&out_dir).unwrap();
 

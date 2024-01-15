@@ -2,6 +2,8 @@ import { writable, type Writable } from "svelte/store";
 import * as THREE from "three";
 import type { BlueMapApp } from "./BlueMap/BlueMapApp";
 
+export const MAP_URL = "http://127.0.0.1:40401";
+
 export const current_pos: Writable<THREE.Vector3 | null> = writable(null);
 export let curr_bluemap: Writable<BlueMapApp | null> = writable(null);
 

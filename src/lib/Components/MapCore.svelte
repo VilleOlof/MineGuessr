@@ -15,6 +15,8 @@
 
 			await bluemap.load();
 			bluemap.setFlatView(0);
+			// Disable loading of hires tiles
+			bluemap.mapViewer.data.loadedHiresViewDistance = 0;
 
 			map_container.addEventListener('bluemapMapInteraction', (evt) => {
 				dispatch('mapInteraction', {

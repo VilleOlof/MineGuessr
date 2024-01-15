@@ -33,3 +33,53 @@ metadata should just be like an array of objects, and each object has the locati
 
 photos should have no resourcepacks, no mods that effect visuals, taken on main acc so no ones sus.  
 
+# Setup & Start
+
+
+### **Website**
+```bash
+# This is to install npm packages for the website itself
+npm run install
+```
+
+```bash
+# Run the website in dev mode
+npm run dev
+```
+```bash
+# Run the website in production
+npm run build
+node build
+```
+
+*Insert information regarding `./src/lib/server/loc_metadata.json` and `./static/locations/*/*.webp`*
+
+### **Map Proxy**
+> [!IMPORTANT]  
+> The Map Proxy needs to be running for the websites map to work!
+
+```bash
+cd /map_proxy # Directory for the map proxy
+cargo build --release # Build the binary
+
+# Start it
+./target/release/map_proxy.exe
+```
+The Map Proxy also needs a `Config.toml` file with the following content:
+```toml
+map_url = "https://map.90gq.se"
+port = 40401 # Be sure this matches ./src/lib/index.ts:5
+```
+
+### **Image Converter**
+*This is only used in development to convert panorama pngs to webp*
+
+```bash
+cd /image_converter # Directory for the converter
+cargo build --release # Build the binary
+
+# Run it with an input and output arg
+./target/release/image_converter.exe -i "./conversions/in" -o "/conversions/out"
+```
+
+

@@ -11,5 +11,9 @@ vite.config.ts.timestamp-*
 
 /static/locations
 /src/lib/server/loc_metadata.json
+
 /image_converter/target
 /image_converter/conversions
+
+/map_proxy/target
+/map_proxy/Config.toml

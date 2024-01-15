@@ -37,7 +37,7 @@ import { i18n, setLanguage } from "../i18n";
 import { PlayerMarkerManager } from "./markers/PlayerMarkerManager";
 import { NormalMarkerManager } from "./markers/NormalMarkerManager";
 import { reactive } from "vue";
-import { current_pos } from "$lib";
+import { MAP_URL, current_pos } from "$lib";
 import { get } from "svelte/store";
 
 export class BlueMapApp {
@@ -88,7 +88,7 @@ export class BlueMapApp {
 
         this.lastCameraMove = 0;
 
-        this.dataUrl = "https://map.90gq.se/maps/";
+        this.dataUrl = `${MAP_URL}/maps/`;
 
         this.mainMenu = reactive(new MainMenu());
 
@@ -333,7 +333,7 @@ export class BlueMapApp {
         return new Promise((resolve, reject) => {
             let loader = new FileLoader();
             loader.setResponseType("json");
-            loader.load("https://map.90gq.se/" + "settings.json?" + generateCacheHash(),
+            loader.load(MAP_URL + "/settings.json?" + generateCacheHash(),
                 resolve,
                 () => { },
                 () => reject("Failed to load the settings.json!")
