@@ -69,7 +69,11 @@ The Map Proxy also needs a `Config.toml` file with the following content:
 ```toml
 map_url = "https://map.90gq.se"
 port = 40401 # Be sure this matches ./src/lib/index.ts:5
+redis_url = "redis://localhost:6379/"
+cache_time = 3600 # How long caches stay valid in redis
 ```
+
+*Do note that the map proxy needs a redis server to connect to*
 
 ### **Image Converter**
 *This is only used in development to convert panorama pngs to webp*

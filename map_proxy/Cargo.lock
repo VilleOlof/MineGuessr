@@ -593,6 +593,8 @@ dependencies = [
  "redis",
  "tokio",
  "tower-http",
+ "tower-layer",
+ "tower-service",
 ]
 
 [[package]]
