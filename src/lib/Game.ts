@@ -27,7 +27,7 @@ export class Game {
     private static markers_to_remove: string[] = ["guess_line", "current_pos", "correct_pos"];
 
     private static MARKER_Y_OFFSET = 200;
-    private static MARKER_CENTER_OFFSET = 0.5;
+    private static MARKER_CENTER_OFFSET = 0;
 
     constructor(random_locations: location_metadata[]) {
         this.game_id = uuidv4();
@@ -217,13 +217,12 @@ export class Game {
 
         map.popupMarkerSet.updateMarkerFromData(`correct_pos${index !== undefined ? `_${index}` : ''}`, {
             position: { x: correct_loc.x, y: Game.MARKER_Y_OFFSET, z: correct_loc.y },
-            anchor: { x: Game.MARKER_CENTER_OFFSET, y: Game.MARKER_CENTER_OFFSET },
-            iconAnchor: { x: Game.MARKER_CENTER_OFFSET, y: Game.MARKER_CENTER_OFFSET },
+            anchor: { x: 18.5, y: 36.5 },
             label: '',
             detail: '',
             sorting: 1000,
             listed: false,
-            icon: 'correct.svg',
+            icon: 'pin-red.svg',
             classes: ['correct_pos'],
             minDistance: 0,
             maxDistance: 10000000,
@@ -309,7 +308,7 @@ export class Game {
         };
 
         try {
-            await fetch(`${location.origin}/stats/${this.game_id}`, {
+            await fetch(`/stats/${this.game_id}`, {
                 method: "POST",
                 body: JSON.stringify(stats)
             });

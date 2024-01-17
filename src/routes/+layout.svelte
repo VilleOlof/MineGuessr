@@ -1,4 +1,5 @@
 <script>
+	import { PUBLIC_ORIGIN } from '$env/static/public';
 	import '../app.pcss';
 </script>
 
@@ -7,8 +8,8 @@
 
 	<meta property="og:title" content="90gQ Guessr" />
 	<meta property="og:description" content="Liknande GeoGuessr, fast för minecraft servern 90gQ" />
-	<!-- <meta property="og:image" content="{PUBLIC_URL}/favicon.png" />
-	<meta property="og:url" content={PUBLIC_URL} /> -->
+	<meta property="og:image" content="{PUBLIC_ORIGIN}/Earth.webp" />
+	<meta property="og:url" content={PUBLIC_ORIGIN} />
 	<meta content="#22c55e" name="theme-color" />
 </svelte:head>
 
@@ -30,14 +31,14 @@
 	}
 
 	:global(.current_pos, .correct_pos) {
-		background-color: rgb(17 24 39);
+		/* background-color: rgb(17 24 39); */
 		padding: 0.5rem;
 		font-size: 1.5rem;
 		border-radius: 0.5rem;
 	}
 
 	:global(.current_pos > img) {
-		filter: invert(70%) sepia(30%) saturate(2641%) hue-rotate(148deg) brightness(104%) contrast(87%);
+		/* filter: invert(70%) sepia(30%) saturate(2641%) hue-rotate(148deg) brightness(104%) contrast(87%); */
 		width: 100%;
 		height: 100%;
 	}

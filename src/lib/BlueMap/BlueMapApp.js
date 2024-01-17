@@ -32,13 +32,12 @@ import { alert, animate, EasingFunctions, generateCacheHash } from "./util/Utils
 import { MainMenu } from "./MainMenu";
 import { PopupMarker } from "./PopupMarker";
 import { MarkerSet } from "./markers/MarkerSet";
-import { getLocalStorage, round, setLocalStorage } from "./Utils";
+import { getLocalStorage, setLocalStorage } from "./Utils";
 import { i18n, setLanguage } from "../i18n";
 import { PlayerMarkerManager } from "./markers/PlayerMarkerManager";
 import { NormalMarkerManager } from "./markers/NormalMarkerManager";
 import { reactive } from "vue";
-import { MAP_URL, current_pos } from "$lib";
-import { get } from "svelte/store";
+import { PUBLIC_MAP_URL } from "$env/static/public";
 
 export class BlueMapApp {
 
@@ -88,7 +87,7 @@ export class BlueMapApp {
 
         this.lastCameraMove = 0;
 
-        this.dataUrl = `${MAP_URL}/maps/`;
+        this.dataUrl = `${PUBLIC_MAP_URL}/maps/`;
 
         this.mainMenu = reactive(new MainMenu());
 
@@ -333,7 +332,7 @@ export class BlueMapApp {
         return new Promise((resolve, reject) => {
             let loader = new FileLoader();
             loader.setResponseType("json");
-            loader.load(MAP_URL + "/settings.json?" + generateCacheHash(),
+            loader.load(PUBLIC_MAP_URL + "/settings.json?" + generateCacheHash(),
                 resolve,
                 () => { },
                 () => reject("Failed to load the settings.json!")

@@ -5,7 +5,6 @@
 Guess the Minecraft ingame location based off a 360 panorama view and use the map to guess the location.  
 
 ## TODO
-Fix Map pin for loc/correct
 achivements?
 
 # Setup & Start
@@ -24,7 +23,16 @@ npm run dev
 ```bash
 # Run the website in production
 npm run build
-node build
+node -r dotenv/config build
+```
+
+#### **.env**
+
+```sh
+DATABASE_URL = "file:./db.sqlite" # Local sqlite db
+PUBLIC_MAP_URL = "http://127.0.0.1:40401" # Url to Map Proxy
+ORIGIN = "http://localhost:5173" # Self
+PUBLIC_ORIGIN = "http://localhost:5173" # Self
 ```
 
 #### **Location Metadata**

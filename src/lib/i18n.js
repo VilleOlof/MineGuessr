@@ -3,7 +3,7 @@
 import { createI18n } from 'vue-i18n';
 import { nextTick } from "vue";
 import { fetchHocon } from "./BlueMap/Utils";
-import { MAP_URL } from '$lib';
+import { PUBLIC_MAP_URL } from '$env/static/public';
 
 export const i18nModule = createI18n({
 	locale: 'en',
@@ -19,7 +19,7 @@ export const i18n = i18nModule.global;
 export async function setLanguage(lang) {
 	try {
 		if (!i18n.availableLocales.includes(lang)) {
-			let messages = await fetchHocon(MAP_URL + `/lang/en.conf`);
+			let messages = await fetchHocon(PUBLIC_MAP_URL + `/lang/en.conf`);
 			i18n.setLocaleMessage(lang, messages);
 		}
 
@@ -34,7 +34,7 @@ export async function setLanguage(lang) {
 }
 
 export async function loadLanguageSettings() {
-	let settings = await fetchHocon(MAP_URL + `/lang/settings.conf`);
+	let settings = await fetchHocon(PUBLIC_MAP_URL + `/lang/settings.conf`);
 	i18n.languages = settings.languages;
 	await setLanguage(settings.default);
 }
