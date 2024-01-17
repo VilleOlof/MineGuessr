@@ -5,6 +5,10 @@ import type { BlueMapApp } from "./BlueMap/BlueMapApp";
 export const current_pos: Writable<THREE.Vector3 | null> = writable(null);
 export let curr_bluemap: Writable<BlueMapApp | null> = writable(null);
 
+// Disable Vue DevTools
+// @ts-ignore
+globalThis.__VUE_PROD_DEVTOOLS__ = false;
+
 export type location_metadata = {
     id: number,
     coordinates: [number, number]
