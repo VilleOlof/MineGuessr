@@ -26,7 +26,7 @@ type Client = hyper_util::client::legacy::Client<HttpsConnector<HttpConnector>, 
 lazy_static! {
     pub static ref SETTINGS: RwLock<Config> = RwLock::new(
         Config::builder()
-            .add_source(config::File::with_name("config"))
+            .add_source(config::File::with_name("./config"))
             .build()
             .unwrap()
     );

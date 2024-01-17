@@ -33,6 +33,7 @@ DATABASE_URL = "file:./db.sqlite" # Local sqlite db
 PUBLIC_MAP_URL = "http://127.0.0.1:40401" # Url to Map Proxy
 ORIGIN = "http://localhost:5173" # Self
 PUBLIC_ORIGIN = "http://localhost:5173" # Self
+PORT = 40400 # Just for production
 ```
 
 #### **Location Metadata**
@@ -45,20 +46,20 @@ And `coordinates` is just an array of first `x` and then `z`.
 
 ```json
 [
-    {
-        "id": 0,
-        "coordinates": [
-            102562,
-            -32164
-        ]
-    },
-    {
-        "id": 1,
-        "coordinates": [
-            102522,
-            -32328
-        ]
-    },
+  {
+    "id": 0,
+    "coordinates": [
+      102562,
+      -32164
+    ]
+  },
+  {
+    "id": 1,
+    "coordinates": [
+      102522,
+      -32328
+    ]
+  },
 ]
 ```
 
