@@ -22,6 +22,7 @@
 		"prettier": "^3.1.1",
 		"prettier-plugin-svelte": "^3.1.2",
 		"prettier-plugin-tailwindcss": "^0.5.9",
+		"prisma": "^5.8.1",
 		"svelte": "^4.2.7",
 		"svelte-check": "^3.6.0",
 		"tailwindcss": "^3.3.6",
@@ -31,6 +32,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@prisma/client": "^5.8.1",
 		"@types/canvas-confetti": "^1.6.4",
 		"@types/node": "^20.11.0",
 		"camera-controls": "^2.7.3",
@@ -40,6 +42,7 @@
 		"svelte-persisted-store": "^0.9.0",
 		"three": "^0.160.0",
 		"vue": "^3.4.8",
-		"vue-i18n": "^9.9.0"
+		"vue-i18n": "^9.9.0",
+		"zod": "^3.22.4"
 	}
 }

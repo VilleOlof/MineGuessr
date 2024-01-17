@@ -1,7 +1,7 @@
 import { UpdatePOIMarker, curr_bluemap, current_pos, type location_metadata } from "$lib";
 import { get, writable, type Writable } from "svelte/store";
 import * as THREE from "three";
-import { Stats } from "./Stats";
+import { Stats, type DBStats } from "./Stats";
 
 export module GameModule {
     export type Round = {
@@ -61,7 +61,7 @@ export class Game {
         return rounds[index];
     }
 
-    submit_guess(guess: THREE.Vector2) {
+    async submit_guess(guess: THREE.Vector2) {
         if (get(current_pos) === null) {
             return;
         }
@@ -96,6 +96,9 @@ export class Game {
             if (current_round.score < stats.worst_score) {
                 stats.worst_score = current_round.score;
             }
+
+            stats.total_time += current_round.time;
+
             return stats;
         });
 
@@ -103,6 +106,8 @@ export class Game {
         this.place_correct_marker(current_round.location);
 
         this.move_camera_to_pos(current_round.location);
+
+        await this.send_stats(current_round);
     }
 
     next_round() {
@@ -138,6 +143,8 @@ export class Game {
 
         //Reset coords
         current_pos.update(() => null);
+
+        dispatchEvent(new CustomEvent("next_round", { detail: this.get_current_round() }));
     }
 
     private calculate_score(distance: number): number {
@@ -285,6 +292,31 @@ export class Game {
 
         controls.controls = map.mapControls;
 
+    }
+
+    async send_stats(round?: GameModule.Round) {
+        let curr_round = round ?? this.get_current_round();
+
+        let stats: DBStats = {
+            round_id: curr_round.panorama_id,
+            location_x: curr_round.location.x,
+            location_z: curr_round.location.y,
+            guess_x: curr_round.guess_location.x,
+            guess_z: curr_round.guess_location.y,
+            distance: curr_round.distance,
+            time: curr_round.time,
+            panorama_id: curr_round.panorama_id,
+        };
+
+        try {
+            await fetch(`${location.origin}/stats/${this.game_id}`, {
+                method: "POST",
+                body: JSON.stringify(stats)
+            });
+        }
+        catch (e) {
+            console.log(e);
+        }
     }
 }
 

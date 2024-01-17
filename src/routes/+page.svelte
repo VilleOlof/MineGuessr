@@ -3,6 +3,7 @@
 	import Button from '$lib/Components/Button.svelte';
 	import PopupWrapper from '$lib/Components/PopupWrapper.svelte';
 	import Stats from '$lib/Components/Stats.svelte';
+	import Info from '$lib/Components/Info.svelte';
 
 	let show_info = false;
 	let show_stats = false;
@@ -83,7 +84,7 @@
 
 {#if show_info}
 	<PopupWrapper title="Info" on:click={() => (show_info = false)}>
-		<!-- <Info /> -->
+		<Info />
 	</PopupWrapper>
 {:else if show_stats}
 	<PopupWrapper title="Statistik" on:click={() => (show_stats = false)}>

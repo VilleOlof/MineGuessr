@@ -17,3 +17,5 @@ vite.config.ts.timestamp-*
 
 /map_proxy/target
 /map_proxy/Config.toml
+
+/prisma/db.sqlite

@@ -28,3 +28,13 @@ export function UpdatePOIMarker(map: BlueMapApp, pos: THREE.Vector3, index?: num
         type: 'poi'
     });
 }
+
+export function format_time(time: number) {
+    if (isNaN(time)) return "00:00";
+
+    // Minutes and seconds, like MM:SS
+    let minutes = Math.floor(time / 60);
+    let seconds = Math.floor(time % 60);
+
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}

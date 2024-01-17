@@ -1,37 +1,12 @@
 # 90gQGuessr
 
-Guess the minecraft ingame location based off a 360 panorama view and use the map to guess the location.  
+> Like GeoGuessr but for Minecraft.
 
-a game has 5 rounds. 5000 score per round max, the closer the more points. (count in chunks?)  
-If the guess is within 1-2 chunks it should be considered perfect.  
+Guess the Minecraft ingame location based off a 360 panorama view and use the map to guess the location.  
 
+## TODO
+Fix Map pin for loc/correct
 achivements?
-
-## /
-Should actually be a home page. no weird state changes. if you go `/` you always get the home page.
-Play button, quick how to like stamdle, maybe daily in the future? but fuck dates?  
-More detailed instructions, also on how scoring works.  
-
-"Karta från map.90gq.se" at in the corner next to version and stats.  
-AND SEND STATS TO SERVER !!!   
-
-## /play
-The actual game, always start a new game when entering this site. the game is valid as long as the tab is open.  
-so just hold the game data in mem. no localstorage and shit, except for additions to stats.  
-generate a game id and use that to send stats to server so the server knows exact what stats came from what game.  
-
-
-## locations
-the locations should be in `/static/locations/(index)/panorama_x.png`.  
-and then a master records file at `/src/lib/loc_metadata.json`.  
-
-this metadata file should contain the index and what coord it is related to.  
-this is hidden in the lib dir so users cant fetch the master location file of all guessable locations  
-when a play round is loaded, the server fetches 5 random locations from the metadata.  
-
-metadata should just be like an array of objects, and each object has the location asset index and the coords in a number[]  
-
-photos should have no resourcepacks, no mods that effect visuals, taken on main acc so no ones sus.  
 
 # Setup & Start
 
@@ -52,7 +27,42 @@ npm run build
 node build
 ```
 
-*Insert information regarding `./src/lib/server/loc_metadata.json` and `./static/locations/*/*.webp`*
+#### **Location Metadata**
+
+For the site to know what locations exist and their coords/panorama index.  
+It needs a `loc_metadata.json` file located in `./src/lib/server/`  
+
+It should look something like this, an array of objects that have the fields `id`, `coordinates`.  
+And `coordinates` is just an array of first `x` and then `z`.  
+
+```json
+[
+    {
+        "id": 0,
+        "coordinates": [
+            102562,
+            -32164
+        ]
+    },
+    {
+        "id": 1,
+        "coordinates": [
+            102522,
+            -32328
+        ]
+    },
+]
+```
+
+#### **Panorama Screenshots**
+
+The site also needs screenshots for each location to show.  
+Located at `./static/locations/`, each panorama view is one folder that has 6 screenshots.  
+These 6 screenshots gets used like a skybox cubemap, and each folder name should be its panorama index.  
+So the Location Metadata can find the correct panorama and display it.  
+
+These screenshots can be taken ingame with mods like *[Panoramica](https://modrinth.com/mod/panoramica)*  
+Screenshots should also be taken with minimal resourcepacks and effects.   
 
 ### **Map Proxy**
 > [!IMPORTANT]  

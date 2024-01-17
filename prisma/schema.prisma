@@ -1,0 +1,27 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Stat {
+  id       Int    @id @default(autoincrement())
+  game_id  String
+  round_id Int
+
+  location_x  Int
+  location_z  Int
+  guess_x     Int
+  guess_z     Int
+  distance    Int
+  time        Int
+  panorama_id Int
+
+  date DateTime @default(now())
+}

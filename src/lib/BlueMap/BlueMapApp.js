@@ -667,30 +667,6 @@ export class BlueMapApp {
 
     updatePageAddress = () => {
         return;
-
-        let hash = "#";
-
-        if (this.mapViewer.map) {
-            hash += this.mapViewer.map.data.id;
-
-            let controls = this.mapViewer.controlsManager;
-            hash += ":" + round(controls.position.x, 0);
-            hash += ":" + round(controls.position.y, 0);
-            hash += ":" + round(controls.position.z, 0);
-            hash += ":" + round(controls.distance, 0);
-            hash += ":" + round(controls.rotation, 2);
-            hash += ":" + round(controls.angle, 2);
-            hash += ":" + round(controls.tilt, 2);
-            hash += ":" + round(controls.ortho, 0);
-            hash += ":" + this.appState.controls.state;
-        }
-
-        history.replaceState(undefined, undefined, hash);
-
-        document.title = i18n.t("pageTitle", {
-            map: this.mapViewer.map ? this.mapViewer.map.data.name : "?",
-            version: this.settings.version
-        });
     }
 
     loadPageAddress = async () => {

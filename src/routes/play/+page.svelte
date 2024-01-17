@@ -47,7 +47,7 @@
 </a>
 
 <div
-	class="topbar pointer-events-none absolute bottom-0 left-0 hidden w-full items-start justify-center p-2 lg:bottom-0 lg:flex"
+	class="topbar pointer-events-none absolute bottom-0 left-0 hidden w-full items-start justify-center p-4 lg:bottom-0 lg:flex"
 >
 	<GuessButton {game} />
 </div>
@@ -57,10 +57,15 @@
 {/if}
 
 <Map fullscreen={$game_finished} game_instance={game}>
-	<GuessButton {game} />
+	<div class="m-3">
+		<GuessButton {game} />
+	</div>
 </Map>
 
-<p class="absolute bottom-0 left-0 m-1 text-sm text-white/80 md:text-base" title="Spel id">
+<p
+	class="pointer-events-none absolute bottom-0 left-0 m-1 text-sm text-white/80 md:text-base"
+	title="Spel id"
+>
 	{game.game_id}
 </p>
 

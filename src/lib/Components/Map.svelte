@@ -78,7 +78,10 @@
 					}}
 				/>
 
-				<p class="absolute left-0 top-0 m-2 bg-black/70 px-2 py-1 text-xl" title="Koordinater">
+				<p
+					class="pointer-events-none absolute left-0 top-0 m-2 bg-black/70 px-2 py-1 text-xl"
+					title="Koordinater"
+				>
 					{#if $current_pos}
 						x {$current_pos.x}, z {$current_pos.z}
 					{:else}
@@ -88,27 +91,10 @@
 			</div>
 
 			<button
-				class="bg-gray-900 px-1 font-bold text-cyan-400 outline outline-4 outline-gray-900"
+				class="bg-gray-700 px-1 text-5xl font-bold text-white outline outline-4 outline-gray-900"
 				on:click={() => (show_map_force = !show_map_force)}
 			>
-				{#if show_map_force}
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						height="24"
-						viewBox="0 -960 960 960"
-						width="24"
-						fill="currentColor"
-						><path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z" /></svg
-					>
-				{:else}
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						height="24"
-						viewBox="0 -960 960 960"
-						width="24"
-						fill="currentColor"><path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z" /></svg
-					>
-				{/if}
+				{show_map_force ? '>' : '<'}
 			</button>
 		</div>
 	</div>
