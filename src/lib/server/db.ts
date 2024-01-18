@@ -20,4 +20,12 @@ export module DB {
             }
         });
     }
+
+    export async function AddSuggestion(text: string) {
+        await prisma.suggestion.create({
+            data: {
+                text: text,
+            }
+        });
+    }
 }

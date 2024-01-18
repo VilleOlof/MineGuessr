@@ -2,6 +2,8 @@
 	import { format_time } from '$lib';
 	import type { Game, GameModule } from '$lib/Game';
 	import Button from './Button.svelte';
+	import PopupWrapper from './PopupWrapper.svelte';
+	import Suggestion from './Suggestion.svelte';
 
 	export let game: Game;
 	export let show_end_map: boolean;
@@ -10,6 +12,8 @@
 
 	$: total_points = $rounds.reduce((acc: number, curr: GameModule.Round) => acc + curr.score, 0);
 	$: total_time = $rounds.reduce((acc: number, curr: GameModule.Round) => acc + curr.time, 0);
+
+	let show_suggestion: boolean = false;
 </script>
 
 <div

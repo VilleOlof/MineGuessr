@@ -35,8 +35,6 @@
 	<Panorama bind:index={$rounds[$curr_round].panorama_id} />
 {/if}
 
-<XPBar {game} />
-
 <a
 	class="rounds absolute left-0 top-0 aspect-square h-auto w-16 transition-transform hover:-rotate-6 hover:scale-110 active:scale-90 sm:w-24"
 	title="Tillbaka till menyn"
@@ -46,8 +44,16 @@
 	<img src="/Earth.webp" alt="Tillbaka" />
 </a>
 
+<Map fullscreen={$game_finished} game_instance={game}>
+	<div class="m-3">
+		<GuessButton {game} />
+	</div>
+</Map>
+
+<XPBar {game} />
+
 <div
-	class="topbar pointer-events-none absolute bottom-0 left-0 hidden w-full items-start justify-center p-4 lg:bottom-0 lg:flex"
+	class="topbar pointer-events-none absolute bottom-0 left-0 z-10 hidden w-full items-start justify-center p-4 lg:bottom-0 lg:flex"
 >
 	<GuessButton {game} />
 </div>
@@ -55,12 +61,6 @@
 {#if $game_finished && !$show_end_map}
 	<Endscreen {game} bind:show_end_map={$show_end_map} />
 {/if}
-
-<Map fullscreen={$game_finished} game_instance={game}>
-	<div class="m-3">
-		<GuessButton {game} />
-	</div>
-</Map>
 
 <p
 	class="pointer-events-none absolute bottom-0 left-0 m-1 text-sm text-white/80 md:text-base"

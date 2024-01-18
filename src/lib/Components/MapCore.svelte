@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createEventDispatcher, onMount } from 'svelte';
+	import { createEventDispatcher, onDestroy, onMount } from 'svelte';
 	import { BlueMapApp } from '$lib/BlueMap/BlueMapApp';
 	import { loadLanguageSettings } from '$lib/i18n';
 	import { curr_bluemap } from '$lib';
@@ -31,6 +31,13 @@
 		}
 	});
 
+	onDestroy(() => {
+		if (!bluemap) return;
+
+		// Remove keybinds so you can actually type in the main menu
+		bluemap.mapControls.stop();
+	});
+
 	let dispatch = createEventDispatcher();
 </script>
 
@@ -38,7 +45,7 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
 	id="map-container"
-	class="h-full w-full bg-slate-800 outline outline-4 outline-gray-900"
+	class="pointer-events-auto h-full w-full bg-slate-800 outline outline-4 outline-gray-900"
 	bind:this={map_container}
 	on:click
 	on:mouseenter

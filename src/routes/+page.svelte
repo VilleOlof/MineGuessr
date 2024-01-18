@@ -4,9 +4,11 @@
 	import PopupWrapper from '$lib/Components/PopupWrapper.svelte';
 	import Stats from '$lib/Components/Stats.svelte';
 	import Info from '$lib/Components/Info.svelte';
+	import Suggestion from '$lib/Components/Suggestion.svelte';
 
 	let show_info = false;
 	let show_stats = false;
+	let show_suggestion = false;
 </script>
 
 <div
@@ -43,7 +45,15 @@
 		<Button on:click={() => (show_info = true)}>?</Button>
 	</div>
 
-	<div class="credits flex flex-col items-center text-gray-400 md:text-lg">
+	<button
+		class="text-xl text-gray-300 underline underline-offset-4 transition-colors hover:text-cyan-400"
+		on:click={() => (show_suggestion = !show_suggestion)}
+		>Har du förslag på platser, eller annat?</button
+	>
+
+	<div
+		class="credits md:text-md absolute bottom-0 left-0 m-2 flex flex-col items-start text-gray-400"
+	>
 		<p>
 			Karta från <a
 				href="https://map.90gq.se"
@@ -79,7 +89,7 @@
 			d="M80-120v-80h800v80H80Zm40-120v-280h120v280H120Zm200 0v-480h120v480H320Zm200 0v-360h120v360H520Zm200 0v-600h120v600H720Z"
 		/></svg
 	>
-	<p>V1.0.0</p>
+	<p>V1.1.0</p>
 </div>
 
 {#if show_info}
@@ -89,5 +99,9 @@
 {:else if show_stats}
 	<PopupWrapper title="Statistik" on:click={() => (show_stats = false)}>
 		<Stats />
+	</PopupWrapper>
+{:else if show_suggestion}
+	<PopupWrapper title="Skicka in förslag" on:click={() => (show_suggestion = !show_suggestion)}>
+		<Suggestion bind:open={show_suggestion} />
 	</PopupWrapper>
 {/if}

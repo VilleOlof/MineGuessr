@@ -26,3 +26,10 @@ model Stat {
 
   @@id([game_id, round_id])
 }
+
+model Suggestion {
+  id Int @id @default(autoincrement())
+
+  text String
+  date DateTime @default(now())
+}

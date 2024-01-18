@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { format_time } from '$lib';
 	import type { Game } from '$lib/Game';
-	import { onDestroy } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
 
 	export let game: Game;
@@ -24,18 +24,24 @@
 	$: if ($rounds[$curr_round].finished) {
 		clearInterval(timer);
 	}
-	addEventListener('next_round', () => {
+
+	let next_round = () => {
 		timer_date = new Date();
 		timer = setInterval(step_time, TIMER_UPDATE);
+	};
+
+	onMount(() => {
+		addEventListener('next_round', next_round);
 	});
 
 	onDestroy(() => {
 		clearInterval(timer);
+		removeEventListener('next_round', next_round);
 	});
 </script>
 
 <div
-	class="xpWrapper pointer-events-none absolute left-0 top-0 flex w-full flex-col items-center justify-start p-2"
+	class="xpWrapper pointer-events-none absolute left-0 top-0 z-10 flex w-full flex-col items-center justify-start p-2"
 >
 	<div class="xpbar pointer-events-auto flex h-8 w-1/2 bg-gray-900 p-1 shadow-lg md:w-1/4">
 		{#each $rounds as round}

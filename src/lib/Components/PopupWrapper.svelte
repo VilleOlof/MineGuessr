@@ -6,10 +6,10 @@
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div on:click class="blurryshader absolute left-0 top-0 h-full w-full backdrop-blur-sm"></div>
+<div on:click class="blurryshader absolute left-0 top-0 z-10 h-full w-full backdrop-blur-sm"></div>
 
 <div
-	class="popup c-shadow absolute top-36 w-11/12 bg-gray-700 p-2 shadow-cyan-400 md:w-7/12 lg:w-4/12"
+	class="popup c-shadow absolute top-36 z-10 w-11/12 bg-gray-700 p-2 shadow-cyan-400 md:w-7/12 lg:w-4/12"
 	transition:fly={{ y: 100, duration: 200, delay: 100 }}
 >
 	<header class="flex items-center justify-between">

@@ -8,8 +8,8 @@ Guess the Minecraft ingame location based off a 360 panorama view and use the ma
 achivements?  
 submit new place suggestions in endscreen  
 database panel with auth for checking db data  
-mention how many locations exists in info?  
 post to reddit  
+share match with /game/[game_id] (only if all rounds are finished)  
 
 # Setup & Start
 
