@@ -5,6 +5,8 @@
 	Din uppgift är att gissa var på kartan du tror att platsen är. <br />
 	<br />
 	Du får poäng baserat på hur nära du gissar. <br />
+	<br />
+	Finns över 150+ platser att gissa på! <br />
 </p>
 
 <h2 class="my-1 text-2xl font-bold">Poängsystemet</h2>

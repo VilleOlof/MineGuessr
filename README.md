@@ -9,7 +9,6 @@ achivements?
 submit new place suggestions in endscreen  
 database panel with auth for checking db data  
 mention how many locations exists in info?  
-**add all new locations**  
 post to reddit  
 
 # Setup & Start
