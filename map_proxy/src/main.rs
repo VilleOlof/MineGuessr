@@ -153,8 +153,6 @@ async fn internal_handler(
             }
         }
 
-        println!("Request Content Type: {:?}", res.headers());
-
         return Ok(res);
     }
 

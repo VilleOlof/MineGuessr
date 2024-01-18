@@ -16,7 +16,7 @@ export type location_metadata = {
 
 export function UpdatePOIMarker(map: BlueMapApp, pos: THREE.Vector3, index?: number) {
     map.popupMarkerSet.updateMarkerFromData(`current_pos${index !== undefined ? `_${index}` : ''}`, {
-        position: { x: pos.x, y: pos.y, z: pos.z },
+        position: { x: pos.x + 0.5, y: pos.y, z: pos.z + 0.65 },
         anchor: { x: 18.5, y: 36.5 },
         label: '',
         detail: '',

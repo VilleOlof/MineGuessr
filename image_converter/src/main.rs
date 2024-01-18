@@ -13,7 +13,7 @@ struct Args {
     output: String,
 
     #[arg(short, long, default_value = None)]
-    count_skip: Option<i32>,
+    start_number: Option<i32>,
 }
 
 fn main() {
@@ -31,7 +31,8 @@ fn main() {
         for image in in_images {
             let image = image.unwrap();
 
-            let out_dir = out_dir.join((index + args.count_skip.unwrap_or(0) as usize).to_string());
+            let out_dir =
+                out_dir.join((index + args.start_number.unwrap_or(0) as usize).to_string());
             let out_file = out_dir
                 .clone()
                 .join(image.path().file_stem().unwrap())

@@ -27,7 +27,7 @@ export class Game {
     private static markers_to_remove: string[] = ["guess_line", "current_pos", "correct_pos"];
 
     private static MARKER_Y_OFFSET = 200;
-    private static MARKER_CENTER_OFFSET = 0;
+    private static MARKER_CENTER_OFFSET = 0.5;
 
     constructor(random_locations: location_metadata[]) {
         this.game_id = uuidv4();
@@ -177,7 +177,7 @@ export class Game {
             (correct_loc.y + guess_loc.y) / 2
         );
         map.popupMarkerSet.updateMarkerFromData(`guess_line${index !== undefined ? `_${index}` : ''}`, {
-            position: { x: mid_loc.x, y: Game.MARKER_Y_OFFSET, z: mid_loc.y },
+            position: { x: mid_loc.x + 0.5, y: Game.MARKER_Y_OFFSET, z: mid_loc.y + 0.5 },
             label: '',
             detail: '',
             line: [
@@ -216,7 +216,7 @@ export class Game {
         }
 
         map.popupMarkerSet.updateMarkerFromData(`correct_pos${index !== undefined ? `_${index}` : ''}`, {
-            position: { x: correct_loc.x, y: Game.MARKER_Y_OFFSET, z: correct_loc.y },
+            position: { x: correct_loc.x + 0.5, y: Game.MARKER_Y_OFFSET, z: correct_loc.y + 0.65 },
             anchor: { x: 18.5, y: 36.5 },
             label: '',
             detail: '',
