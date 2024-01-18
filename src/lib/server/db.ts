@@ -23,10 +23,10 @@ export module DB {
 
     export async function GetStats(amount: number): Promise<Stat[][]> {
         // select the latest five unique games
-        const games = await prisma.stat.groupBy({
-            by: ['game_id'],
+        const games = await prisma.stat.findMany({
+            distinct: ['game_id'],
             orderBy: {
-                game_id: 'desc'
+                date: 'desc',
             },
             take: amount
         });

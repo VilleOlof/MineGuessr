@@ -30,9 +30,10 @@
 				{#each data.games as game}
 					<h2 class="bg-gray-800 p-1 text-gray-300">{game[0].game_id}</h2>
 					<p class="w-full text-center text-base text-gray-400">{game[0].date.toLocaleString()}</p>
+
 					<div class="round bg-gray-700">
 						{#each game as round}
-							<p>{round.round_id}</p>
+							<p class="text-gray-300">- {round.round_id}</p>
 
 							<div class="coords flex gap-4">
 								<p class="mx-2 w-1/2 text-green-400">x{round.location_x}, z{round.location_z}</p>
