@@ -1,5 +1,5 @@
 import type { DBStats } from "$lib/Stats";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, type Stat, type Suggestion } from "@prisma/client";
 
 export module DB {
 
@@ -21,10 +21,45 @@ export module DB {
         });
     }
 
+    export async function GetStats(amount: number): Promise<Stat[][]> {
+        // select the latest five unique games
+        const games = await prisma.stat.groupBy({
+            by: ['game_id'],
+            orderBy: {
+                game_id: 'desc'
+            },
+            take: amount
+        });
+
+        // select the latest five stats for each game
+        const stats = await Promise.all(games.map(async (game) => {
+            return await prisma.stat.findMany({
+                where: {
+                    game_id: game.game_id
+                },
+                orderBy: {
+                    round_id: 'desc'
+                },
+                take: 5
+            });
+        }));
+
+        return stats;
+    }
+
     export async function AddSuggestion(text: string) {
         await prisma.suggestion.create({
             data: {
                 text: text,
+            }
+        });
+    }
+
+    export async function GetSuggestions(amount: number): Promise<Suggestion[]> {
+        return await prisma.suggestion.findMany({
+            take: amount,
+            orderBy: {
+                date: 'desc'
             }
         });
     }

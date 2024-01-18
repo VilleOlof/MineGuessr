@@ -70,7 +70,7 @@ export class Game {
 
         current_round.guess_location = guess;
         current_round.distance = current_round.location.distanceTo(guess);
-        current_round.score = this.calculate_score(current_round.distance);
+        current_round.score = Game.calculate_score(current_round.distance);
         current_round.finished = true;
 
         if (current_round.distance === 0) {
@@ -147,7 +147,7 @@ export class Game {
         dispatchEvent(new CustomEvent("next_round", { detail: this.get_current_round() }));
     }
 
-    private calculate_score(distance: number): number {
+    public static calculate_score(distance: number): number {
         // if the distanceis below 16 meters, the score is a perfect 5000.
         // and for each meter after that, the score is reduced by 0.25.
         const MAX_SCORE = 5000;
@@ -297,7 +297,7 @@ export class Game {
         let curr_round = round ?? this.get_current_round();
 
         let stats: DBStats = {
-            round_id: curr_round.panorama_id,
+            round_id: get(this.current_round),
             location_x: curr_round.location.x,
             location_z: curr_round.location.y,
             guess_x: curr_round.guess_location.x,

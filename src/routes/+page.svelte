@@ -9,6 +9,25 @@
 	let show_info = false;
 	let show_stats = false;
 	let show_suggestion = false;
+
+	let login_count: number = 0;
+	let show_login: boolean = false;
+	function increment_login() {
+		login_count++;
+		if (login_count >= 5) {
+			show_login = true;
+		}
+
+		setTimeout(() => {
+			login_count--;
+		}, 1000);
+	}
+
+	let login_pass: string = '';
+	function login() {
+		document.cookie = `90gqguessr-panel-pass=${login_pass}; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
+		location.href = '/panel';
+	}
 </script>
 
 <div
@@ -73,6 +92,8 @@
 	</div>
 </div>
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div class="absolute bottom-0 right-0 m-4 flex gap-2 text-gray-400">
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<svg
@@ -89,7 +110,8 @@
 			d="M80-120v-80h800v80H80Zm40-120v-280h120v280H120Zm200 0v-480h120v480H320Zm200 0v-360h120v360H520Zm200 0v-600h120v600H720Z"
 		/></svg
 	>
-	<p>V1.1.0</p>
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
+	<p><span on:click={increment_login}>V</span>1.1.0</p>
 </div>
 
 {#if show_info}
@@ -103,5 +125,25 @@
 {:else if show_suggestion}
 	<PopupWrapper title="Skicka in förslag" on:click={() => (show_suggestion = !show_suggestion)}>
 		<Suggestion bind:open={show_suggestion} />
+	</PopupWrapper>
+{:else if show_login}
+	<PopupWrapper title="Panel login" on:click={() => (show_login = !show_login)}>
+		<div class="flex w-full items-end justify-between">
+			<div class="">
+				<p class="text-lg text-gray-300">Lösenord:</p>
+				<input type="password" class="bg-gray-900 px-2 py-1 text-xl" bind:value={login_pass} />
+			</div>
+			<div class="">
+				<button
+					class="bg-gray-900 px-4 py-2 text-3xl transition-transform hover:scale-95 active:scale-105"
+					on:click={login}>Logga in</button
+				>
+				<button
+					on:click={() => (location.href = '/panel')}
+					class="h-full bg-gray-900 px-4 py-2 text-3xl transition-transform hover:scale-95 active:scale-105"
+					>{'>'}</button
+				>
+			</div>
+		</div>
 	</PopupWrapper>
 {/if}

@@ -38,6 +38,7 @@ PUBLIC_MAP_URL = "http://127.0.0.1:40401" # Url to Map Proxy
 ORIGIN = "http://localhost:5173" # Self
 PUBLIC_ORIGIN = "http://localhost:5173" # Self
 PORT = 40400 # Just for production
+PANEL_PASSWORD = "password123" # For the /panel page
 ```
 
 #### **Location Metadata**
