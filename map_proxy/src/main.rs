@@ -136,8 +136,24 @@ async fn internal_handler(
         // Copy the content type headers
         let req_type = req.headers().get(CONTENT_TYPE);
         if let Some(r_type) = req_type {
-            res.headers_mut().insert(CONTENT_TYPE, r_type.clone());
+            if !r_type.is_empty() {
+                res.headers_mut().insert(CONTENT_TYPE, r_type.clone());
+            }
+        } else {
+            let mime_type = match &path {
+                x if x.contains("js") => Some("text/javascript"),
+                x if x.contains("png") => Some("image/png"),
+                x if x.contains("json") => Some("application/json"),
+                _ => None,
+            };
+
+            if let Some(mime) = mime_type {
+                res.headers_mut()
+                    .insert(CONTENT_TYPE, HeaderValue::from_static(mime));
+            }
         }
+
+        println!("Request Content Type: {:?}", res.headers());
 
         return Ok(res);
     }
@@ -178,6 +194,10 @@ async fn root_handler(
     mut req: Request,
 ) -> Result<Response, StatusCode> {
     *req.uri_mut() = Uri::try_from(shared.map_url).unwrap();
+
+    // Insert html content type since its root page
+    req.headers_mut()
+        .insert(CONTENT_TYPE, HeaderValue::from_static("text/html"));
 
     internal_handler(State(client), Extension(redis_conn), req).await
 }
