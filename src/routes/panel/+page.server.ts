@@ -11,8 +11,13 @@ export async function load({ cookies }) {
     const latest_suggestions = await DB.GetSuggestions(5);
     const latest_games = await DB.GetStats(5);
 
+    const total_games = await DB.GetTotalStats();
+    const games_24h = await DB.GetTotalStatsWithinTime(1000 * 60 * 60 * 24);
+
     return {
         suggestions: latest_suggestions,
-        games: latest_games
+        games: latest_games,
+        total_games: total_games,
+        games_24h: games_24h
     }
 }

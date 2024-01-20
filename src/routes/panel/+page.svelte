@@ -52,5 +52,15 @@
 				{/each}
 			</div>
 		</PanelWrapper>
+
+		<PanelWrapper>
+			<PanelGoto title="Statistik" href="/panel/stats" />
+
+			<h2 class="text-2xl"><span class="text-gray-300">Total Games:</span> {data.total_games}</h2>
+			<h2 class="text-2xl">
+				<span class="text-gray-300">Total Games (24h):</span>
+				{data.games_24h}
+			</h2>
+		</PanelWrapper>
 	</div>
 </div>

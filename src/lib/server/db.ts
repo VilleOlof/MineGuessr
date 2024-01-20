@@ -32,6 +32,20 @@ export module DB {
         });
     }
 
+    export async function GetTotalStats(): Promise<number> {
+        return await prisma.stat.count();
+    }
+
+    export async function GetTotalStatsWithinTime(time: number): Promise<number> {
+        return await prisma.stat.count({
+            where: {
+                date: {
+                    gt: new Date(Date.now() - time)
+                }
+            }
+        });
+    }
+
     export async function GetStats(amount: number): Promise<Stat[][]> {
         // select the latest five unique games
         const games = await prisma.stat.findMany({

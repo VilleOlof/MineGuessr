@@ -6,8 +6,8 @@ Guess the Minecraft ingame location based off a 360 panorama view and use the ma
 
 ## TODO
 [ ] - achivements?  
-[/] - database panel with auth for checking db data    
-[ ] - share match with /game/[game_id] (only if all rounds are finished)  
+[/] - database panel with auth for checking db data  
+[ ] - better mobile for /panel
 
 # Setup & Start
 
