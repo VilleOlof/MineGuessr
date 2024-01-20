@@ -4,7 +4,6 @@
 	import { UpdatePOIMarker, current_pos } from '$lib';
 	import { BlueMapApp } from '$lib/BlueMap/BlueMap';
 	import { Game } from '$lib/Game';
-	import { get } from 'svelte/store';
 	import { onDestroy, onMount } from 'svelte';
 
 	let show_map_force: boolean = true;

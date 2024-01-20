@@ -25,13 +25,3 @@
 		Vidare
 	</button>
 {/if}
-
-<style>
-	:global(.g-drop) {
-		--offset: 8px;
-
-		box-shadow: 0 var(--offset) 0px 0px var(--tw-shadow-color);
-		-webkit-box-shadow: 0 var(--offset) 0px 0px var(--tw-shadow-color);
-		-moz-box-shadow: 0 var(--offset) 0px 0px var(--tw-shadow-color);
-	}
-</style>

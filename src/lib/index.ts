@@ -22,7 +22,7 @@ export function UpdatePOIMarker(map: BlueMapApp, pos: THREE.Vector3, index?: num
         detail: '',
         sorting: 1000,
         listed: false,
-        icon: 'pin-red.svg',
+        icon: '/pin-red.svg',
         classes: ['current_pos'],
         minDistance: 0,
         maxDistance: 10000000,

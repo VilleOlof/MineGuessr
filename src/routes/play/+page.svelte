@@ -11,7 +11,7 @@
 
 	export let data: PageData;
 
-	let game = new Game(data.random_locations);
+	let game = Game.create(data.random_locations);
 	let rounds = game.rounds;
 	let curr_round = game.current_round;
 	let game_finished = game.game_finished;
@@ -50,13 +50,15 @@
 	</div>
 </Map>
 
-<XPBar {game} />
+{#if !$game_finished}
+	<XPBar {game} />
 
-<div
-	class="topbar pointer-events-none absolute bottom-0 left-0 z-10 hidden w-full items-start justify-center p-4 lg:bottom-0 lg:flex"
->
-	<GuessButton {game} />
-</div>
+	<div
+		class="pointer-events-none absolute bottom-0 left-0 z-10 hidden w-full items-start justify-center p-4 lg:bottom-0 lg:flex"
+	>
+		<GuessButton {game} />
+	</div>
+{/if}
 
 {#if $game_finished && !$show_end_map}
 	<Endscreen {game} bind:show_end_map={$show_end_map} />

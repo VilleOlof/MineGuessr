@@ -1,6 +1,7 @@
 <script>
 	import { PUBLIC_ORIGIN } from '$env/static/public';
 	import '../app.pcss';
+	import { Toaster } from 'svelte-french-toast';
 </script>
 
 <svelte:head>
@@ -21,6 +22,8 @@
 
 {@html "<!-- What will today's adventure be? -->"}
 
+<Toaster />
+
 <style>
 	:global(.c-shadow) {
 		--offset: 4px;
@@ -28,6 +31,14 @@
 		box-shadow: var(--offset) var(--offset) 0px -1px var(--tw-shadow-color);
 		-webkit-box-shadow: var(--offset) var(--offset) 0px -1px var(--tw-shadow-color);
 		-moz-box-shadow: var(--offset) var(--offset) 0px -1px var(--tw-shadow-color);
+	}
+
+	:global(.g-drop) {
+		--offset: 8px;
+
+		box-shadow: 0 var(--offset) 0px 0px var(--tw-shadow-color);
+		-webkit-box-shadow: 0 var(--offset) 0px 0px var(--tw-shadow-color);
+		-moz-box-shadow: 0 var(--offset) 0px 0px var(--tw-shadow-color);
 	}
 
 	:global(.current_pos, .correct_pos) {

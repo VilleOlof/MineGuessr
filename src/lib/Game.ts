@@ -2,6 +2,7 @@ import { UpdatePOIMarker, curr_bluemap, current_pos, type location_metadata } fr
 import { get, writable, type Writable } from "svelte/store";
 import * as THREE from "three";
 import { Stats, type DBStats } from "./Stats";
+import type { Stat } from "@prisma/client";
 
 export module GameModule {
     export type Round = {
@@ -17,7 +18,7 @@ export module GameModule {
 
 export class Game {
 
-    game_id: string;
+    game_id: string = "";
 
     rounds: Writable<GameModule.Round[]> = writable([]);
     current_round: Writable<number> = writable(0);
@@ -29,8 +30,12 @@ export class Game {
     private static MARKER_Y_OFFSET = 200;
     private static MARKER_CENTER_OFFSET = 0.5;
 
-    constructor(random_locations: location_metadata[]) {
-        this.game_id = uuidv4();
+    constructor() { }
+
+    static create(random_locations: location_metadata[]): Game {
+        let game = new Game();
+
+        game.game_id = uuidv4();
 
         Stats.update((stats) => {
             stats.games_played += 1;
@@ -38,7 +43,7 @@ export class Game {
         });
 
         // Init rounds
-        this.rounds.update(() => random_locations.map((loc) => {
+        game.rounds.update(() => random_locations.map((loc) => {
             return {
                 location: new THREE.Vector2(loc.coordinates[0], loc.coordinates[1]),
                 guess_location: new THREE.Vector2(0, 0),
@@ -49,9 +54,32 @@ export class Game {
                 finished: false
             };
         }));
-        console.log(get(this.rounds));
 
-        console.log("Game created with id: " + this.game_id);
+        console.log("Game created with id: " + game.game_id);
+
+        return game;
+    }
+
+    static create_from_db(game_id: string, rounds: Stat[]): Game {
+        let game = new Game();
+
+        game.game_id = game_id;
+
+        game.rounds.update(() => rounds.map((round) => {
+            return {
+                location: new THREE.Vector2(round.location_x, round.location_z),
+                guess_location: new THREE.Vector2(round.guess_x, round.guess_z),
+                distance: round.distance,
+                time: round.time,
+                score: Game.calculate_score(round.distance),
+                panorama_id: round.panorama_id,
+                finished: true
+            };
+        }));
+
+        game.game_finished.update(() => true);
+
+        return game;
     }
 
     get_current_round(): GameModule.Round {
@@ -222,7 +250,7 @@ export class Game {
             detail: '',
             sorting: 1000,
             listed: false,
-            icon: 'pin-red.svg',
+            icon: '/pin-red.svg',
             classes: ['correct_pos'],
             minDistance: 0,
             maxDistance: 10000000,
@@ -248,8 +276,8 @@ export class Game {
             }
 
             // Remove round specific tagged markers
-            for (let round_id of get(this.rounds)) {
-                let marker_name = `${marker_id}_${round_id}`;
+            for (let i = 0; i < get(this.rounds).length; i++) {
+                let marker_name = `${marker_id}_${i}`;
 
                 let marker = map.popupMarkerSet.markers.get(marker_name);
                 if (marker) {

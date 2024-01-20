@@ -5,11 +5,9 @@
 Guess the Minecraft ingame location based off a 360 panorama view and use the map to guess the location.  
 
 ## TODO
-achivements?  
-submit new place suggestions in endscreen  
-database panel with auth for checking db data  
-post to reddit  
-share match with /game/[game_id] (only if all rounds are finished)  
+[ ] - achivements?  
+[/] - database panel with auth for checking db data    
+[ ] - share match with /game/[game_id] (only if all rounds are finished)  
 
 # Setup & Start
 

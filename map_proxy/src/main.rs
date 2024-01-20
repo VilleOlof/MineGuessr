@@ -180,7 +180,10 @@ async fn internal_handler(
     // Replace the original body with one of the clones
     *res.body_mut() = body1;
 
-    set_redis_content(redis_conn, &path, body2).await;
+    // Handle redis in new task
+    tokio::task::spawn(async move {
+        set_redis_content(redis_conn, &path, body2).await;
+    });
 
     Ok(res)
 }

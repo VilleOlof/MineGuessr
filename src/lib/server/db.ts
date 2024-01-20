@@ -21,6 +21,17 @@ export module DB {
         });
     }
 
+    export async function GetStat(game_id: string): Promise<Stat[]> {
+        return await prisma.stat.findMany({
+            where: {
+                game_id: game_id
+            },
+            orderBy: {
+                round_id: 'desc'
+            }
+        });
+    }
+
     export async function GetStats(amount: number): Promise<Stat[][]> {
         // select the latest five unique games
         const games = await prisma.stat.findMany({
