@@ -342,7 +342,7 @@ export class Game {
             });
         }
         catch (e) {
-            console.log(e);
+            console.log(`Error while sending stats: ${e}`);
         }
     }
 }

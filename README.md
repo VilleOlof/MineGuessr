@@ -8,6 +8,10 @@ Guess the Minecraft ingame location based off a 360 panorama view and use the ma
 [ ] - achivements?  
 [/] - database panel with auth for checking db data  
 [ ] - better mobile for /panel
+[ ] - Teleport to a set list of cities  
+[ ] - Discord Auth Login
+[ ] - Leaderboards
+[ ] - show that suggestion was sent
 
 # Setup & Start
 

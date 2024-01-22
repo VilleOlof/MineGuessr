@@ -1,3 +1,4 @@
+import { logger } from '$lib/server/logger';
 import { DBStatsSchema } from '$lib/Stats.js';
 import { DB } from '$lib/server/db.js';
 
@@ -9,6 +10,7 @@ export async function POST({ request, params }) {
 
         let stats = DBStatsSchema.safeParse(body);
         if (!stats.success) {
+            logger.error(`Invalid stats: ${stats.error}`);
             return new Response("Invalid stats", { status: 400 });
         }
 
@@ -17,7 +19,7 @@ export async function POST({ request, params }) {
         return new Response("OK", { status: 200 });
     }
     catch (e) {
-        console.log(e);
+        logger.error(`Error while adding stats: ${e}`);
         return new Response("Internal server error", { status: 500 })
     }
 }

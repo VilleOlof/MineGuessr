@@ -2,6 +2,7 @@
 	import { PUBLIC_ORIGIN } from '$env/static/public';
 	import toast from 'svelte-french-toast';
 	import Button from './Button.svelte';
+	import { toast_style } from '$lib';
 
 	export let game_id: string;
 	export let total_points: number;
@@ -16,7 +17,7 @@
 		} else {
 			await navigator.clipboard.writeText(`${PUBLIC_ORIGIN}/game/${game_id}`);
 			toast.success('Länken har kopierats till urklipp!', {
-				style: 'background-color: rgb(17 24 39); color: white; font-family: Minecraft, sans-serif;'
+				style: toast_style
 			});
 		}
 	}

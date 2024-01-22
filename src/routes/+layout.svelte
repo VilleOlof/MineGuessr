@@ -42,14 +42,12 @@
 	}
 
 	:global(.current_pos, .correct_pos) {
-		/* background-color: rgb(17 24 39); */
 		padding: 0.5rem;
 		font-size: 1.5rem;
 		border-radius: 0.5rem;
 	}
 
 	:global(.current_pos > img) {
-		/* filter: invert(70%) sepia(30%) saturate(2641%) hue-rotate(148deg) brightness(104%) contrast(87%); */
 		width: 100%;
 		height: 100%;
 	}

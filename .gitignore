@@ -20,3 +20,4 @@ vite.config.ts.timestamp-*
 /map_proxy/config.toml
 
 /prisma/db.sqlite
+/logs

@@ -5,6 +5,7 @@
 	import { curr_bluemap, format_time } from '$lib';
 	import Button from '$lib/Components/Button.svelte';
 	import Share from '$lib/Components/Share.svelte';
+	import { PUBLIC_ORIGIN } from '$env/static/public';
 
 	export let data: PageData;
 	let show_popup: boolean = true;
@@ -60,7 +61,7 @@
 			show_popup = true;
 			game_instance.clear_markers();
 		}}
-		class="g-drop pointer-events-auto absolute left-0 top-0 m-4 flex border-4 border-gray-900 bg-gray-700 px-6 py-2 text-5xl shadow-gray-900 transition-transform hover:-translate-y-2 active:scale-90"
+		class="g-drop pointer-events-auto absolute left-0 top-0 m-4 flex border-4 border-gray-900 bg-gray-700 px-6 py-2 text-4xl shadow-gray-900 transition-transform hover:-translate-y-2 active:scale-90"
 		>Visa Resultat</button
 	>
 {/if}

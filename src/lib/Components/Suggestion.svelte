@@ -1,15 +1,32 @@
 <script lang="ts">
+	import { toast_style } from '$lib';
+	import toast from 'svelte-french-toast';
+
 	export let open: boolean;
 
 	let text: string;
 	async function submit() {
-		await fetch('/api/suggestion', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ text })
-		});
+		try {
+			await fetch('/api/suggestion', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ text })
+			});
+
+			toast.success('Tack för din ide!', {
+				duration: 5000,
+				style: toast_style
+			});
+		} catch (e) {
+			console.error(e);
+
+			toast.error('Något gick fel!', {
+				duration: 5000,
+				style: toast_style
+			});
+		}
 
 		open = false;
 	}
