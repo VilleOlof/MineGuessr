@@ -16,6 +16,13 @@ export type location_metadata = {
     coordinates: [number, number]
 }
 
+/**
+ * Adds a guess marker to the map
+ * 
+ * @param map The bluemap instance
+ * @param pos The position of the marker
+ * @param index The index of the marker, often used together with a round index
+ */
 export function UpdatePOIMarker(map: BlueMapApp, pos: THREE.Vector3, index?: number) {
     map.popupMarkerSet.updateMarkerFromData(`current_pos${index !== undefined ? `_${index}` : ''}`, {
         position: { x: pos.x + 0.5, y: pos.y, z: pos.z + 0.65 },
@@ -32,6 +39,12 @@ export function UpdatePOIMarker(map: BlueMapApp, pos: THREE.Vector3, index?: num
     });
 }
 
+/**
+ * Formats a time in milliseconds to a string
+ * 
+ * @param time The time in milliseconds
+ * @returns The formatted time (MM:SS)
+ */
 export function format_time(time: number) {
     if (isNaN(time)) return "00:00";
 

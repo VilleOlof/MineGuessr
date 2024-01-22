@@ -4,6 +4,9 @@ import * as THREE from "three";
 import { Stats, type DBStats } from "./Stats";
 import type { Stat } from "@prisma/client";
 
+/**
+ * Game types
+ */
 export module GameModule {
     export type Round = {
         location: THREE.Vector2;
@@ -16,8 +19,13 @@ export module GameModule {
     }
 }
 
+/**
+ * Represents a game
+ * Controls everything from the game logic, to game state, etc.
+ */
 export class Game {
 
+    /** The game id, used for  */
     game_id: string = "";
 
     rounds: Writable<GameModule.Round[]> = writable([]);
@@ -25,13 +33,25 @@ export class Game {
 
     game_finished: Writable<boolean> = writable(false);
 
+    /** Markers to remove when clearing markers */
     private static markers_to_remove: string[] = ["guess_line", "current_pos", "correct_pos"];
 
+    /** Markers y offset */
     private static MARKER_Y_OFFSET = 200;
+    /** Markers center offset */
     private static MARKER_CENTER_OFFSET = 0.5;
 
+    /**
+     * Use the static create method to create a new game instead
+     */
     constructor() { }
 
+    /**
+     * Creates a new game
+     * 
+     * @param random_locations The locations to use for the game
+     * @returns The created game
+     */
     static create(random_locations: location_metadata[]): Game {
         let game = new Game();
 
@@ -60,6 +80,14 @@ export class Game {
         return game;
     }
 
+    /**
+     * Creates a game from the database
+     * An alternative to the create method
+     * 
+     * @param game_id The games id
+     * @param rounds The rounds to use for the game
+     * @returns The created game
+     */
     static create_from_db(game_id: string, rounds: Stat[]): Game {
         let game = new Game();
 
@@ -82,6 +110,11 @@ export class Game {
         return game;
     }
 
+    /**
+     * Gets the current round
+     * 
+     * @returns The current round
+     */
     get_current_round(): GameModule.Round {
         let index = get(this.current_round);
         let rounds = get(this.rounds);
@@ -89,6 +122,12 @@ export class Game {
         return rounds[index];
     }
 
+    /**
+     * Submits a guess
+     * 
+     * @param guess The guess to submit (x, z)
+     * @returns The current round
+     */
     async submit_guess(guess: THREE.Vector2) {
         if (get(current_pos) === null) {
             return;
@@ -130,14 +169,19 @@ export class Game {
             return stats;
         });
 
-        this.draw_line_to_guess(current_round.location, guess);
-        this.place_correct_marker(current_round.location);
+        Game.draw_line_to_guess(current_round.location, guess);
+        Game.place_correct_marker(current_round.location);
 
-        this.move_camera_to_pos(current_round.location);
+        Game.move_camera_to_pos(current_round.location);
 
         await this.send_stats(current_round);
     }
 
+    /**
+     * Continues to the next round
+     * 
+     * Dispatches a next_round event
+     */
     next_round() {
         if (get(this.game_finished)) return;
 
@@ -167,7 +211,7 @@ export class Game {
         // Clear guess line
         this.clear_markers();
         // Reset camera
-        this.reset_view();
+        Game.reset_view();
 
         //Reset coords
         current_pos.update(() => null);
@@ -175,6 +219,12 @@ export class Game {
         dispatchEvent(new CustomEvent("next_round", { detail: this.get_current_round() }));
     }
 
+    /**
+     * Calculates the score from a distance
+     * 
+     * @param distance The distance to calculate the score from
+     * @returns The score
+     */
     public static calculate_score(distance: number): number {
         // if the distanceis below 16 meters, the score is a perfect 5000.
         // and for each meter after that, the score is reduced by 0.25.
@@ -193,7 +243,14 @@ export class Game {
         return Math.round(score);
     }
 
-    draw_line_to_guess(correct_loc: THREE.Vector2, guess_loc: THREE.Vector2, index?: number) {
+    /**
+     * Draws a line from the correct location to the guess location
+     * 
+     * @param correct_loc The correct location
+     * @param guess_loc The guess location
+     * @param index The index of the round, optional for marker indexing
+     */
+    static draw_line_to_guess(correct_loc: THREE.Vector2, guess_loc: THREE.Vector2, index?: number) {
         let map = get(curr_bluemap);
 
         if (map === null) {
@@ -223,20 +280,29 @@ export class Game {
         });
     }
 
+    /**
+     * Draws all guess lines
+     */
     draw_all_guess_lines() {
         let rounds = get(this.rounds);
 
         for (let i = 0; i < rounds.length; i++) {
             let round = rounds[i];
-            this.draw_line_to_guess(round.location, round.guess_location, i);
-            this.place_correct_marker(round.location, i);
+            Game.draw_line_to_guess(round.location, round.guess_location, i);
+            Game.place_correct_marker(round.location, i);
 
             let bluemap = get(curr_bluemap);
             if (bluemap) UpdatePOIMarker(bluemap, new THREE.Vector3(round.guess_location.x, Game.MARKER_Y_OFFSET, round.guess_location.y), i);
         }
     }
 
-    place_correct_marker(correct_loc: THREE.Vector2, index?: number) {
+    /**
+     * Places a marker at the correct location
+     * 
+     * @param correct_loc The correct location
+     * @param index The index of the round, optional for marker indexing
+     */
+    static place_correct_marker(correct_loc: THREE.Vector2, index?: number) {
         let map = get(curr_bluemap);
 
         if (map === null) {
@@ -258,6 +324,9 @@ export class Game {
         });
     }
 
+    /**
+     * Clears all markers
+     */
     clear_markers() {
         // Remove guess line
         let map = get(curr_bluemap);
@@ -287,7 +356,10 @@ export class Game {
         }
     }
 
-    reset_view() {
+    /**
+     * Resets the camera to the default position
+     */
+    static reset_view() {
         let map = get(curr_bluemap);
 
         if (map === null) {
@@ -297,7 +369,12 @@ export class Game {
         map.resetCamera();
     }
 
-    move_camera_to_pos(pos: THREE.Vector2) {
+    /**
+     * Moves the camera to a position
+     * 
+     * @param pos 
+     */
+    static move_camera_to_pos(pos: THREE.Vector2) {
         let map = get(curr_bluemap);
 
         if (map === null) {
@@ -321,6 +398,11 @@ export class Game {
 
     }
 
+    /**
+     * Sends the stats to the server
+     * 
+     * @param round The round to send the stats from, optional
+     */
     async send_stats(round?: GameModule.Round) {
         let curr_round = round ?? this.get_current_round();
 
@@ -347,7 +429,13 @@ export class Game {
     }
 }
 
-// https://stackoverflow.com/questions/105034/how-do-i-create-a-guid-uuid/2117523#2117523
+/**
+ * Generates a uuid
+ * 
+ * https://stackoverflow.com/questions/105034/how-do-i-create-a-guid-uuid/2117523#2117523
+ * 
+ * @returns The generated uuid
+ */
 function uuidv4() {
     return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
         // @ts-ignore

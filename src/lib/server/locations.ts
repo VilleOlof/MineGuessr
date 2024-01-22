@@ -1,5 +1,13 @@
 import type { location_metadata } from "$lib";
 
+/**
+ * Gets x amount of total unique locations
+ * possible_locations length must be greater than amount
+ * 
+ * @param amount The amount of random locations to get
+ * @param possible_locations The possible locations to choose from
+ * @returns {location_metadata[]} The random locations
+ */
 export function get_random_locations(amount: number, possible_locations: location_metadata[]): location_metadata[] {
     let loc_metadata: location_metadata[] = [];
 

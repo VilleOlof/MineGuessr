@@ -66,6 +66,17 @@
 	onDestroy(() => {
 		removeEventListener('next_round', force_close);
 	});
+
+	let selected_place: string;
+	function PlaceTeleport() {
+		const [x, z] = selected_place.split(',').map((c) => Number(c.trim()));
+		console.log(x, z);
+
+		Game.move_camera_to_pos(new THREE.Vector2(x, z));
+
+		// Reset
+		selected_place = '0, 0';
+	}
 </script>
 
 {#if fullscreen}
@@ -102,32 +113,51 @@
 				/>
 
 				<div
-					class="pointer-events-none absolute left-0 top-0 m-2 flex items-center gap-2 py-1 text-xl"
+					class="pointer-events-none absolute left-0 top-0 m-2 flex flex-col items-start gap-2 py-1 text-xl"
 				>
-					<button
-						on:click={async (ev) => await ResizeMap(ev)}
-						title={enlarge_map ? 'Förminska kartan' : 'Förstora kartan'}
-						class="pointer-events-auto h-full bg-black/70 p-1 transition-transform hover:scale-105 active:scale-95"
-					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							height="24"
-							viewBox="0 -960 960 960"
-							width="24"
-							fill="currentColor"
-							><path
-								d="M120-120v-200h80v120h120v80H120Zm520 0v-80h120v-120h80v200H640ZM120-640v-200h200v80H200v120h-80Zm640 0v-120H640v-80h200v200h-80Z"
-							/></svg
+					<div class="flex items-center gap-2">
+						<button
+							on:click={async (ev) => await ResizeMap(ev)}
+							title={enlarge_map ? 'Förminska kartan' : 'Förstora kartan'}
+							class="pointer-events-auto h-full bg-black/70 p-1 transition-transform hover:scale-105 active:scale-95"
 						>
-					</button>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								height="24"
+								viewBox="0 -960 960 960"
+								width="24"
+								fill="currentColor"
+								><path
+									d="M120-120v-200h80v120h120v80H120Zm520 0v-80h120v-120h80v200H640ZM120-640v-200h200v80H200v120h-80Zm640 0v-120H640v-80h200v200h-80Z"
+								/></svg
+							>
+						</button>
+						<p class="bg-black/70 px-2">
+							{#if $current_pos}
+								x {$current_pos.x}, z {$current_pos.z}
+							{:else}
+								Ingen position
+							{/if}
+						</p>
+					</div>
 
-					<p class="bg-black/70 px-2">
-						{#if $current_pos}
-							x {$current_pos.x}, z {$current_pos.z}
-						{:else}
-							Ingen position
-						{/if}
-					</p>
+					<select
+						class="pointer-events-auto w-fit bg-black/70 p-1 px-2 text-gray-100"
+						bind:value={selected_place}
+						on:change={PlaceTeleport}
+					>
+						<option value="0, 0" disabled selected>Platser</option>
+						<option value="279, 232">Nirethia</option>
+						<option value="360, 22490">Avalon</option>
+						<option value="102620, -32210">Valyria</option>
+						<option value="-37850, 280">Qurumaa</option>
+						<option value="250, -20840">Norendor</option>
+						<option value="-4000, -10600">Tesora</option>
+						<option value="-100000, 250">Farmania</option>
+						<option value="-7200, 8800">Erathon</option>
+						<option value="-37300, -2100">Ossyria</option>
+						<option value="20000, 0">Nyaste nya</option>
+					</select>
 				</div>
 			</div>
 

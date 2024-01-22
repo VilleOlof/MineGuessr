@@ -1,10 +1,19 @@
 import type { DBStats } from "$lib/Stats";
 import { PrismaClient, type Stat, type Suggestion } from "@prisma/client";
 
+/**
+ * The database module
+ */
 export module DB {
 
     const prisma = new PrismaClient();
 
+    /**
+     * Creates a new game row in the database
+     * 
+     * @param game_id The game id
+     * @param stats The stats to add
+     */
     export async function CreateStatRow(game_id: string, stats: DBStats) {
         await prisma.stat.create({
             data: {
@@ -21,6 +30,12 @@ export module DB {
         });
     }
 
+    /**
+     * Gets the stats for a game
+     * 
+     * @param game_id The game id
+     * @returns {Stat[]} The stats
+     */
     export async function GetStat(game_id: string): Promise<Stat[]> {
         return await prisma.stat.findMany({
             where: {
@@ -32,10 +47,21 @@ export module DB {
         });
     }
 
+    /**
+     * Gets the total amount of stats
+     * 
+     * @returns {number} The total amount of stats
+     */
     export async function GetTotalStats(): Promise<number> {
         return await prisma.stat.count();
     }
 
+    /**
+     * Gets the total amount of stats within a time
+     * 
+     * @param time The time in milliseconds
+     * @returns {number} The total amount of stats within a time
+     */
     export async function GetTotalStatsWithinTime(time: number): Promise<number> {
         return await prisma.stat.count({
             where: {
@@ -46,6 +72,12 @@ export module DB {
         });
     }
 
+    /**
+     * Gets the total amount of games
+     * 
+     * @param amount The amount of games to get
+     * @returns {Stat[][]} The stats
+     */
     export async function GetStats(amount: number): Promise<Stat[][]> {
         // select the latest five unique games
         const games = await prisma.stat.findMany({
@@ -72,6 +104,11 @@ export module DB {
         return stats;
     }
 
+    /**
+     * Adds a suggestion to the database
+     * 
+     * @param text The suggestion text
+     */
     export async function AddSuggestion(text: string) {
         await prisma.suggestion.create({
             data: {
@@ -80,6 +117,12 @@ export module DB {
         });
     }
 
+    /**
+     * Gets the latest x suggestions
+     * 
+     * @param amount The amount of suggestions to get
+     * @returns {Suggestion[]} The suggestions
+     */
     export async function GetSuggestions(amount: number): Promise<Suggestion[]> {
         return await prisma.suggestion.findMany({
             take: amount,

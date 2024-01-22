@@ -21,6 +21,12 @@ export const logger = createLogger({
     ]
 });
 
+/**
+ * Formats the date to be used in the log filename
+ * 
+ * @param date The date to format
+ * @returns The formatted date
+ */
 function format_log_filename(date: Date) {
     return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}_${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}`;
 }
