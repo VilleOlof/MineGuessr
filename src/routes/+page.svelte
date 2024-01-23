@@ -6,7 +6,7 @@
 	import Info from '$lib/Components/Info.svelte';
 	import Suggestion from '$lib/Components/Suggestion.svelte';
 	import toast from 'svelte-french-toast';
-	import { toast_style } from '$lib';
+	import { GetDiscordAvatarUrl, toast_style } from '$lib';
 	import type { LayoutData } from './$types';
 
 	export let data: LayoutData;
@@ -153,30 +153,33 @@
 	</PopupWrapper>
 {/if}
 
-<!-- <div class="discordLogin absolute right-0 top-0 m-8">
-	<Button
-		on:click={async () => {
-			try {
-				const url = (await (await fetch('/discord/init')).json()).url;
-				location.href = url;
-			} catch (e) {
-				console.error(e);
-				toast.error('Något gick fel!', {
-					duration: 5000,
-					style: toast_style
-				});
-			}
-		}}>Logga in med Discord</Button
-	>
-
+<div class="discordLogin absolute left-0 top-0 m-4">
 	{#if data.user}
-		<div class="my-4 flex items-center gap-2 text-2xl">
+		<div class="flex items-center gap-4 text-3xl">
 			<img
-				src="https://cdn.discordapp.com/avatars/{data.user.user_id}/{data.user.avatar}.png"
+				src={GetDiscordAvatarUrl(data.user.user_id, data.user.avatar)}
 				alt=""
-				class="h-12 w-12"
+				class="h-12 w-12 rounded-full outline outline-4 outline-offset-2 outline-cyan-400/75"
 			/>
-			<p>{data.user.username}</p>
+			<p>@{data.user.username}</p>
 		</div>
+	{:else}
+		<Button
+			on:click={async () => {
+				try {
+					const url = (await (await fetch('/discord/init')).json()).url;
+					location.href = url;
+				} catch (e) {
+					console.error(e);
+					toast.error('Något gick fel!', {
+						duration: 5000,
+						style: toast_style
+					});
+				}
+			}}
+		>
+			<img src="/discord.svg" alt="" class="h-8 w-8" />
+			Logga in</Button
+		>
 	{/if}
-</div> -->
+</div>

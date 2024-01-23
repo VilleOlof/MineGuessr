@@ -2,7 +2,7 @@
 	import { Game, type GameModule } from '$lib/Game';
 	import Map from '$lib/Components/Map.svelte';
 	import type { PageData } from './$types';
-	import { curr_bluemap, format_time } from '$lib';
+	import { GetDiscordAvatarUrl, curr_bluemap, format_time } from '$lib';
 	import Button from '$lib/Components/Button.svelte';
 	import Share from '$lib/Components/Share.svelte';
 	import { PUBLIC_ORIGIN } from '$env/static/public';
@@ -53,6 +53,13 @@
 				>
 				<Share game_id={data.game_id} {total_points} />
 			</div>
+
+			{#if data.user}
+				<div class="flex gap-4 text-2xl">
+					<span class="text-gray-400">Av:</span>
+					@{data.user.username}
+				</div>
+			{/if}
 		</div>
 	</div>
 {:else}

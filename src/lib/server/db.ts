@@ -1,5 +1,5 @@
 import type { DBStats } from "$lib/Stats";
-import { PrismaClient, type Stat, type Suggestion } from "@prisma/client";
+import { PrismaClient, type Stat, type Suggestion, type User } from "@prisma/client";
 
 /**
  * The database module
@@ -35,19 +35,26 @@ export module DB {
         });
     }
 
+    export type StatWithUser = Stat & {
+        user: User | null
+    };
+
     /**
      * Gets the stats for a game
      * 
      * @param game_id The game id
      * @returns {Stat[]} The stats
      */
-    export async function GetStat(game_id: string): Promise<Stat[]> {
+    export async function GetStat(game_id: string): Promise<StatWithUser[]> {
         return await prisma.stat.findMany({
             where: {
                 game_id: game_id
             },
             orderBy: {
                 round_id: 'desc'
+            },
+            include: {
+                user: true
             }
         });
     }
@@ -135,5 +142,14 @@ export module DB {
                 date: 'desc'
             }
         });
+    }
+
+    /**
+     * Gets the total amount of logged in users
+     * 
+     * @returns {number} The total amount of logged in users
+     */
+    export async function GetUserCount(): Promise<number> {
+        return await prisma.user.count();
     }
 }

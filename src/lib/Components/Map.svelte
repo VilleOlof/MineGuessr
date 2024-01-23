@@ -14,6 +14,21 @@
 
 	let bluemap: BlueMapApp | null = null;
 
+	let place_element: HTMLSelectElement;
+
+	const places: { [key: string]: THREE.Vector2 } = {
+		Nirethia: new THREE.Vector2(279, 232),
+		Valyria: new THREE.Vector2(102620, -32210),
+		Avalon: new THREE.Vector2(360, 22490),
+		Qurumaa: new THREE.Vector2(-37850, 280),
+		Norendor: new THREE.Vector2(250, -20840),
+		Tesora: new THREE.Vector2(-4000, -10600),
+		Farmania: new THREE.Vector2(-100000, 250),
+		Erathon: new THREE.Vector2(-7200, 8800),
+		Ossyria: new THREE.Vector2(-37300, -2100),
+		'Nyaste nya': new THREE.Vector2(20000, 0)
+	};
+
 	function GetPosFromInteraction(event: Event): THREE.Vector3 | null {
 		// trust me bro, .detail exists
 		// @ts-ignore
@@ -46,6 +61,10 @@
 		return position;
 	}
 
+	const sleep = (ms: number, callback: Function) => {
+		setTimeout(callback, ms);
+	};
+
 	async function ResizeMap(ev: Event, force?: boolean) {
 		enlarge_map = force ?? !enlarge_map;
 		await new Promise((r) => setTimeout(r, 50)); // budget ass solution
@@ -59,18 +78,75 @@
 	}
 	const force_close = (ev: Event) => ResizeMap(ev, false);
 
+	function handle_keyup(ev: KeyboardEvent) {
+		switch (ev.key) {
+			case 'm': {
+				ResizeMap(ev);
+				break;
+			}
+			case 'h': {
+				show_map_force = !show_map_force;
+
+				sleep(100, () => dispatchEvent(new Event('resize')));
+				sleep(250, () => dispatchEvent(new Event('resize')));
+
+				break;
+			}
+			case '0': {
+				Game.reset_view();
+
+				break;
+			}
+			case '1': {
+				PlaceTeleport(Object.values(places)[0]);
+				break;
+			}
+			case '2': {
+				PlaceTeleport(Object.values(places)[1]);
+				break;
+			}
+			case '3': {
+				PlaceTeleport(Object.values(places)[2]);
+				break;
+			}
+			case '4': {
+				PlaceTeleport(Object.values(places)[3]);
+				break;
+			}
+			case '5': {
+				PlaceTeleport(Object.values(places)[4]);
+				break;
+			}
+			case '6': {
+				PlaceTeleport(Object.values(places)[7]);
+				break;
+			}
+			case '7': {
+				PlaceTeleport(Object.values(places)[8]);
+				break;
+			}
+			case '8': {
+				PlaceTeleport(Object.values(places)[9]);
+				break;
+			}
+		}
+	}
+
 	onMount(() => {
 		addEventListener('next_round', force_close);
+		addEventListener('keyup', handle_keyup);
 	});
 
 	onDestroy(() => {
 		removeEventListener('next_round', force_close);
+		removeEventListener('keyup', handle_keyup);
 	});
 
 	let selected_place: string;
-	function PlaceTeleport() {
-		const [x, z] = selected_place.split(',').map((c) => Number(c.trim()));
-		console.log(x, z);
+	function PlaceTeleport(vector?: THREE.Vector2) {
+		const [x, z] = vector
+			? [vector.x, vector.y]
+			: selected_place.split(',').map((c) => Number(c.trim()));
 
 		Game.move_camera_to_pos(new THREE.Vector2(x, z));
 
@@ -144,19 +220,14 @@
 					<select
 						class="pointer-events-auto w-fit bg-black/70 p-1 px-2 text-gray-100"
 						bind:value={selected_place}
-						on:change={PlaceTeleport}
+						bind:this={place_element}
+						on:change={() => PlaceTeleport()}
 					>
 						<option value="0, 0" disabled selected>Platser</option>
-						<option value="279, 232">Nirethia</option>
-						<option value="360, 22490">Avalon</option>
-						<option value="102620, -32210">Valyria</option>
-						<option value="-37850, 280">Qurumaa</option>
-						<option value="250, -20840">Norendor</option>
-						<option value="-4000, -10600">Tesora</option>
-						<option value="-100000, 250">Farmania</option>
-						<option value="-7200, 8800">Erathon</option>
-						<option value="-37300, -2100">Ossyria</option>
-						<option value="20000, 0">Nyaste nya</option>
+
+						{#each Object.keys(places) as place}
+							<option value={places[place].x + ', ' + places[place].y}>{place}</option>
+						{/each}
 					</select>
 				</div>
 			</div>

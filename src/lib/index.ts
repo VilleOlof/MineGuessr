@@ -54,3 +54,8 @@ export function format_time(time: number) {
 
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
+
+export function GetDiscordAvatarUrl(user_id: string, avatar_hash: string | null) {
+    if (!avatar_hash) return `https://cdn.discordapp.com/embed/avatars/index.png`;
+    return `https://cdn.discordapp.com/avatars/${user_id}/${avatar_hash}.png`;
+}

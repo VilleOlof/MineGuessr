@@ -8,6 +8,9 @@
 	import confetti from 'canvas-confetti';
 	import GuessButton from '$lib/Components/GuessButton.svelte';
 	import XPBar from '$lib/Components/XPBar.svelte';
+	import { onMount, onDestroy } from 'svelte';
+	import { current_pos } from '$lib';
+	import * as THREE from 'three';
 
 	export let data: PageData;
 
@@ -18,7 +21,7 @@
 
 	let show_end_map: Writable<boolean> = writable(false);
 
-	addEventListener('perfect_guess', (event: Event) => {
+	const perfect_guess = () =>
 		confetti({
 			particleCount: 150,
 			spread: 100,
@@ -27,6 +30,40 @@
 			},
 			drift: 0.2
 		});
+
+	$: show_guess = $current_pos !== null && !$rounds[$curr_round].finished;
+	$: show_next = $rounds[$curr_round].finished;
+	const g_hotkey = () => {
+		if (show_guess) {
+			game.submit_guess(new THREE.Vector2($current_pos?.x, $current_pos?.z));
+		} else if (show_next) {
+			game.next_round();
+		}
+	};
+
+	function handle_keyup(ev: KeyboardEvent) {
+		switch (ev.key) {
+			case 'g': {
+				g_hotkey();
+
+				break;
+			}
+			case 'Enter': {
+				g_hotkey();
+
+				break;
+			}
+		}
+	}
+
+	onMount(() => {
+		addEventListener('keyup', handle_keyup);
+		addEventListener('perfect_guess', perfect_guess);
+	});
+
+	onDestroy(() => {
+		removeEventListener('keyup', handle_keyup);
+		removeEventListener('perfect_guess', perfect_guess);
 	});
 </script>
 

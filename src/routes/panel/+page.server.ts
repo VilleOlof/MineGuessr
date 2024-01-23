@@ -16,10 +16,13 @@ export async function load({ cookies }) {
     const total_games = await DB.GetTotalStats();
     const games_24h = await DB.GetTotalStatsWithinTime(1000 * 60 * 60 * 24);
 
+    const total_users = await DB.GetUserCount();
+
     return {
         suggestions: latest_suggestions,
         games: latest_games,
         total_games: total_games,
-        games_24h: games_24h
+        games_24h: games_24h,
+        total_users: total_users
     }
 }
