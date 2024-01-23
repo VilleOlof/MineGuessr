@@ -116,7 +116,7 @@
 		/></svg
 	>
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<p><span on:click={increment_login}>V</span>1.2.0</p>
+	<p><span on:click={increment_login}>V</span>1.2.1</p>
 </div>
 
 {#if show_info}
