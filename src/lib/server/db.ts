@@ -6,7 +6,7 @@ import { PrismaClient, type Stat, type Suggestion } from "@prisma/client";
  */
 export module DB {
 
-    const prisma = new PrismaClient();
+    export const prisma = new PrismaClient();
 
     /**
      * Creates a new game row in the database

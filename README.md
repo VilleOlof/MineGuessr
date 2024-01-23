@@ -40,6 +40,11 @@ ORIGIN = "http://localhost:5173" # Self
 PUBLIC_ORIGIN = "http://localhost:5173" # Self
 PORT = 40400 # Just for production
 PANEL_PASSWORD = "password123" # For the /panel page
+
+# For discord auth
+DISCORD_CLIENT_ID = ""
+DISCORD_CLIENT_SECRET = ""
+DISCORD_REDIRECT_URL = ""
 ```
 
 #### **Location Metadata**

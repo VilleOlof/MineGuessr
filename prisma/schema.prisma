@@ -24,6 +24,9 @@ model Stat {
 
   date DateTime @default(now())
 
+  user_id String?
+  user    User?   @relation(fields: [user_id], references: [id])
+
   @@id([game_id, round_id])
 }
 
@@ -32,4 +35,34 @@ model Suggestion {
 
   text String
   date DateTime @default(now())
+}
+
+model User {
+  id String @id
+
+  user_id  String  @unique
+  username String  @unique
+  avatar   String?
+
+  Session Session[]
+  Key     Key[]
+  Stat    Stat[]
+}
+
+model Session {
+  id             String @id
+  active_expires BigInt
+  idle_expires   BigInt
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id])
+}
+
+model Key {
+  id String @id
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id])
+
+  hashed_password String?
 }

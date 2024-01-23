@@ -5,6 +5,11 @@
 	import Stats from '$lib/Components/Stats.svelte';
 	import Info from '$lib/Components/Info.svelte';
 	import Suggestion from '$lib/Components/Suggestion.svelte';
+	import toast from 'svelte-french-toast';
+	import { toast_style } from '$lib';
+	import type { LayoutData } from './$types';
+
+	export let data: LayoutData;
 
 	let show_info = false;
 	let show_stats = false;
@@ -147,3 +152,31 @@
 		</div>
 	</PopupWrapper>
 {/if}
+
+<!-- <div class="discordLogin absolute right-0 top-0 m-8">
+	<Button
+		on:click={async () => {
+			try {
+				const url = (await (await fetch('/discord/init')).json()).url;
+				location.href = url;
+			} catch (e) {
+				console.error(e);
+				toast.error('Något gick fel!', {
+					duration: 5000,
+					style: toast_style
+				});
+			}
+		}}>Logga in med Discord</Button
+	>
+
+	{#if data.user}
+		<div class="my-4 flex items-center gap-2 text-2xl">
+			<img
+				src="https://cdn.discordapp.com/avatars/{data.user.user_id}/{data.user.avatar}.png"
+				alt=""
+				class="h-12 w-12"
+			/>
+			<p>{data.user.username}</p>
+		</div>
+	{/if}
+</div> -->
