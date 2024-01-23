@@ -14,7 +14,7 @@ export module DB {
      * @param game_id The game id
      * @param stats The stats to add
      */
-    export async function CreateStatRow(game_id: string, stats: DBStats) {
+    export async function CreateStatRow(game_id: string, stats: DBStats, user_id?: string) {
         await prisma.stat.create({
             data: {
                 game_id: game_id,
@@ -26,6 +26,11 @@ export module DB {
                 distance: stats.distance,
                 time: stats.time,
                 panorama_id: stats.panorama_id,
+                user: {
+                    connect: {
+                        user_id: user_id
+                    }
+                }
             }
         });
     }

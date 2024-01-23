@@ -2,7 +2,7 @@ import { logger } from '$lib/server/logger';
 import { DBStatsSchema } from '$lib/Stats.js';
 import { DB } from '$lib/server/db.js';
 
-export async function POST({ request, params }) {
+export async function POST({ request, params, locals }) {
     try {
         let game_id: string = params.game_id;
 
@@ -14,7 +14,9 @@ export async function POST({ request, params }) {
             return new Response("Invalid stats", { status: 400 });
         }
 
-        await DB.CreateStatRow(game_id, stats.data);
+        const session = await locals.auth.validate();
+
+        await DB.CreateStatRow(game_id, stats.data, session?.user.user_id ?? undefined);
 
         return new Response("OK", { status: 200 });
     }
