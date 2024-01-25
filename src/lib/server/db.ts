@@ -1,3 +1,4 @@
+import type { TopGame } from "$lib";
 import type { DBStats } from "$lib/Stats";
 import { PrismaClient, type Stat, type Suggestion, type User } from "@prisma/client";
 
@@ -151,5 +152,73 @@ export module DB {
      */
     export async function GetUserCount(): Promise<number> {
         return await prisma.user.count();
+    }
+
+    /**
+     * Gets the top games
+     * Used for the leaderboard
+     * 
+     * @param limit How many games to get
+     * @param offset The offset
+     * @returns 
+     */
+    export async function GetTopGames(limit: number, offset: number): Promise<TopGame[]> {
+        type MidTopGame = {
+            game_id: string,
+            date: Date,
+            user_id: string;
+            total_distance: number,
+            total_time: number
+            round_distances: string
+        };
+
+        const games: MidTopGame[] = await prisma.$queryRaw`
+            SELECT 
+                game_id, 
+                date, 
+                user_id, 
+                GROUP_CONCAT(distance) as round_distances, 
+                SUM(
+                    CASE 
+                        WHEN (5000 - (distance - 16) * 0.25) < 0 THEN 0
+                        WHEN (5000 - (distance - 16) * 0.25) > 5000 THEN 5000
+                        ELSE (5000 - (distance - 16) * 0.25)
+                    END
+                ) as total_score, 
+                SUM(distance) as total_distance, 
+                SUM(time) as total_time
+            FROM stat
+            GROUP BY game_id
+            HAVING COUNT(*) = 5
+            ORDER BY total_score DESC, total_time ASC
+            LIMIT ${limit} OFFSET ${offset}
+        `;
+
+        const gameUserIds = games.map(game => game.user_id).filter((value) => value !== null);
+
+        const users = await prisma.user.findMany({
+            where: {
+                id: {
+                    in: gameUserIds
+                }
+            },
+            select: {
+                id: true,
+                user_id: true,
+                username: true,
+                avatar: true
+            }
+        });
+
+        const result: TopGame[] = games.map(game => ({
+            ...game,
+            total_distance: Number(game.total_distance),
+            total_time: Number(game.total_time), // From BigInt to Number
+            round_distance: game.round_distances.split(',').map(Number),
+            user: users.find(user => user.id === game.user_id)
+        }));
+        console.log(result);
+
+        return result;
     }
 }

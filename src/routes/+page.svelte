@@ -16,22 +16,15 @@
 	let show_suggestion = false;
 
 	let login_count: number = 0;
-	let show_login: boolean = false;
 	function increment_login() {
 		login_count++;
 		if (login_count >= 5) {
-			show_login = true;
+			window.location.href = '/panel';
 		}
 
 		setTimeout(() => {
 			login_count--;
 		}, 1000);
-	}
-
-	let login_pass: string = '';
-	function login() {
-		document.cookie = `90gqguessr-panel-pass=${login_pass}; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
-		location.href = '/panel';
 	}
 </script>
 
@@ -65,6 +58,8 @@
 
 	<div class="buttons flex items-center justify-between gap-4">
 		<Button on:click={() => (location.href = '/play')}>Spela</Button>
+
+		<Button on:click={() => (location.href = '/top')}>Top</Button>
 
 		<Button on:click={() => (show_info = true)}>?</Button>
 	</div>
@@ -130,26 +125,6 @@
 {:else if show_suggestion}
 	<PopupWrapper title="Skicka in förslag" on:click={() => (show_suggestion = !show_suggestion)}>
 		<Suggestion bind:open={show_suggestion} />
-	</PopupWrapper>
-{:else if show_login}
-	<PopupWrapper title="Panel login" on:click={() => (show_login = !show_login)}>
-		<div class="flex w-full items-end justify-between">
-			<div class="">
-				<p class="text-lg text-gray-300">Lösenord:</p>
-				<input type="password" class="bg-gray-900 px-2 py-1 text-xl" bind:value={login_pass} />
-			</div>
-			<div class="">
-				<button
-					class="bg-gray-900 px-4 py-2 text-3xl transition-transform hover:scale-95 active:scale-105"
-					on:click={login}>Logga in</button
-				>
-				<button
-					on:click={() => (location.href = '/panel')}
-					class="h-full bg-gray-900 px-4 py-2 text-3xl transition-transform hover:scale-95 active:scale-105"
-					>{'>'}</button
-				>
-			</div>
-		</div>
 	</PopupWrapper>
 {/if}
 

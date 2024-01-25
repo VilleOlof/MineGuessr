@@ -9,6 +9,10 @@ Guess the Minecraft ingame location based off a 360 panorama view and use the ma
 [/] - database panel with auth for checking db data  
 [ ] - better mobile for /panel  
 [ ] - Leaderboards  
+[ ] - Make games server-sided
+[ ] - Daily mode (server-sided date)
+[ ] - Connect old/local stats to server (upsert sync with local)
+[ ] - More Panorama screenshots
 
 # Setup & Start
 

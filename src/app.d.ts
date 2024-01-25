@@ -17,6 +17,7 @@ declare global {
 			user_id: string; // Discord user ID
 			username: string;
 			avatar: string | null;
+			perm_lvl: number;
 		};
 		type DatabaseSessionAttributes = {};
 	}

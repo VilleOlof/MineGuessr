@@ -57,7 +57,7 @@
 			{#if data.user}
 				<div class="flex gap-4 text-2xl">
 					<span class="text-gray-400">Av:</span>
-					@{data.user.username}
+					{data.game[0].user?.username ? `@${data.game[0].user?.username}` : '???'}
 				</div>
 			{/if}
 		</div>

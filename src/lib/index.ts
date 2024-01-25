@@ -16,6 +16,20 @@ export type location_metadata = {
     coordinates: [number, number]
 }
 
+export type TopGame = {
+    user: {
+        id: string;
+        user_id: string;
+        username: string;
+        avatar: string | null;
+    } | undefined;
+    game_id: string;
+    date: Date;
+    total_distance: number;
+    total_time: number;
+    round_distance: number[];
+};
+
 /**
  * Adds a guess marker to the map
  * 

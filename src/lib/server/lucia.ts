@@ -15,7 +15,8 @@ export const auth = lucia({
         return {
             user_id: data.user_id,
             username: data.username,
-            avatar: data.avatar
+            avatar: data.avatar,
+            perm_lvl: data.perm_lvl
         }
     }
 });

@@ -1,11 +1,10 @@
-import { PANEL_PASSWORD } from '$env/static/private';
 import { logger } from '$lib/server/logger';
 import { DB } from '$lib/server/db.js';
 import { error } from '@sveltejs/kit';
 
-export async function load({ cookies }) {
-    const pass = cookies.get('90gqguessr-panel-pass');
-    if (!pass || pass !== PANEL_PASSWORD) {
+export async function load({ locals }) {
+    const session = await locals.auth.validate();
+    if (!session || session.user.perm_lvl !== 10) {
         logger.error('Unauthorized panel access');
         throw error(401, 'Unauthorized');
     }

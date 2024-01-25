@@ -43,6 +43,7 @@ model User {
   user_id  String  @unique
   username String  @unique
   avatar   String?
+  perm_lvl Int     @default(0)
 
   Session Session[]
   Key     Key[]
