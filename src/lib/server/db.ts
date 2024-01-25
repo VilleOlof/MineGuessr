@@ -1,4 +1,4 @@
-import type { TopGame } from "$lib";
+import { PAGE_SIZE, type TopGame } from "$lib";
 import type { DBStats } from "$lib/Stats";
 import { PrismaClient, type Stat, type Suggestion, type User } from "@prisma/client";
 
@@ -167,6 +167,7 @@ export module DB {
             game_id: string,
             date: Date,
             user_id: string;
+            total_score: number,
             total_distance: number,
             total_time: number
             round_distances: string
@@ -212,13 +213,27 @@ export module DB {
 
         const result: TopGame[] = games.map(game => ({
             ...game,
+            total_score: Number(game.total_score),
             total_distance: Number(game.total_distance),
             total_time: Number(game.total_time), // From BigInt to Number
             round_distance: game.round_distances.split(',').map(Number),
             user: users.find(user => user.id === game.user_id)
         }));
-        console.log(result);
 
         return result;
+    }
+
+    export async function GetAmountOfGamePages(): Promise<number> {
+        const amountOfGames: { amount: BigInt }[] = await prisma.$queryRaw`
+            SELECT COUNT(*) as amount
+            FROM (
+                SELECT game_id
+                FROM stat
+                GROUP BY game_id
+                HAVING COUNT(*) = 5
+            ) as games
+        `;
+
+        return Math.ceil(Number(amountOfGames[0].amount) / PAGE_SIZE);
     }
 }

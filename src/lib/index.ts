@@ -11,6 +11,9 @@ export const toast_style = 'background-color: rgb(17 24 39); color: white; font-
 // @ts-ignore
 globalThis.__VUE_PROD_DEVTOOLS__ = false;
 
+// TODO MOVE THESE TYPES AND FUNCTIONS TO SOME BETTER PLACE
+export const PAGE_SIZE = 10;
+
 export type location_metadata = {
     id: number,
     coordinates: [number, number]
@@ -25,6 +28,7 @@ export type TopGame = {
     } | undefined;
     game_id: string;
     date: Date;
+    total_score: number;
     total_distance: number;
     total_time: number;
     round_distance: number[];

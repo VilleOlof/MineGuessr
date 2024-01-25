@@ -60,9 +60,23 @@
 
 	async function Page(pageIn: number) {
 		const new_page = ($page ?? 1) + pageIn;
-		if (new_page < 1) return;
+
+		if (new_page < 1 || new_page > data.pages) {
+			toast.error('Det finns inga fler sidor!', {
+				style: toast_style
+			});
+			return;
+		}
+
 		lb_data.set(await fetch_page(new_page));
 		page.set(new_page);
+	}
+
+	function short_name(name: string) {
+		if (name.length > 13) {
+			return name.substring(0, 13) + '...';
+		}
+		return name;
 	}
 
 	onMount(async () => {
@@ -128,7 +142,7 @@
 											alt=""
 											class="h-6 w-6 rounded-full"
 										/>
-										@{game.user.username.substring(0, 16)}
+										@{short_name(game.user.username)}
 									{:else}
 										???
 									{/if}

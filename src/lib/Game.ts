@@ -222,6 +222,9 @@ export class Game {
     /**
      * Calculates the score from a distance
      * 
+     * This needs to have the same calculation method as the
+     * sql query in DB.GetTopGames in order to be synced.
+     * 
      * @param distance The distance to calculate the score from
      * @returns The score
      */

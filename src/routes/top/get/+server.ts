@@ -1,7 +1,8 @@
+import { PAGE_SIZE } from '$lib';
 import { DB } from '$lib/server/db.js';
 import { logger } from '$lib/server/logger.js';
 
-const PAGE_SIZE = 10;
+
 
 export async function GET({ url }) {
     try {
