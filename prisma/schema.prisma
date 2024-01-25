@@ -37,6 +37,25 @@ model Suggestion {
   date DateTime @default(now())
 }
 
+model Statistics {
+  id Int @id @default(autoincrement())
+
+  user_id String @unique
+  user    User   @relation(fields: [user_id], references: [user_id])
+
+  games_played     Int
+  games_finished   Int
+  total_score      Int
+  average_score    Float
+  average_distance Float
+  total_distance   Int
+  best_score       Int
+  worst_score      Int
+  total_time       Int
+
+  updated_at DateTime @updatedAt
+}
+
 model User {
   id String @id
 
@@ -48,6 +67,8 @@ model User {
   Session Session[]
   Key     Key[]
   Stat    Stat[]
+
+  statistics Statistics?
 }
 
 model Session {

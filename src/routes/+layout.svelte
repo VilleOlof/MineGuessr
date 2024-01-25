@@ -1,7 +1,29 @@
-<script>
+<script lang="ts">
 	import { PUBLIC_ORIGIN } from '$env/static/public';
+	import { onMount } from 'svelte';
 	import '../app.pcss';
 	import { Toaster } from 'svelte-french-toast';
+	import { browser } from '$app/environment';
+	import { LatestUpdate, SendUpdatesToServer, Stats } from '$lib/Stats';
+	import type { LayoutData } from './$types';
+
+	export let data: LayoutData;
+
+	onMount(() => {
+		if (browser && data.user !== null) {
+			// if local storage is empty, set it from the server
+			// but if there exists both on the client and server
+			// check using the timestamp, and if the client doesnt have a timestamp or the server has a newer timestamp, update the client
+
+			if ($Stats.games_played === 0) {
+				$Stats = data.server_stats;
+			} else if ($LatestUpdate === null || $LatestUpdate < data.server_stats.last_updated) {
+				$Stats = data.server_stats;
+			}
+
+			SendUpdatesToServer();
+		}
+	});
 </script>
 
 <svelte:head>

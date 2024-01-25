@@ -1,5 +1,5 @@
 import { PAGE_SIZE, type TopGame } from "$lib";
-import type { DBStats } from "$lib/Stats";
+import type { DBStats, Stats } from "$lib/Stats";
 import { PrismaClient, type Stat, type Suggestion, type User } from "@prisma/client";
 
 /**
@@ -235,5 +235,44 @@ export module DB {
         `;
 
         return Math.ceil(Number(amountOfGames[0].amount) / PAGE_SIZE);
+    }
+
+    export async function UpsertStatistics(user_id: string, stats: Stats) {
+        return await prisma.statistics.upsert({
+            where: {
+                user_id: user_id
+            },
+            update: {
+                games_played: stats.games_played,
+                games_finished: stats.games_finished,
+                total_score: stats.total_score,
+                average_score: stats.average_score,
+                average_distance: stats.average_distance,
+                total_distance: stats.total_distance,
+                best_score: stats.best_score,
+                worst_score: stats.worst_score,
+                total_time: stats.total_time
+            },
+            create: {
+                user_id: user_id,
+                games_played: stats.games_played,
+                games_finished: stats.games_finished,
+                total_score: stats.total_score,
+                average_score: stats.average_score,
+                average_distance: stats.average_distance,
+                total_distance: stats.total_distance,
+                best_score: stats.best_score,
+                worst_score: stats.worst_score,
+                total_time: stats.total_time
+            }
+        });
+    }
+
+    export async function GetStatistics(user_id: string) {
+        return await prisma.statistics.findUnique({
+            where: {
+                user_id: user_id
+            }
+        });
     }
 }

@@ -37,6 +37,36 @@ export const Stats: Writable<Stats> = persisted("90gqguessr-stats", {
 
     total_time: 0,
 });
+export const LatestUpdate: Writable<number | null> = persisted("90gqguessr-stats-update", null);
+
+export function SendUpdatesToServer() {
+    Stats.subscribe(async (stats) => {
+        try {
+            if (stats.games_played === 0) return;
+
+            let res = await fetch("/api/statistics", {
+                method: "POST",
+                body: JSON.stringify(stats),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            if (!res.ok) {
+                console.log("Failed to send statistics to server", res);
+                return;
+            }
+
+            let json = await res.json();
+            const updated_at: Date = new Date(json.update);
+
+            LatestUpdate.set(updated_at.getTime());
+        }
+        catch (e) {
+            console.log("Failed to send statistics to server", e);
+        }
+    });
+}
 
 export const DBStatsSchema = z.object({
     round_id: z.number(),
