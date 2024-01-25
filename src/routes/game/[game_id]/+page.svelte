@@ -26,7 +26,6 @@
 		<div
 			class="end flex w-full flex-col items-center gap-4 bg-gray-900 px-2 py-6 sm:w-3/4 md:w-1/2 xl:w-2/5"
 		>
-			<h1 class="text-gray-400">{data.game_id}</h1>
 			<p class="text-4xl">Totalt: {total_points}</p>
 			<p class="text-3xl">Tid: {format_time(total_time / 1000)}s</p>
 
@@ -60,6 +59,10 @@
 					{data.game[0].user?.username ? `@${data.game[0].user?.username}` : '???'}
 				</div>
 			{/if}
+
+			<p class="text-lg text-gray-300">{data.game[data.game.length - 1].date.toLocaleString()}</p>
+
+			<p class="text-gray-400">{data.game_id}</p>
 		</div>
 	</div>
 {:else}

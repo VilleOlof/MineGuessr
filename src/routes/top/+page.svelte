@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { format_time, GetDiscordAvatarUrl, toast_style, type TopGame } from '$lib';
+	import { format_time, GetDiscordAvatarUrl, PAGE_SIZE, toast_style, type TopGame } from '$lib';
 	import { Game } from '$lib/Game';
 	import { onMount } from 'svelte';
 	import toast from 'svelte-french-toast';
@@ -9,10 +9,28 @@
 
 	export let data: PageData;
 
-	let lb_data: Writable<TopGame[]> = writable([]);
+	let lb_data: Writable<TopGame[]> = writable(GetTempLbData(PAGE_SIZE));
 	let loading: boolean = false;
 
 	const page = queryParam('page', ssp.number(1));
+
+	function GetTempLbData(amount: number): TopGame[] {
+		let data: TopGame[] = [];
+
+		for (let i = 0; i < amount; i++) {
+			data.push({
+				game_id: i.toString(),
+				date: new Date(),
+				total_score: 0,
+				round_distance: [1, 2, 3, 4, 5],
+				total_distance: 0,
+				total_time: 5999400,
+				user: undefined
+			});
+		}
+
+		return data;
+	}
 
 	async function fetch_page(page: number | null): Promise<TopGame[]> {
 		loading = true;
@@ -85,7 +103,7 @@
 </script>
 
 {#if loading}
-	<p>Laddar datan just för dig...</p>
+	<p class="text-center text-5xl">Laddar datan just för dig...</p>
 {:else}
 	<div class="flex flex-col items-center gap-4">
 		<h1 class="text-4xl">Topplista</h1>
@@ -128,8 +146,7 @@
 							</th>
 							<td class="px-3 py-2 md:px-6 md:py-4"> {format_time(game.total_time / 1000)} </td>
 							<td class="px-3 py-2 md:px-6 md:py-4">
-								{game.round_distance.reduce((acc, curr) => acc + Game.calculate_score(curr), 0)}
-								<!--TODO FIX THIS, TAKE THE SUM OF ALL ROUNDS INSTEAD OF TOTAL?-->
+								{Math.round(game.total_score)}
 							</td>
 							<td class="hidden px-3 py-2 md:table-cell md:px-6 md:py-4">
 								{game.total_distance} blocks
