@@ -15,10 +15,12 @@
 			// but if there exists both on the client and server
 			// check using the timestamp, and if the client doesnt have a timestamp or the server has a newer timestamp, update the client
 
-			if ($Stats.games_played === 0) {
-				$Stats = data.server_stats;
-			} else if ($LatestUpdate === null || $LatestUpdate < data.server_stats.last_updated) {
-				$Stats = data.server_stats;
+			if (data.server_stats !== null) {
+				if ($Stats.games_played === 0) {
+					$Stats = data.server_stats;
+				} else if ($LatestUpdate === null || $LatestUpdate < data.server_stats.last_updated) {
+					$Stats = data.server_stats;
+				}
 			}
 
 			SendUpdatesToServer();

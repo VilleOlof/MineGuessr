@@ -8,9 +8,9 @@ Guess the Minecraft ingame location based off a 360 panorama view and use the ma
 [ ] - achivements?  
 [/] - database panel with auth for checking db data  
 [ ] - better mobile for /panel  
-[ ] - Make games server-sided  
 [ ] - Daily mode (server-sided date)  
 [ ] - More Panorama screenshots  
+[LATER] - Make games server-sided  
 
 # Setup & Start
 
