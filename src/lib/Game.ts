@@ -3,6 +3,7 @@ import { get, writable, type Writable } from "svelte/store";
 import * as THREE from "three";
 import { Stats, type DBStats } from "./Stats";
 import type { Stat } from "@prisma/client";
+import { z } from "zod";
 
 /**
  * Game types
@@ -17,6 +18,13 @@ export module GameModule {
         panorama_id: number;
         finished: boolean;
     }
+
+    export const GameType = {
+        Normal: 0,
+        Daily: 1
+    } as const;
+
+    export const GameTypeSchema = z.nativeEnum(GameType);
 }
 
 /**
@@ -418,6 +426,7 @@ export class Game {
             distance: curr_round.distance,
             time: curr_round.time,
             panorama_id: curr_round.panorama_id,
+            game_type: GameModule.GameType.Normal // TODO
         };
 
         try {

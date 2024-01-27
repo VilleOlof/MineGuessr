@@ -4,7 +4,7 @@ import { error } from '@sveltejs/kit';
 
 export async function load({ locals }) {
     const session = await locals.auth.validate();
-    if (!session || session.user.perm_lvl !== 10) {
+    if (!session || session.user.perm_lvl !== DB.Permissions.Admin) {
         logger.error('Unauthorized panel access');
         throw error(401, 'Unauthorized');
     }

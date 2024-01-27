@@ -18,12 +18,16 @@
 			if (data.server_stats !== null) {
 				if ($Stats.games_played === 0) {
 					$Stats = data.server_stats;
-				} else if ($LatestUpdate === null || $LatestUpdate < data.server_stats.last_updated) {
+				} else if (
+					$LatestUpdate === null ||
+					$LatestUpdate < data.server_stats.updated_at.getTime()
+				) {
 					$Stats = data.server_stats;
 				}
 			}
 
 			SendUpdatesToServer();
+			$Stats = $Stats;
 		}
 	});
 </script>

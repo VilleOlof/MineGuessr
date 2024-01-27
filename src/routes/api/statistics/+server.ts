@@ -37,7 +37,7 @@ export async function POST({ locals, request }) {
         }
         const stats = parsed.data;
 
-        let db_stats = await DB.UpsertStatistics(session.user.user_id, stats);
+        let db_stats = await DB.UpsertStatistics(session.user.userId, stats);
 
         return new Response(JSON.stringify({
             status: 'ok',

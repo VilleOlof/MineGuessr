@@ -1,6 +1,7 @@
 import { persisted } from "svelte-persisted-store";
 import type { Writable } from "svelte/store";
 import { z } from "zod";
+import { GameModule } from "./Game";
 
 export const StatsSchema = z.object({
     games_played: z.number(),
@@ -40,7 +41,7 @@ export const Stats: Writable<Stats> = persisted("90gqguessr-stats", {
 export const LatestUpdate: Writable<number | null> = persisted("90gqguessr-stats-update", null);
 
 export function SendUpdatesToServer() {
-    Stats.subscribe(async (stats) => {
+    const sendStats = async (stats: Stats) => {
         try {
             if (stats.games_played === 0) return;
 
@@ -65,6 +66,15 @@ export function SendUpdatesToServer() {
         catch (e) {
             console.log("Failed to send statistics to server", e);
         }
+    };
+    let timeout: NodeJS.Timeout | null = null;
+
+    Stats.subscribe(async (stats) => {
+        if (timeout) clearTimeout(timeout);
+
+        timeout = setTimeout(async () => {
+            await sendStats(stats);
+        }, 5000);
     });
 }
 
@@ -78,5 +88,7 @@ export const DBStatsSchema = z.object({
     distance: z.number(),
     time: z.number(),
     panorama_id: z.number(),
+
+    game_type: GameModule.GameTypeSchema,
 });
 export type DBStats = z.infer<typeof DBStatsSchema>;

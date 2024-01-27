@@ -16,7 +16,7 @@ export async function POST({ request, params, locals }) {
 
         const session = await locals.auth.validate();
 
-        await DB.CreateStatRow(game_id, stats.data, session?.user.user_id ?? undefined);
+        await DB.CreateStatRow(game_id, stats.data, session?.user.userId ?? undefined);
 
         return new Response("OK", { status: 200 });
     }

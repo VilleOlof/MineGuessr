@@ -7,7 +7,15 @@ import { PrismaClient, type Stat, type Suggestion, type User } from "@prisma/cli
  */
 export module DB {
 
-    export const prisma = new PrismaClient();
+    export const prisma = new PrismaClient({
+        log: ['error'],
+    });
+
+    export const Permissions = {
+        Banned: -1,
+        User: 0,
+        Admin: 10
+    } as const;
 
     /**
      * Creates a new game row in the database
@@ -27,9 +35,10 @@ export module DB {
                 distance: stats.distance,
                 time: stats.time,
                 panorama_id: stats.panorama_id,
+                game_type: stats.game_type,
                 user: {
                     connect: {
-                        user_id: user_id
+                        id: user_id
                     }
                 }
             }

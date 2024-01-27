@@ -22,6 +22,8 @@ model Stat {
   time        Int
   panorama_id Int
 
+  game_type Int @default(0)
+
   date DateTime @default(now())
 
   user_id String?
@@ -41,7 +43,7 @@ model Statistics {
   id Int @id @default(autoincrement())
 
   user_id String @unique
-  user    User   @relation(fields: [user_id], references: [user_id])
+  user    User   @relation(fields: [user_id], references: [id])
 
   games_played     Int
   games_finished   Int
