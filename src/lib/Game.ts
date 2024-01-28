@@ -1,9 +1,10 @@
-import { UpdatePOIMarker, curr_bluemap, current_pos, type location_metadata } from "$lib";
+import { UpdatePOIMarker, curr_bluemap, current_pos, toast_style, type location_metadata } from "$lib";
 import { get, writable, type Writable } from "svelte/store";
 import * as THREE from "three";
 import { Stats, type DBStats } from "./Stats";
 import type { Stat } from "@prisma/client";
 import { z } from "zod";
+import toast from "svelte-french-toast";
 
 /**
  * Game types
@@ -437,6 +438,10 @@ export class Game {
         }
         catch (e) {
             console.log(`Error while sending stats: ${e}`);
+
+            toast.error("Kunde inte skicka statistik till servern", {
+                style: toast_style
+            });
         }
     }
 }

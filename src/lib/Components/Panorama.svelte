@@ -3,29 +3,16 @@
 	import * as THREE from 'three';
 	import CameraControls from 'camera-controls';
 	import Stats from 'three/addons/libs/stats.module.js';
+	import { ThreeHandler } from '$lib/Three';
 
 	let three_wrapper: HTMLDivElement;
 	let loading: boolean = true;
 
 	export let index: number;
-	$: ChangeBackground(index);
-
-	function ChangeBackground(index: number) {
-		let ext = 'webp';
+	$: {
 		loading = true;
-		let background = new THREE.CubeTextureLoader()
-			.setPath(`/locations/${index}/`)
-			.load([
-				`panorama_1.${ext}`,
-				`panorama_3.${ext}`,
-				`panorama_4.${ext}`,
-				`panorama_5.${ext}`,
-				`panorama_0.${ext}`,
-				`panorama_2.${ext}`
-			]);
-
+		ThreeHandler.change_panorama(scene, index);
 		loading = false;
-		scene.background = background;
 	}
 
 	CameraControls.install({ THREE: THREE });
@@ -36,23 +23,14 @@
 	const clock = new THREE.Clock();
 
 	const scene = new THREE.Scene();
-	ChangeBackground(index);
+	ThreeHandler.change_panorama(scene, index);
 
-	const camera = new THREE.PerspectiveCamera(60, width / height, 0.01, 100);
-	camera.position.set(0, 0, 1e-5);
+	const camera = ThreeHandler.create_camera();
 
 	const renderer = new THREE.WebGLRenderer();
 	renderer.setSize(width, height);
-	document.body.appendChild(renderer.domElement);
 
-	const cameraControls = new CameraControls(camera, renderer.domElement);
-	cameraControls.minDistance = cameraControls.maxDistance = 1;
-	cameraControls.azimuthRotateSpeed = -0.35; // negative value to invert rotation direction
-	cameraControls.polarRotateSpeed = -0.35; // negative value to invert rotation direction
-	cameraControls.truckSpeed = 10;
-	cameraControls.mouseButtons.wheel = CameraControls.ACTION.ZOOM;
-	cameraControls.touches.two = CameraControls.ACTION.TOUCH_ZOOM_TRUCK;
-	cameraControls.saveState();
+	const cameraControls = ThreeHandler.create_camera_controls(camera, renderer.domElement);
 
 	onMount(async () => {
 		three_wrapper.appendChild(renderer.domElement);
