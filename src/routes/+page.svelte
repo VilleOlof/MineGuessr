@@ -130,13 +130,16 @@
 
 <div class="discordLogin absolute left-0 top-0 m-4">
 	{#if data.user}
+		{@const pfp_url = GetDiscordAvatarUrl(data.user.user_id, data.user.avatar)}
+
 		<div class="flex items-center gap-4 text-3xl">
-			<img
-				src={GetDiscordAvatarUrl(data.user.user_id, data.user.avatar)}
-				alt=""
-				class="h-12 w-12 rounded-full outline outline-4 outline-offset-2 outline-cyan-400/75"
-			/>
-			<p>@{data.user.username}</p>
+			<img src={pfp_url} alt="" class="h-12 w-12 rounded-full outline outline-2 outline-gray-700" />
+			<p
+				class=" pfp_colored bg-clip-text text-transparent"
+				style="background-image: url({pfp_url})"
+			>
+				@{data.user.username}
+			</p>
 		</div>
 	{:else}
 		<Button
@@ -158,3 +161,12 @@
 		>
 	{/if}
 </div>
+
+<style>
+	/* https://x.com/artur_bien/status/1750944453538283933 */
+	.pfp_colored {
+		background-size: 1px 1px;
+		background-repeat: repeat;
+		filter: invert(0.1) contrast(1) saturate(2) grayscale(0.2) brightness(2);
+	}
+</style>
