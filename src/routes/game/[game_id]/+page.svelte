@@ -2,7 +2,7 @@
 	import { Game, type GameModule } from '$lib/Game';
 	import Map from '$lib/Components/Map.svelte';
 	import type { PageData } from './$types';
-	import { GetDiscordAvatarUrl, curr_bluemap, format_time } from '$lib';
+	import { GameType, GetDiscordAvatarUrl, curr_bluemap, format_time } from '$lib';
 	import Button from '$lib/Components/Button.svelte';
 	import Share from '$lib/Components/Share.svelte';
 	import { PUBLIC_ORIGIN } from '$env/static/public';
@@ -50,7 +50,7 @@
 						}
 					}}>Kolla kartan</Button
 				>
-				<Share game_id={data.game_id} {total_points} />
+				<Share game_id={data.game_id} {total_points} game_type={game_instance.game_type} />
 			</div>
 
 			{#if data.user}
@@ -60,7 +60,15 @@
 				</div>
 			{/if}
 
-			<p class="text-lg text-gray-300">{data.game[data.game.length - 1].date.toLocaleString()}</p>
+			{#if game_instance.game_type === GameType.Daily}
+				{@const date = data.game[data.game.length - 1].date}
+
+				<p class="text-3xl text-gray-200">
+					Dagligt läge ({date.getFullYear()}/{date.getMonth() + 1}/{date.getDate()})
+				</p>
+			{:else}
+				<p class="text-lg text-gray-300">{data.game[data.game.length - 1].date.toLocaleString()}</p>
+			{/if}
 
 			<p class="text-gray-400">{data.game_id}</p>
 		</div>

@@ -2,6 +2,7 @@
 	import { fly } from 'svelte/transition';
 
 	export let title: string;
+	export let mini: boolean = false;
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -9,7 +10,8 @@
 <div on:click class="blurryshader absolute left-0 top-0 z-10 h-full w-full backdrop-blur-sm"></div>
 
 <div
-	class="popup c-shadow absolute top-36 z-10 w-11/12 bg-gray-700 p-2 shadow-cyan-400 md:w-7/12 lg:w-4/12"
+	class:mini={!mini}
+	class="popup c-shadow absolute top-36 z-10 w-11/12 overflow-y-scroll bg-gray-700 p-2 shadow-cyan-400 md:w-7/12 lg:w-4/12"
 	transition:fly={{ y: 100, duration: 200, delay: 100 }}
 >
 	<header class="flex items-center justify-between">
@@ -36,3 +38,9 @@
 
 	<slot />
 </div>
+
+<style>
+	:global(.mini) {
+		height: 75%;
+	}
+</style>

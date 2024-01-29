@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { format_time } from '$lib';
+	import { GameType, format_time } from '$lib';
 	import type { Game } from '$lib/Game';
 	import { onDestroy, onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
@@ -43,7 +43,10 @@
 <div
 	class="xpWrapper pointer-events-none absolute left-0 top-0 z-10 flex w-full flex-col items-center justify-start p-2"
 >
-	<div class="xpbar pointer-events-auto flex h-8 w-1/2 bg-gray-900 p-1 shadow-lg md:w-1/4">
+	<div
+		class="xpbar pointer-events-auto relative flex h-8 w-1/2 bg-gray-900 p-1 shadow-lg md:w-1/4"
+		class:daily-game-text={game.game_type === GameType.Daily}
+	>
 		{#each $rounds as round}
 			{@const percentage = 100 / $rounds.length}
 			<div
@@ -76,3 +79,22 @@
 		</p>
 	{/if}
 </div>
+
+<style>
+	.daily-game-text::after {
+		content: 'Dagligt';
+		position: absolute;
+		top: 0;
+		right: 0;
+		transform: translate(50%, 30%) rotate(-7deg);
+		font-size: 2rem;
+		text-shadow: 2px 2px 1px #141414;
+		color: #fae742;
+	}
+
+	@media screen and (max-width: 640px) {
+		.daily-game-text::after {
+			font-size: 1.5rem;
+		}
+	}
+</style>

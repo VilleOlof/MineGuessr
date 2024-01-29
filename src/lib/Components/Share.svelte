@@ -2,16 +2,22 @@
 	import { PUBLIC_ORIGIN } from '$env/static/public';
 	import toast from 'svelte-french-toast';
 	import Button from './Button.svelte';
-	import { toast_style } from '$lib';
+	import { GameType, toast_style } from '$lib';
 
 	export let game_id: string;
+	export let game_type: GameType;
 	export let total_points: number;
 
 	async function share() {
 		if (navigator?.canShare?.()) {
+			const date = new Date();
 			await navigator.share({
 				title: '90gQ Guessr',
-				text: `Jag fick ${total_points} poäng på 90gQ Guessr!`,
+				text: `Jag fick ${total_points} poäng på dagliga 90gQ Guessr!${
+					game_type === GameType.Daily
+						? `(${date.getFullYear()}/${date.getMonth()}/${date.getDate()})`
+						: ''
+				}`,
 				url: `${PUBLIC_ORIGIN}/game/${game_id}`
 			});
 		} else {

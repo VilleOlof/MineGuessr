@@ -9,14 +9,31 @@
 	Finns över 150+ platser att gissa på! <br />
 </p>
 
-<h2 class="my-1 text-2xl font-bold">Poängsystemet</h2>
+<h2 class="my-1 mt-4 text-2xl font-bold">Poängsystemet</h2>
 <p class="md:text-xl">
 	Om du har inom 16 block av platsen får du 5000 poäng. <br />
 	För varje block du är ifrån platsen så förlorar du 0,25 poäng. <br />
 	Tiden du har på dig för att gissa påverkar inte poängen. <br />
 </p>
 
-<h2 class="my-1 text-2xl font-bold">Snabbknappar</h2>
+<h2 class="my-1 mt-4 text-2xl font-bold">Dagligt läge</h2>
+<p class="md:text-xl">
+	Varje ny dag (01:00) så byts platserna ut. <br />
+	Du kan endast spela dagligt läge en gång per dag. <br />
+	<br />
+	Detta gör det enkelt att tävla mot sina vänner!
+</p>
+
+<h2 class="my-1 mt-4 text-2xl font-bold">Topplistan</h2>
+<p class="md:text-xl">
+	Se vilka som är bäst på att gissa platser! <br />
+	Ifall man är inloggad så syns endast sitt bästa resultat. <br />
+	<br />
+	Först sorterar den efter poäng, sen efter tid. <br />
+	Topplistan inkluderar inte dagligt läge.
+</p>
+
+<h2 class="my-1 mt-4 text-2xl font-bold">Snabbknappar</h2>
 <p class="md:text-xl">
 	<kbd>M</kbd> - Fullskärm/minska kartan <br />
 	<kbd>H</kbd> - Visa/dölj kartan <br />

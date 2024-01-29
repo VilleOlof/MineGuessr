@@ -44,7 +44,7 @@
 					game.draw_all_guess_lines();
 				}}>Kolla kartan</Button
 			>
-			<Share game_id={game.game_id} {total_points} />
+			<Share game_id={game.game_id} {total_points} game_type={game.game_type} />
 		</div>
 	</div>
 </div>

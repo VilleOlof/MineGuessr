@@ -112,7 +112,7 @@
 		/></svg
 	>
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<p><span on:click={increment_login}>V</span>1.2.3</p>
+	<p><span on:click={increment_login}>V</span>1.3.0</p>
 </div>
 
 {#if show_info}
@@ -120,11 +120,15 @@
 		<Info />
 	</PopupWrapper>
 {:else if show_stats}
-	<PopupWrapper title="Statistik" on:click={() => (show_stats = false)}>
+	<PopupWrapper title="Statistik" on:click={() => (show_stats = false)} mini={true}>
 		<Stats />
 	</PopupWrapper>
 {:else if show_suggestion}
-	<PopupWrapper title="Skicka in förslag" on:click={() => (show_suggestion = !show_suggestion)}>
+	<PopupWrapper
+		title="Skicka in förslag"
+		on:click={() => (show_suggestion = !show_suggestion)}
+		mini={true}
+	>
 		<Suggestion bind:open={show_suggestion} />
 	</PopupWrapper>
 {/if}
