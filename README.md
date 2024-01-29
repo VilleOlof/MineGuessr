@@ -13,6 +13,7 @@ This site should be pretty modular and easy to setup for other worlds, assuming 
 [ ] - better mobile for /panel  
 [ ] - More Panorama screenshots  
 [ ] - Leaderboards for each daily  
+[ ] - Duels  
 [LATER] - Make games server-sided  
 
 # Setup & Start
@@ -22,6 +23,7 @@ This site should be pretty modular and easy to setup for other worlds, assuming 
 ```bash
 # This is to install npm packages for the website itself
 npm run install
+npx prisma db push # Push the database schema to the db
 ```
 
 ```bash
