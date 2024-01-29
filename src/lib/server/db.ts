@@ -183,28 +183,6 @@ export module DB {
         };
 
         // TODO UNDERSTAND THIS QUERY, AND TEST WITH MORE USERS
-
-        // const games: MidTopGame[] = await prisma.$queryRaw`
-        //     SELECT 
-        //         game_id, 
-        //         date, 
-        //         user_id, 
-        //         GROUP_CONCAT(distance) as round_distances, 
-        //         SUM(
-        //             CASE 
-        //                 WHEN (5000 - (distance - 16) * 0.25) < 0 THEN 0
-        //                 WHEN (5000 - (distance - 16) * 0.25) > 5000 THEN 5000
-        //                 ELSE (5000 - (distance - 16) * 0.25)
-        //             END
-        //         ) as total_score, 
-        //         SUM(distance) as total_distance, 
-        //         SUM(time) as total_time
-        //     FROM stat
-        //     GROUP BY game_id
-        //     HAVING COUNT(*) = 5
-        //     ORDER BY total_score DESC, total_time ASC
-        //     LIMIT ${limit} OFFSET ${offset}
-        // `;
         const games: MidTopGame[] = await prisma.$queryRaw`
             SELECT 
                 game_id, 
@@ -223,7 +201,11 @@ export module DB {
                     total_score, 
                     total_distance, 
                     total_time,
-                    ROW_NUMBER() OVER(PARTITION BY COALESCE(user_id, game_id) ORDER BY total_score DESC, total_time ASC) as rn
+                    ROW_NUMBER() OVER(
+                            PARTITION BY COALESCE(user_id, game_id) 
+                            ORDER BY total_score DESC, 
+                            total_time ASC
+                        ) as rn
                 FROM (
                     SELECT 
                         game_id, 

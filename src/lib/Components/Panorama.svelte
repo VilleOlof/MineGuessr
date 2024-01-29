@@ -11,6 +11,7 @@
 	$: {
 		loading = true;
 		ThreeHandler.change_panorama(scene, index);
+		ThreeHandler.random_camera_direction(cameraControls);
 		loading = false;
 	}
 
@@ -27,6 +28,7 @@
 
 	const camera = ThreeHandler.create_camera([width, height]);
 	const cameraControls = ThreeHandler.create_camera_controls(camera, renderer.domElement);
+	ThreeHandler.random_camera_direction(cameraControls);
 
 	onMount(async () => {
 		three_wrapper.appendChild(renderer.domElement);

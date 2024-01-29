@@ -8,7 +8,6 @@ Guess the Minecraft ingame location based off a 360 panorama view and use the ma
 [ ] - achivements?  
 [/] - database panel with auth for checking db data  
 [ ] - better mobile for /panel  
-[ ] - Daily mode (server-sided date)  
 [ ] - More Panorama screenshots  
 [ ] - Leaderboards for each daily  
 [LATER] - Make games server-sided  

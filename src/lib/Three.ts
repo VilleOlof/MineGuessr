@@ -32,6 +32,17 @@ export module ThreeHandler {
     }
 
     /**
+     * Mutates the camera to either -90, 0, 90 or 180 degrees in radians
+     * 
+     * @param camera The camera to mutate
+     */
+    export function random_camera_direction(camera: CameraControls) {
+        const random_rotation = Math.floor(Math.random() * 4) * 90 * Math.PI / 180;
+
+        camera.rotateTo(random_rotation, 1.5, false);
+    }
+
+    /**
      * Creates camera controls for a camera and canvas
      * 
      * @param camera The camera to control
