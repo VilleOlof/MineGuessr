@@ -2,7 +2,6 @@
 	import { onMount } from 'svelte';
 	import * as THREE from 'three';
 	import CameraControls from 'camera-controls';
-	import Stats from 'three/addons/libs/stats.module.js';
 	import { ThreeHandler } from '$lib/Three';
 
 	let three_wrapper: HTMLDivElement;
@@ -21,24 +20,18 @@
 	let height = window.innerHeight;
 
 	const clock = new THREE.Clock();
-
 	const scene = new THREE.Scene();
+
 	ThreeHandler.change_panorama(scene, index);
+	const renderer = ThreeHandler.create_renderer([width, height]);
 
-	const camera = ThreeHandler.create_camera();
-
-	const renderer = new THREE.WebGLRenderer();
-	renderer.setSize(width, height);
-
+	const camera = ThreeHandler.create_camera([width, height]);
 	const cameraControls = ThreeHandler.create_camera_controls(camera, renderer.domElement);
 
 	onMount(async () => {
 		three_wrapper.appendChild(renderer.domElement);
 
 		loading = false;
-
-		let stats = new Stats();
-		// document.body.appendChild(stats.dom);
 
 		function animate() {
 			requestAnimationFrame(animate);
@@ -53,8 +46,6 @@
 				camera.aspect = width / height;
 				camera.updateProjectionMatrix();
 			}
-
-			stats.update();
 
 			renderer.render(scene, camera);
 		}

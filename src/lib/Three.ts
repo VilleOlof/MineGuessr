@@ -1,7 +1,11 @@
 import * as THREE from 'three';
 import CameraControls from 'camera-controls';
 
+/** Core Panorama ThreeJS function */
 export module ThreeHandler {
+
+    /** The width and height */
+    export type Size = [number, number];
 
     /**
      * Takes in a scene and a panorama index  
@@ -52,13 +56,16 @@ export module ThreeHandler {
         return cameraControls;
     }
 
-    export function create_camera(): THREE.PerspectiveCamera {
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-
+    /**
+     * Creates a perspective camera
+     * 
+     * @param size The width and height of the camera
+     * @returns The camera
+     */
+    export function create_camera(size: Size): THREE.PerspectiveCamera {
         const camera = new THREE.PerspectiveCamera(
             60,
-            width / height,
+            size[0] / size[1],
             0.01,
             100
         );
@@ -66,5 +73,18 @@ export module ThreeHandler {
         camera.position.set(0, 0, 1e-5);
 
         return camera;
+    }
+
+    /**
+     * Creates a renderer
+     * 
+     * @param size The width and height of the renderer
+     * @returns The renderer
+     */
+    export function create_renderer(size: Size): THREE.WebGLRenderer {
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(size[0], size[1]);
+
+        return renderer;
     }
 }
