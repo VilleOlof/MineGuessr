@@ -10,6 +10,7 @@ Guess the Minecraft ingame location based off a 360 panorama view and use the ma
 [ ] - better mobile for /panel  
 [ ] - Daily mode (server-sided date)  
 [ ] - More Panorama screenshots  
+[ ] - Leaderboards for each daily  
 [LATER] - Make games server-sided  
 
 # Setup & Start

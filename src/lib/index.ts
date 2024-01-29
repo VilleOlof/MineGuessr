@@ -34,6 +34,12 @@ export type TopGame = {
     round_distance: number[];
 };
 
+export const GameType = {
+    Normal: 0,
+    Daily: 1
+} as const;
+export type GameType = typeof GameType[keyof typeof GameType];
+
 /**
  * Adds a guess marker to the map
  * 

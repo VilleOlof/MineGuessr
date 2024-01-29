@@ -58,6 +58,7 @@
 
 	<div class="buttons flex items-center justify-between gap-4">
 		<Button on:click={() => (location.href = '/play')}>Spela</Button>
+		<Button on:click={() => (location.href = '/play?daily=true')}>Dagligt</Button>
 
 		<Button on:click={() => (location.href = '/top')}>Top</Button>
 

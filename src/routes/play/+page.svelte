@@ -9,12 +9,13 @@
 	import GuessButton from '$lib/Components/GuessButton.svelte';
 	import XPBar from '$lib/Components/XPBar.svelte';
 	import { onMount, onDestroy } from 'svelte';
-	import { current_pos } from '$lib';
+	import { current_pos, GameType } from '$lib';
 	import * as THREE from 'three';
 
 	export let data: PageData;
 
-	let game = Game.create(data.random_locations);
+	let game = Game.create(data.random_locations, data.daily ? GameType.Daily : GameType.Normal);
+
 	let rounds = game.rounds;
 	let curr_round = game.current_round;
 	let game_finished = game.game_finished;

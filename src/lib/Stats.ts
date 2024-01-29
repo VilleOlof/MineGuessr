@@ -1,7 +1,7 @@
+import { GameType } from "$lib";
 import { persisted } from "svelte-persisted-store";
 import type { Writable } from "svelte/store";
 import { z } from "zod";
-import { GameModule } from "./Game";
 
 export const StatsSchema = z.object({
     games_played: z.number(),
@@ -89,6 +89,9 @@ export const DBStatsSchema = z.object({
     time: z.number(),
     panorama_id: z.number(),
 
-    game_type: GameModule.GameTypeSchema,
+    game_type: z.union([
+        z.literal(GameType.Normal),
+        z.literal(GameType.Daily)
+    ]),
 });
 export type DBStats = z.infer<typeof DBStatsSchema>;

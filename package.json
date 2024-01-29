@@ -45,6 +45,7 @@
 		"hammerjs": "^2.0.8",
 		"hocon-parser": "^1.0.1",
 		"lucia": "^2.7.6",
+		"pure-rand": "^6.0.4",
 		"svelte-french-toast": "^1.2.0",
 		"svelte-persisted-store": "^0.9.0",
 		"three": "^0.160.0",

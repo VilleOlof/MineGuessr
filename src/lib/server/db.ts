@@ -240,6 +240,7 @@ export module DB {
                         SUM(distance) as total_distance, 
                         SUM(time) as total_time
                     FROM stat
+                    WHERE game_type = 0
                     GROUP BY game_id, user_id
                     HAVING COUNT(*) = 5
                 ) t

@@ -1,9 +1,8 @@
-import { UpdatePOIMarker, curr_bluemap, current_pos, toast_style, type location_metadata } from "$lib";
+import { GameType, UpdatePOIMarker, curr_bluemap, current_pos, toast_style, type location_metadata } from "$lib";
 import { get, writable, type Writable } from "svelte/store";
 import * as THREE from "three";
 import { Stats, type DBStats } from "./Stats";
 import type { Stat } from "@prisma/client";
-import { z } from "zod";
 import toast from "svelte-french-toast";
 
 /**
@@ -19,14 +18,9 @@ export module GameModule {
         panorama_id: number;
         finished: boolean;
     }
-
-    export const GameType = {
-        Normal: 0,
-        Daily: 1
-    } as const;
-
-    export const GameTypeSchema = z.nativeEnum(GameType);
 }
+
+
 
 /**
  * Represents a game
@@ -36,6 +30,8 @@ export class Game {
 
     /** The game id, used for  */
     game_id: string = "";
+    /** The type of the game */
+    game_type: GameType = GameType.Normal;
 
     rounds: Writable<GameModule.Round[]> = writable([]);
     current_round: Writable<number> = writable(0);
@@ -61,7 +57,7 @@ export class Game {
      * @param random_locations The locations to use for the game
      * @returns The created game
      */
-    static create(random_locations: location_metadata[]): Game {
+    static create(random_locations: location_metadata[], type?: GameType): Game {
         let game = new Game();
 
         game.game_id = uuidv4();
@@ -70,6 +66,8 @@ export class Game {
             stats.games_played += 1;
             return stats;
         });
+
+        if (type) game.game_type = type;
 
         // Init rounds
         game.rounds.update(() => random_locations.map((loc) => {
@@ -84,7 +82,7 @@ export class Game {
             };
         }));
 
-        console.log("Game created with id: " + game.game_id);
+        console.log(`Game created with id: ${game.game_id}:${game.game_type}`);
 
         return game;
     }
@@ -101,6 +99,7 @@ export class Game {
         let game = new Game();
 
         game.game_id = game_id;
+        game.game_type = rounds[0].game_type as GameType;
 
         game.rounds.update(() => rounds.map((round) => {
             return {
@@ -117,6 +116,22 @@ export class Game {
         game.game_finished.update(() => true);
 
         return game;
+    }
+
+    /**
+     * Checks a local cookie against the servers daily date to see if the daily game has been played
+     * 
+     * @returns True if the daily game has been played, false otherwise
+     */
+    static check_daily(server_date: Date, user_date: Date): boolean {
+        // return false;
+        // //TODO
+
+        if (user_date < server_date) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -184,6 +199,11 @@ export class Game {
         Game.move_camera_to_pos(current_round.location);
 
         await this.send_stats(current_round);
+
+
+        if (this.game_type === GameType.Daily) {
+            document.cookie = `90gqguessr-latest_daily_id=${this.game_id}; path=/; expires=${new Date(Date.now() + 86400000).toUTCString()}`;
+        }
     }
 
     /**
@@ -427,7 +447,7 @@ export class Game {
             distance: curr_round.distance,
             time: curr_round.time,
             panorama_id: curr_round.panorama_id,
-            game_type: GameModule.GameType.Normal // TODO
+            game_type: this.game_type
         };
 
         try {
