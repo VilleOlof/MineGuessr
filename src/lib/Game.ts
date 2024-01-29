@@ -124,9 +124,6 @@ export class Game {
      * @returns True if the daily game has been played, false otherwise
      */
     static check_daily(server_date: Date, user_date: Date): boolean {
-        // return false;
-        // //TODO
-
         if (user_date < server_date) {
             return false;
         }

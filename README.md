@@ -2,7 +2,10 @@
 
 > Like GeoGuessr but for Minecraft.
 
+**Play it here: [90gqguessr.se](https://90gqguessr.se)**
+
 Guess the Minecraft ingame location based off a 360 panorama view and use the map to guess the location.  
+This site should be pretty modular and easy to setup for other worlds, assuming the design is changed.  
 
 ## TODO
 [ ] - achivements?  
@@ -83,6 +86,7 @@ So the Location Metadata can find the correct panorama and display it.
 
 These screenshots can be taken ingame with mods like *[Panoramica](https://modrinth.com/mod/panoramica)*  
 Screenshots should also be taken with minimal resourcepacks and effects.   
+Theres a resourcepack in the repo called `no-effect-icons` that removes all status effect icons.  
 
 ### **Map Proxy**
 > [!IMPORTANT]  
@@ -97,8 +101,8 @@ cargo build --release # Build the binary
 ```
 The Map Proxy also needs a `Config.toml` file with the following content:
 ```toml
-map_url = "https://map.90gq.se"
-port = 40401 # Be sure this matches ./src/lib/index.ts:5
+map_url = "https://example-bluemapsite.com"
+port = 40401 # Be sure this matches the PUBLIC_MAP_URL in the .env file
 redis_url = "redis://localhost:6379/"
 cache_time = 3600 # How long caches stay valid in redis
 ```

@@ -1,4 +1,5 @@
 import { createLogger, format, transports } from "winston";
+import DailyRotateFile from "winston-daily-rotate-file";
 const { combine, timestamp, printf } = format;
 
 const log_format = combine(timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), printf(({ level, message, timestamp }) => {
@@ -11,22 +12,12 @@ export const logger = createLogger({
     level: 'info',
     transports: [
         new transports.Console({ format: cli_format }),
-        new transports.File({
-            filename: `${format_log_filename(new Date())}.log`,
+        new DailyRotateFile({
             dirname: './logs',
-            maxFiles: 10,
+            datePattern: "YYYY-MM-DD-HH-MM-SS",
+            maxFiles: '1d',
             format: file_format,
             handleExceptions: true
         })
     ]
 });
-
-/**
- * Formats the date to be used in the log filename
- * 
- * @param date The date to format
- * @returns The formatted date
- */
-function format_log_filename(date: Date) {
-    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}_${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}`;
-}
