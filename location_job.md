@@ -257,34 +257,34 @@ template:
 
 
 ### Other -/-
-154 - QR_kod - 
-155 - Fattigland - 
-156 - Valyria skogsby -
-157 - Nyaste nya PI tornet top - 
-158 - Toffes flygande ö - 
-159 - Toffes pyramid - 
-160 - Marcus o smurres guardian farm - 
-161 - Kantos hål -
-162 - Kiyyas blom farm - 
-163 - Kiyyas svampar - 
-164 - Adamdes pyramid - 
-165 - Dannes flyplan - 
-176 - Xweezes zoo? - 
-177 - Elias pyramid - 
-178 - Smurres avalon farm? - 
-179 - Random by - -4884~, -965~
-180 - Kartläggarna ABs kartor - 
-181 - Gambling stället - -471~, -13000~
-182 - Xweezes witch farm - 
-183 - Anosoft kartor (quruuma) - 
-184 - Fångarna på fortet (nort-east ossyria) -
-185 - Nirethia swords - 
-186 - Sheep farm (east of nirethia) - 
-187 - Xweezes nirethia hus (0,0) - 
-188 - Dingo airlines skepp (rithill south) - 
-189 - Maxboxxs deaths - 
-190 - Arrow by - -2469~, -2859~
-191 - Dingos mansion - 
-192 - Fell'rith - -930~, 3500~
-193 - Norlanc - -370~, -750~
-194 - Det nya - 7900~, 13900~
+154 - QR_kod - 99058, -30936
+155 - Fattigland - 102151, -31672
+156 - Fattigland - 102180, -31639
+157 - Valyria skogsby - 100983, -31988
+158 - Nyaste nya PI tornet top - 19738, 108
+159 - Toffes flygande ö - 16257, -4844
+160 - Toffes pyramid - 14350, -5451
+161 - Marcus o smurres guardian farm - 6514, 258
+162 - Kantos hål - 1094, 1437
+163 - Kiyyas blom farm - 8, 1201
+164 - Kiyyas svampar - 2480, 1721
+165 - Adamdes pyramid - 777, 2865
+166 - Dannes flyplan - -758, 361
+167 - Xweezes zoo? - 568, -2065
+168 - Elias pyramid - -7879, 1033
+169 - Smurres avalon farm? - -1416, 24502
+170 - Random by - -4904, -965
+171 - Kartläggarna ABs kartor - -4614, -3037
+172 - Gambling stället - -504, -13018
+173 - Xweezes witch farm - 2296, -20751
+174 - Anosoft kartor (quruuma) - -37765, 2813
+175 - Fångarna på fortet (nort-east ossyria) - -36178, -2695
+176 - Nirethia swords - 250, -13
+177 - Sheep farm (east of nirethia) - 1029, 134
+178 - Xweezes nirethia hus (0,0) - 0, 0
+179 - Dingo airlines skepp (rithill south) - 76, 2258
+180 - Maxboxxs deaths - -1494, 1280
+181 - Arrow by - -2471, -2859
+182 - Dingos mansion - -328, 785
+183 - Fell'rith - -918, 3493
+184 - Norlanc - -346, -751
