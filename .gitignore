@@ -19,5 +19,6 @@ vite.config.ts.timestamp-*
 /map_proxy/Config.toml
 /map_proxy/config.toml
 
-/prisma/db.sqlite
+# Ignore all .sqlite files in the prisma folder
+/prisma/*.sqlite
 /logs

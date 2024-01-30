@@ -64,6 +64,7 @@ model User {
   user_id  String  @unique
   username String  @unique
   avatar   String?
+  labels   String  @default("[]")
   perm_lvl Int     @default(0)
 
   Session Session[]

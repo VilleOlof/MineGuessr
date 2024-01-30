@@ -1,12 +1,18 @@
 <script lang="ts">
 	import { format_time } from '$lib';
+	import Label from '$lib/Components/Label.svelte';
 	import { Game } from '$lib/Game';
+	import { UserLabel } from '$lib/userLabel';
 	import type { PageData } from './$types';
 	import PanelGoto from './components/PanelGoto.svelte';
 	import PanelNav from './components/PanelNav.svelte';
 	import PanelWrapper from './components/PanelWrapper.svelte';
 
 	export let data: PageData;
+
+	let label_username: string = '';
+	let label_labels: string = '';
+	let label_output: string = '';
 </script>
 
 <div class="flex h-full w-full flex-col items-start justify-start gap-4 p-4">
@@ -62,6 +68,81 @@
 				{data.games_24h}
 			</h2>
 			<h2 class="text-2xl"><span class="text-gray-300">Total Users:</span> {data.total_users}</h2>
+		</PanelWrapper>
+
+		<PanelWrapper>
+			<PanelGoto title="Labels" href="/panel/labels" />
+
+			<div class="input mb-4 flex w-full flex-col gap-2">
+				<input
+					class="bg-gray-800 px-2"
+					type="text"
+					placeholder="Username"
+					bind:value={label_username}
+				/>
+				<input
+					class="bg-gray-800 px-2"
+					type="text"
+					placeholder="Labels (x, x)"
+					bind:value={label_labels}
+					list="labels"
+				/>
+
+				<datalist id="labels">
+					{#each Object.keys(UserLabel.Labels) as label}
+						<option value={label} />
+					{/each}
+				</datalist>
+			</div>
+
+			<h2 class="my-2 text-xl text-gray-200">Actions</h2>
+
+			<div class="buttons flex flex-wrap items-start gap-2">
+				<button
+					on:click={async () => {
+						label_output = JSON.stringify(await UserLabel.Panel.Get(label_username), null, 2);
+					}}
+					class="bg-gray-800 px-4 py-1 transition-colors hover:bg-gray-900">Get</button
+				>
+				<button
+					on:click={async () => {
+						label_output = JSON.stringify(
+							await UserLabel.Panel.Set(label_username, label_labels.split(', ')),
+							null,
+							2
+						);
+					}}
+					class="bg-gray-800 px-4 py-1 transition-colors hover:bg-gray-900">Set</button
+				>
+				<button
+					on:click={async () => {
+						await UserLabel.Panel.Update(label_username, label_labels.split(', '));
+						label_output = 'Updated successfully';
+					}}
+					class="bg-gray-800 px-4 py-1 transition-colors hover:bg-gray-900">Update</button
+				>
+				<button
+					on:click={async () => {
+						await UserLabel.Panel.Remove(label_username, label_labels.split(', '));
+						label_output = 'Removed successfully';
+					}}
+					class="bg-gray-800 px-4 py-1 transition-colors hover:bg-gray-900">Remove</button
+				>
+			</div>
+
+			<textarea
+				rows="4"
+				class="my-2 w-full bg-gray-800 px-2"
+				placeholder="Returned data"
+				bind:value={label_output}
+			></textarea>
+
+			<h2 class="my-2 text-xl text-gray-200">Valid Labels</h2>
+			<div class="labels flex flex-wrap gap-2">
+				{#each Object.entries(UserLabel.Labels) as [name, _]}
+					<Label label={name} />
+				{/each}
+			</div>
 		</PanelWrapper>
 	</div>
 </div>

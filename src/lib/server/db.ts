@@ -222,7 +222,7 @@ export module DB {
                         SUM(distance) as total_distance, 
                         SUM(time) as total_time
                     FROM stat
-                    WHERE game_type = 0
+                    WHERE game_type = 0 AND user_id IS NOT NULL
                     GROUP BY game_id, user_id
                     HAVING COUNT(*) = 5
                 ) t
@@ -244,18 +244,28 @@ export module DB {
                 id: true,
                 user_id: true,
                 username: true,
-                avatar: true
+                avatar: true,
+                labels: true,
             }
         });
 
-        const result: TopGame[] = games.map(game => ({
-            ...game,
-            total_score: Number(game.total_score),
-            total_distance: Number(game.total_distance),
-            total_time: Number(game.total_time), // From BigInt to Number
-            round_distance: game.round_distances.split(',').map(Number),
-            user: users.find(user => user.id === game.user_id)
-        }));
+        const result: TopGame[] = games.map(game => {
+            const user = users.find(user => user.id === game.user_id);
+            if (!user || !user.id) {
+                throw new Error(`User with id ${game.user_id} not found`);
+            }
+            return {
+                ...game,
+                total_score: Number(game.total_score),
+                total_distance: Number(game.total_distance),
+                total_time: Number(game.total_time), // From BigInt to Number
+                round_distance: game.round_distances.split(',').map(Number),
+                user: {
+                    ...user,
+                    labels: JSON.parse(user.labels || '[]')
+                }
+            };
+        });
 
         return result;
     }
@@ -323,7 +333,53 @@ export module DB {
                 user_id: true,
                 username: true,
                 avatar: true,
+                labels: true,
             }
         });
+    }
+
+    export module UserLabels {
+        export async function GetLabels(username: string): Promise<string[]> {
+            const db_labels = (await prisma.user.findMany({
+                where: {
+                    username: username
+                },
+                select: {
+                    labels: true
+                }
+            }))[0];
+            if (!db_labels) throw new Error('User not found');
+
+            const labels = JSON.parse(db_labels.labels);
+
+            return labels;
+        }
+
+        export async function SetLabels(username: string, labels: string[]) {
+            await prisma.user.update({
+                where: {
+                    username: username
+                },
+                data: {
+                    labels: JSON.stringify(labels)
+                }
+            });
+        }
+
+        export async function UpdateLabels(username: string, labels: string[]) {
+            const db_labels = await GetLabels(username);
+
+            const new_labels = [...db_labels, ...labels];
+
+            await SetLabels(username, new_labels);
+        }
+
+        export async function RemoveLabel(username: string, label: string[]) {
+            const db_labels = await GetLabels(username);
+
+            const new_labels = db_labels.filter(l => !label.includes(l));
+
+            await SetLabels(username, new_labels);
+        }
     }
 }

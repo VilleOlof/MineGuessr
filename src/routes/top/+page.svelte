@@ -6,6 +6,7 @@
 	import { writable, type Writable } from 'svelte/store';
 	import { queryParam, ssp } from 'sveltekit-search-params';
 	import type { PageData } from './$types';
+	import Label from '$lib/Components/Label.svelte';
 
 	export let data: PageData;
 
@@ -113,7 +114,7 @@
 				<button
 					on:click={Discord}
 					class="underline underline-offset-4 transition-colors hover:text-white">Logga in</button
-				> för att få ditt namn o synas!
+				> för att synas på topplistan!
 			</p>
 		{/if}
 
@@ -154,9 +155,10 @@
 							<td class="px-3 py-2 md:px-6 md:py-4">
 								<div class="flex items-center gap-2">
 									{#if game.user}
-										{#if true}
-											<div class="rounded-md bg-green-700 px-2">90gQ</div>
-										{/if}
+										<!--TODO: Make this work with more labels-->
+										{#each game.user.labels as label}
+											<Label {label} />
+										{/each}
 
 										<img
 											src={GetDiscordAvatarUrl(game.user.user_id, game.user.avatar)}

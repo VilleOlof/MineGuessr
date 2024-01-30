@@ -5,7 +5,7 @@ import type { BlueMapApp } from "./BlueMap/BlueMapApp";
 export const current_pos: Writable<THREE.Vector3 | null> = writable(null);
 export let curr_bluemap: Writable<BlueMapApp | null> = writable(null);
 
-export const toast_style = 'background-color: rgb(17 24 39); color: white; font-family: Minecraft, sans-serif;';
+export const toast_style = 'background-color: rgb(28 36 54); color: white; font-family: Minecraft, sans-serif;';
 
 // Disable Vue DevTools
 // @ts-ignore
@@ -25,6 +25,7 @@ export type TopGame = {
         user_id: string;
         username: string;
         avatar: string | null;
+        labels: string[];
     } | undefined;
     game_id: string;
     date: Date;
