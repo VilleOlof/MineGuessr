@@ -154,10 +154,7 @@
 
 		<div class="flex items-center gap-4 text-3xl">
 			<img src={pfp_url} alt="" class="h-12 w-12 rounded-full outline outline-2 outline-gray-700" />
-			<p
-				class=" pfp_colored bg-clip-text text-transparent"
-				style="background-image: url({pfp_url})"
-			>
+			<p>
 				@{data.user.username}
 			</p>
 		</div>
@@ -184,9 +181,9 @@
 
 <style>
 	/* https://x.com/artur_bien/status/1750944453538283933 */
-	.pfp_colored {
+	/* .pfp_colored {
 		background-size: 1px 1px;
 		background-repeat: repeat;
 		filter: invert(0.1) contrast(1) saturate(2) grayscale(0.2) brightness(2);
-	}
+	} */
 </style>

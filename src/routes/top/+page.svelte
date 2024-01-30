@@ -154,11 +154,16 @@
 							<td class="px-3 py-2 md:px-6 md:py-4">
 								<div class="flex items-center gap-2">
 									{#if game.user}
+										{#if true}
+											<div class="rounded-md bg-green-700 px-2">90gQ</div>
+										{/if}
+
 										<img
 											src={GetDiscordAvatarUrl(game.user.user_id, game.user.avatar)}
 											alt=""
 											class="h-6 w-6 rounded-full"
 										/>
+
 										@{short_name(game.user.username)}
 									{:else}
 										???

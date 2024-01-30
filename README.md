@@ -13,6 +13,7 @@ This site should be pretty modular and easy to setup for other worlds, assuming 
 [ ] - better mobile for /panel  
 [ ] - More Panorama screenshots  
 [ ] - Leaderboards for each daily  
+[ ] - Profile
 [ ] - Duels  
 [LATER] - Make games server-sided  
 

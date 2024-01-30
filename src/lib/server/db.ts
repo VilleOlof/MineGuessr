@@ -312,4 +312,18 @@ export module DB {
             }
         });
     }
+
+    export async function GetUserByUsername(username: string) {
+        return await prisma.user.findUnique({
+            where: {
+                username: username
+            },
+            select: {
+                id: true,
+                user_id: true,
+                username: true,
+                avatar: true,
+            }
+        });
+    }
 }
