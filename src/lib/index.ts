@@ -66,9 +66,9 @@ export function UpdatePOIMarker(map: BlueMapApp, pos: THREE.Vector3, index?: num
 }
 
 /**
- * Formats a time in milliseconds to a string
+ * Formats a time in seconds to a string
  * 
- * @param time The time in milliseconds
+ * @param time The time in seconds
  * @returns The formatted time (MM:SS)
  */
 export function format_time(time: number) {

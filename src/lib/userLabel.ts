@@ -10,10 +10,10 @@ export module UserLabel {
     }
 
     export function get_label_color(label: string): string {
-        return Labels[label];
+        return Labels[label] || '#ffffff';
     }
 
-    export async function is_valid(label: string): Promise<boolean> {
+    export function is_valid(label: string): boolean {
         return label in Labels;
     }
 
