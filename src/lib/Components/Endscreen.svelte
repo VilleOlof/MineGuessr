@@ -1,8 +1,11 @@
 <script lang="ts">
-	import { format_time } from '$lib';
+	import { Discord, format_time } from '$lib';
 	import type { Game, GameModule } from '$lib/Game';
+	import type { LayoutData } from '../../routes/$types';
 	import Button from './Button.svelte';
 	import Share from './Share.svelte';
+
+	export let data: LayoutData;
 
 	export let game: Game;
 	export let show_end_map: boolean;
@@ -20,6 +23,16 @@
 		class="end flex w-full flex-col items-center gap-4 bg-gray-900 px-2 py-6 sm:w-3/4 md:w-1/2 xl:w-2/5"
 	>
 		<h1 class="text-6xl font-bold">Resultat</h1>
+
+		{#if !data.user}
+			<p class="text-lg text-lime-300 md:text-2xl">
+				<button
+					on:click={Discord}
+					class="underline underline-offset-4 transition-colors hover:text-lime-500"
+					>Logga in</button
+				> för att synas på topplistan!
+			</p>
+		{/if}
 
 		<p class="text-4xl">Totalt: {total_points}</p>
 		<p class="text-3xl">Tid: {format_time(total_time / 1000)}s</p>

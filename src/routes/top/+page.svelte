@@ -1,5 +1,12 @@
 <script lang="ts">
-	import { format_time, GetDiscordAvatarUrl, PAGE_SIZE, toast_style, type TopGame } from '$lib';
+	import {
+		Discord,
+		format_time,
+		GetDiscordAvatarUrl,
+		PAGE_SIZE,
+		toast_style,
+		type TopGame
+	} from '$lib';
 	import { Game } from '$lib/Game';
 	import { onMount } from 'svelte';
 	import toast from 'svelte-french-toast';
@@ -62,19 +69,6 @@
 		let content = await res.json();
 
 		return content;
-	}
-
-	async function Discord() {
-		try {
-			const url = (await (await fetch('/discord/init')).json()).url;
-			location.href = url;
-		} catch (e) {
-			console.error(e);
-			toast.error('Något gick fel!', {
-				duration: 5000,
-				style: toast_style
-			});
-		}
 	}
 
 	async function Page(pageIn: number) {

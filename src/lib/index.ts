@@ -1,6 +1,7 @@
 import { writable, type Writable } from "svelte/store";
 import * as THREE from "three";
 import type { BlueMapApp } from "./BlueMap/BlueMapApp";
+import toast from "svelte-french-toast";
 
 export const current_pos: Writable<THREE.Vector3 | null> = writable(null);
 export let curr_bluemap: Writable<BlueMapApp | null> = writable(null);
@@ -90,4 +91,17 @@ export function format_time(time: number) {
 export function GetDiscordAvatarUrl(user_id: string, avatar_hash: string | null) {
     if (!avatar_hash) return `https://cdn.discordapp.com/embed/avatars/index.png`;
     return `https://cdn.discordapp.com/avatars/${user_id}/${avatar_hash}.png`;
+}
+
+export async function Discord() {
+    try {
+        const url = (await (await fetch('/discord/init')).json()).url;
+        location.href = url;
+    } catch (e) {
+        console.error(e);
+        toast.error('Något gick fel!', {
+            duration: 5000,
+            style: toast_style
+        });
+    }
 }

@@ -99,7 +99,7 @@
 {/if}
 
 {#if $game_finished && !$show_end_map}
-	<Endscreen {game} bind:show_end_map={$show_end_map} />
+	<Endscreen {data} {game} bind:show_end_map={$show_end_map} />
 {/if}
 
 <p
