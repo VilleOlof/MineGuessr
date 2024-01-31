@@ -1,6 +1,6 @@
 import { PAGE_SIZE, type TopGame } from "$lib";
 import type { DBStats, Stats } from "$lib/Stats";
-import { PrismaClient, type Stat, type Suggestion, type User } from "@prisma/client";
+import { Prisma, PrismaClient, type Stat, type Suggestion, type User } from "@prisma/client";
 
 /**
  * The database module
@@ -24,7 +24,8 @@ export module DB {
      * @param stats The stats to add
      */
     export async function CreateStatRow(game_id: string, stats: DBStats, user_id?: string) {
-        await prisma.stat.create({
+
+        let args: Prisma.StatCreateArgs = {
             data: {
                 game_id: game_id,
                 round_id: stats.round_id,
@@ -36,13 +37,17 @@ export module DB {
                 time: stats.time,
                 panorama_id: stats.panorama_id,
                 game_type: stats.game_type,
-                user: {
-                    connect: {
-                        id: user_id
-                    }
-                }
             }
-        });
+        };
+        if (user_id) {
+            args.data.user = {
+                connect: {
+                    id: user_id
+                }
+            };
+        }
+
+        await prisma.stat.create(args);
     }
 
     export type StatWithUser = Stat & {
