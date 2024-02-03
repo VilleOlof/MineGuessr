@@ -1,6 +1,6 @@
 import { DB } from '$lib/server/db.js';
 import { logger } from '$lib/server/logger.js';
-import { UserLabel } from '$lib/userLabel.js';
+import { UserLabel } from '$lib/server/userLabel';
 
 // TODO: Low priority, but make this a bit more robust and modular
 

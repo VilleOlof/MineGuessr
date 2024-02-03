@@ -1,6 +1,7 @@
 import { logger } from '$lib/server/logger';
 import { DB } from '$lib/server/db.js';
 import { error } from '@sveltejs/kit';
+import { UserLabel } from '$lib/server/userLabel';
 
 export async function load({ locals }) {
     const session = await locals.auth.validate();
@@ -22,6 +23,7 @@ export async function load({ locals }) {
         games: latest_games,
         total_games: total_games,
         games_24h: games_24h,
-        total_users: total_users
+        total_users: total_users,
+        labels: UserLabel.Labels
     }
 }

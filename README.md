@@ -45,12 +45,24 @@ PUBLIC_MAP_URL = "http://127.0.0.1:40401" # Url to Map Proxy
 ORIGIN = "http://localhost:5173" # Self
 PUBLIC_ORIGIN = "http://localhost:5173" # Self
 PORT = 40400 # Just for production
-PANEL_PASSWORD = "password123" # For the /panel page
 
 # For discord auth
 DISCORD_CLIENT_ID = ""
 DISCORD_CLIENT_SECRET = ""
 DISCORD_REDIRECT_URL = ""
+```
+
+#### **userLabel.json**
+Located in `./src/lib/server/`, this file contains all the custom user labels.  
+These are *currently* just handed out manually through `/panel` and are used to identify special users.  
+
+These labels are *currently* just shown in the `/top` page.  
+
+```json
+{
+  "label_name": "hex_color", // Structure
+  "cool_dev": "#ff0000",     // Example
+}
 ```
 
 #### **Location Metadata**

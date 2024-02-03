@@ -2,7 +2,7 @@
 	import { format_time } from '$lib';
 	import Label from '$lib/Components/Label.svelte';
 	import { Game } from '$lib/Game';
-	import { UserLabel } from '$lib/userLabel';
+	import { UserLabelPanel } from '$lib/userLabel';
 	import type { PageData } from './$types';
 	import PanelGoto from './components/PanelGoto.svelte';
 	import PanelNav from './components/PanelNav.svelte';
@@ -13,6 +13,8 @@
 	let label_username: string = '';
 	let label_labels: string = '';
 	let label_output: string = '';
+
+	const labels = data.labels;
 </script>
 
 <div class="flex h-full w-full flex-col items-start justify-start gap-4 p-4">
@@ -89,7 +91,7 @@
 				/>
 
 				<datalist id="labels">
-					{#each Object.keys(UserLabel.Labels) as label}
+					{#each Object.keys(labels) as label}
 						<option value={label} />
 					{/each}
 				</datalist>
@@ -100,14 +102,14 @@
 			<div class="buttons flex flex-wrap items-start gap-2">
 				<button
 					on:click={async () => {
-						label_output = JSON.stringify(await UserLabel.Panel.Get(label_username), null, 2);
+						label_output = JSON.stringify(await UserLabelPanel.Get(label_username), null, 2);
 					}}
 					class="bg-gray-800 px-4 py-1 transition-colors hover:bg-gray-900">Get</button
 				>
 				<button
 					on:click={async () => {
 						label_output = JSON.stringify(
-							await UserLabel.Panel.Set(label_username, label_labels.split(', ')),
+							await UserLabelPanel.Set(label_username, label_labels.split(', ')),
 							null,
 							2
 						);
@@ -116,14 +118,14 @@
 				>
 				<button
 					on:click={async () => {
-						await UserLabel.Panel.Update(label_username, label_labels.split(', '));
+						await UserLabelPanel.Update(label_username, label_labels.split(', '));
 						label_output = 'Updated successfully';
 					}}
 					class="bg-gray-800 px-4 py-1 transition-colors hover:bg-gray-900">Update</button
 				>
 				<button
 					on:click={async () => {
-						await UserLabel.Panel.Remove(label_username, label_labels.split(', '));
+						await UserLabelPanel.Remove(label_username, label_labels.split(', '));
 						label_output = 'Removed successfully';
 					}}
 					class="bg-gray-800 px-4 py-1 transition-colors hover:bg-gray-900">Remove</button
@@ -139,8 +141,8 @@
 
 			<h2 class="my-2 text-xl text-gray-200">Valid Labels</h2>
 			<div class="labels flex flex-wrap gap-2">
-				{#each Object.entries(UserLabel.Labels) as [name, _]}
-					<Label label={name} />
+				{#each Object.entries(labels) as [name, color]}
+					<Label label={name} {color} />
 				{/each}
 			</div>
 		</PanelWrapper>

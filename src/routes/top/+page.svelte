@@ -7,7 +7,6 @@
 		toast_style,
 		type TopGame
 	} from '$lib';
-	import { Game } from '$lib/Game';
 	import { onMount } from 'svelte';
 	import toast from 'svelte-french-toast';
 	import { writable, type Writable } from 'svelte/store';
@@ -151,7 +150,7 @@
 									{#if game.user}
 										<!--TODO: Make this work with more labels-->
 										{#each game.user.labels as label}
-											<Label {label} />
+											<Label {label} color={data.labels[label]} />
 										{/each}
 
 										<img

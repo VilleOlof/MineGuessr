@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { UserLabel } from '$lib/userLabel';
-
 	export let label: string = '';
+	export let color: string = '';
 </script>
 
-<div class="w-min rounded-md px-2" style="background-color: {UserLabel.get_label_color(label)}">
+<div class="w-min rounded-md px-2" style="background-color: {color}">
 	{label}
 </div>
