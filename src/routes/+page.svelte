@@ -37,7 +37,7 @@
 			alt="Minecraft Earth"
 			class="h-full transition-transform hover:-translate-y-4 hover:-rotate-12"
 		/>
-		<h1 class="text-5xl font-bold md:text-6xl xl:text-7xl">90gQ Guessr</h1>
+		<h1 class="text-4xl font-bold md:text-6xl xl:text-7xl">90gQ Guessr</h1>
 	</header>
 
 	<p class="text-lg md:text-2xl">
@@ -127,7 +127,7 @@
 		/></svg
 	>
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<p><span on:click={increment_login}>V</span>1.3.1</p>
+	<p><span on:click={increment_login}>V</span>1.3.2</p>
 </div>
 
 {#if show_info}
@@ -148,7 +148,7 @@
 	</PopupWrapper>
 {/if}
 
-<div class="discordLogin absolute left-0 top-0 m-4">
+<div class="discordLogin absolute left-0 top-0 m-4 flex flex-col items-start gap-4">
 	{#if data.user}
 		{@const pfp_url = GetDiscordAvatarUrl(data.user.user_id, data.user.avatar)}
 
@@ -158,6 +158,15 @@
 				@{data.user.username}
 			</p>
 		</div>
+
+		<button
+			on:click={async () => {
+				await fetch('/discord/logout');
+				location.reload();
+			}}
+			class="c-shadow bg-gray-800 px-4 shadow-cyan-600 transition-transform hover:-translate-x-1 hover:-translate-y-1 active:scale-90"
+			>Logga ut</button
+		>
 	{:else}
 		<Button
 			on:click={async () => {

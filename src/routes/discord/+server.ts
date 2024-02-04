@@ -32,6 +32,7 @@ export async function GET({ cookies, url, locals }) {
                     user_id: discordUserAuth.discordUser.id,
                     username: discordUserAuth.discordUser.username,
                     avatar: discordUserAuth.discordUser.avatar,
+                    perm_lvl: 0
                 }
             });
         }

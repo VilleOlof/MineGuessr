@@ -3,7 +3,7 @@
 </script>
 
 <div
-	class="instruction flex items-center gap-2 transition-transform hover:translate-x-3 sm:text-lg md:text-xl lg:text-2xl"
+	class="instruction flex items-center gap-2 text-sm transition-transform hover:translate-x-3 sm:text-lg md:text-xl lg:text-2xl"
 >
 	<div class="bar h-5 w-1 rounded-md bg-cyan-400"></div>
 	<p>{text}</p>
