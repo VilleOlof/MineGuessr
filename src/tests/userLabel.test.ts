@@ -1,5 +1,5 @@
 import { expect, test, describe, vi } from 'vitest';
-import { UserLabel } from '$lib/userLabel';
+import { UserLabel } from '$lib/server/userLabel';
 
 describe('UserLabel', () => {
     vi.spyOn(UserLabel, 'Labels', 'get').mockReturnValue({

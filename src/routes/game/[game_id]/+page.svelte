@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { Game, type GameModule } from '$lib/Game';
+	import { Game } from '$lib/Game';
 	import Map from '$lib/Components/Map.svelte';
 	import type { PageData } from './$types';
-	import { GameType, GetDiscordAvatarUrl, curr_bluemap, format_time } from '$lib';
+	import { GameType, curr_bluemap, format_time } from '$lib';
 	import Button from '$lib/Components/Button.svelte';
 	import Share from '$lib/Components/Share.svelte';
-	import { PUBLIC_ORIGIN } from '$env/static/public';
+	import type { GameModule } from '../../../../shared/GameModule';
 
 	export let data: PageData;
 	let show_popup: boolean = true;

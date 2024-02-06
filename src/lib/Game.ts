@@ -4,23 +4,7 @@ import * as THREE from "three";
 import { Stats, type DBStats } from "./Stats";
 import type { Stat } from "@prisma/client";
 import toast from "svelte-french-toast";
-
-/**
- * Game types
- */
-export module GameModule {
-    export type Round = {
-        location: THREE.Vector2;
-        guess_location: THREE.Vector2;
-        distance: number;
-        time: number;
-        score: number;
-        panorama_id: number;
-        finished: boolean;
-    }
-}
-
-
+import type { GameModule } from "../../shared/GameModule";
 
 /**
  * Represents a game

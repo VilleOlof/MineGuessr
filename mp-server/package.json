@@ -10,5 +10,8 @@
   },
   "scripts": {
     "start": "bun run index.ts"
+  },
+  "dependencies": {
+    "elysia": "^0.8.15"
   }
 }
