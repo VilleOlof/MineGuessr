@@ -1,10 +1,11 @@
-import { GameType, UpdatePOIMarker, curr_bluemap, current_pos, toast_style, type location_metadata } from "$lib";
+import { GameType, UpdatePOIMarker, curr_bluemap, current_pos, toast_style } from "$lib";
 import { get, writable, type Writable } from "svelte/store";
 import * as THREE from "three";
 import { Stats, type DBStats } from "./Stats";
 import type { Stat } from "@prisma/client";
 import toast from "svelte-french-toast";
 import type { GameModule } from "../../shared/GameModule";
+import type { location_metadata } from "../../shared";
 
 /**
  * Represents a game

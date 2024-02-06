@@ -1,4 +1,4 @@
-import type { location_metadata } from "$lib";
+import type { location_metadata } from "../../../shared";
 
 /**
  * Gets x amount of total unique locations

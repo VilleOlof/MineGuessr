@@ -1,6 +1,7 @@
 import { expect, describe, test, beforeEach } from 'vitest';
 import { Game } from '$lib/Game';
-import { GameType, type location_metadata } from '$lib';
+import { GameType } from '$lib';
+import type { location_metadata } from '../../shared';
 
 describe('Game', () => {
     const location_metadata: location_metadata[] = [

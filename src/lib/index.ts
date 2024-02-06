@@ -15,11 +15,6 @@ globalThis.__VUE_PROD_DEVTOOLS__ = false;
 // TODO MOVE THESE TYPES AND FUNCTIONS TO SOME BETTER PLACE
 export const PAGE_SIZE = 10;
 
-export type location_metadata = {
-    id: number,
-    coordinates: [number, number]
-}
-
 export type TopGame = {
     user: {
         id: string;

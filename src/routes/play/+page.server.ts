@@ -3,10 +3,9 @@ import { get_random_locations } from "$lib/server/locations";
 import { get_loc_metadata } from "$lib/server/metadata";
 import { redirect } from "@sveltejs/kit";
 import prand from "pure-rand";
+import { ROUNDS_PER_MATCH } from "../../../shared/";
 
 export const ssr = false;
-
-const ROUNDS_PER_MATCH: number = 5;
 
 export async function load({ url, cookies }) {
     const params = url.searchParams;
