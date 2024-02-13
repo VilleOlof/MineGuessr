@@ -3,6 +3,7 @@
 	import Label from '$lib/Components/Label.svelte';
 	import { Game } from '$lib/Game';
 	import { UserLabelPanel } from '$lib/userLabel';
+	import { GameModule } from '../../../shared';
 	import type { PageData } from './$types';
 	import PanelGoto from './components/PanelGoto.svelte';
 	import PanelNav from './components/PanelNav.svelte';
@@ -51,7 +52,7 @@
 							<div class="info flex justify-center gap-2">
 								<p class="w-1/3">{round.distance} Blocks</p>
 								<p class="w-1/4">{format_time(round.time / 1000)}s</p>
-								<p class="w-1/4">{Game.calculate_score(round.distance)} P</p>
+								<p class="w-1/4">{GameModule.calculate_score(round.distance)} P</p>
 							</div>
 
 							<div class="h-1 w-full bg-gray-800"></div>

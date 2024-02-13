@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { Stats, type DBStats } from "./Stats";
 import type { Stat } from "@prisma/client";
 import toast from "svelte-french-toast";
-import type { GameModule } from "../../shared/GameModule";
+import { GameModule } from "../../shared/GameModule";
 import type { location_metadata } from "../../shared";
 
 /**
@@ -92,7 +92,7 @@ export class Game {
                 guess_location: new THREE.Vector2(round.guess_x, round.guess_z),
                 distance: round.distance,
                 time: round.time,
-                score: Game.calculate_score(round.distance),
+                score: GameModule.calculate_score(round.distance),
                 panorama_id: round.panorama_id,
                 finished: true
             };
@@ -143,7 +143,7 @@ export class Game {
 
         current_round.guess_location = guess;
         current_round.distance = current_round.location.distanceTo(guess);
-        current_round.score = Game.calculate_score(current_round.distance);
+        current_round.score = GameModule.calculate_score(current_round.distance);
         current_round.finished = true;
 
         if (current_round.distance === 0) {
@@ -228,33 +228,6 @@ export class Game {
         current_pos.update(() => null);
 
         dispatchEvent(new CustomEvent("next_round", { detail: this.get_current_round() }));
-    }
-
-    /**
-     * Calculates the score from a distance
-     * 
-     * This needs to have the same calculation method as the
-     * sql query in DB.GetTopGames in order to be synced.
-     * 
-     * @param distance The distance to calculate the score from
-     * @returns The score
-     */
-    public static calculate_score(distance: number): number {
-        // if the distanceis below 16 meters, the score is a perfect 5000.
-        // and for each meter after that, the score is reduced by 0.25.
-        const MAX_SCORE = 5000;
-        const MIN_DISTANCE = 16;
-
-        let score = MAX_SCORE - (distance - MIN_DISTANCE) * 0.25;
-
-        if (score < 0) {
-            score = 0;
-        }
-        else if (score > MAX_SCORE) {
-            score = MAX_SCORE;
-        }
-
-        return Math.round(score);
     }
 
     /**

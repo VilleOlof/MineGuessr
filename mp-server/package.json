@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@types/three": "^0.161.2",
-    "elysia": "^0.8.15"
+    "elysia": "^0.8.15",
+    "zod": "^3.22.4"
   }
 }

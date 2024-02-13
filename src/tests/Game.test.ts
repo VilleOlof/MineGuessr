@@ -1,7 +1,7 @@
 import { expect, describe, test, beforeEach } from 'vitest';
 import { Game } from '$lib/Game';
 import { GameType } from '$lib';
-import type { location_metadata } from '../../shared';
+import { GameModule, type location_metadata } from '../../shared';
 
 describe('Game', () => {
     const location_metadata: location_metadata[] = [
@@ -40,7 +40,7 @@ describe('Game', () => {
 
     test('calculate_score should return the correct score', () => {
         const distance = 100;
-        const score = Game.calculate_score(distance);
+        const score = GameModule.calculate_score(distance);
         expect(score).toBeGreaterThan(0);
     });
 
