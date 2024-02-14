@@ -1,5 +1,7 @@
+import * as THREE from "three";
 import { Payloads, request_type } from "../../shared/MP";
 import readline from 'readline';
+import { GameModule } from "../../shared";
 
 let user_id = "test";
 let game_id: string;
@@ -13,7 +15,6 @@ console.log('Client started');
 
 socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
-    console.log(data.type);
 
     switch (data.type) {
         case 2: {
@@ -23,14 +24,50 @@ socket.onmessage = (event) => {
         }
         case 3: {
             console.log("played joined: ", data.payload.player_id);
+
+            break;
         }
         case 5: {
             console.log("player ready: ", data.payload.player_id);
             break;
         }
+        case 6: {
+            const panorama_id = data.payload.panorama_id;
+            const round_index = data.payload.round_index;
+            console.log(`Started next round [${round_index + 1}] with panorama: ${panorama_id}`)
+
+            break;
+        }
+        case 8: {
+            console.log("Player guessed: ", data.payload.player_id);
+            break;
+        }
+        case 9: {
+            console.log("Round ended");
+            for (const [player_id, round] of Object.entries(data.payload.rounds as { [key: string]: GameModule.Round })) {
+                console.log(`Player ${player_id} guessed: ${round.guess_location.x}, ${round.guess_location.y} with a distance of ${Math.floor(round.distance)} meters. Score: ${round.score}`);
+            }
+
+            break;
+        }
+        case 11: {
+            console.log("Game finished");
+            for (const [player_id, rounds] of Object.entries(data.payload.players as { [key: string]: GameModule.Round[] })) {
+                console.log(`Player ${player_id} finished with a total score of ${rounds.reduce((acc, round) => acc + round.score, 0)}`);
+            }
+
+            break;
+        }
         case 13: {
             console.error("Error: ", data.payload);
             break;
+        }
+        case 14: {
+            // Ping
+            break;
+        }
+        default: {
+            console.log(`Unhandled message: ${data.type}`)
         }
     }
 };
@@ -75,6 +112,8 @@ function menu() {
     menu_item('create', 'Create a game');
     menu_item('join', 'Join a game');
     menu_item('ready', 'Ready up');
+    menu_item('guess', 'Guess the location');
+    menu_item('next', 'Go to the next round');
 
     menu_item('exit', 'Exit the client');
 
@@ -127,6 +166,29 @@ rl.on('line', (input) => {
                 _payload: {
                     ready: true
                 } as Payloads.ChangeReadyStatus,
+                game_id
+            }));
+
+            break;
+        }
+        case "guess": {
+            const [x, z] = [Math.ceil(Math.random() * 2000), Math.ceil(Math.random() * 2000)];
+
+            socket.send(JSON.stringify({
+                type: request_type.GUESS_LOCATION,
+                player_id: user_id,
+                _payload: {
+                    location: new THREE.Vector2(x, z)
+                } as Payloads.GuessLocation,
+                game_id
+            }));
+
+            break;
+        }
+        case "next": {
+            socket.send(JSON.stringify({
+                type: request_type.GOTO_NEXT_ROUND,
+                player_id: user_id,
                 game_id
             }));
 

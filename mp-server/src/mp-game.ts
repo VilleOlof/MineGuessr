@@ -43,6 +43,9 @@ export class MPGame {
 
     public static inbetween_round_time: number = 1000 * 20;
     public inbetween_round_timeout: NodeJS.Timeout | null = null;
+    // ###
+    public static guess_timeout: number = 1000 * 30;
+    public guess_timeout: NodeJS.Timeout | null = null;
 
     public players: { [key: string]: PlayerData } = {};
 

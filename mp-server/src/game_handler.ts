@@ -41,9 +41,7 @@ export module GameHandler {
     }
 
     export function create_game(player: string, payload: Payloads.CreateGame) {
-        if (does_player_have_game(player)) {
-            throw new Error("Player already has a game");
-        }
+        if (does_player_have_game(player)) throw new Error("Player already has a game");
 
         let game = new MPGame(payload.panoramas);
         game.config.visibility = payload.visibility;
@@ -57,13 +55,9 @@ export module GameHandler {
     }
 
     export function join_game(player: string, payload: Payloads.JoinGame) {
-        if (!games[payload.game_id]) {
-            throw new Error("Game does not exist");
-        }
+        if (!games[payload.game_id]) throw new Error("Game does not exist");
 
-        if (does_player_have_game(player)) {
-            throw new Error("Player already has a game");
-        }
+        if (does_player_have_game(player)) throw new Error("Player already has a game");
 
         games[payload.game_id].add_player(player);
 
@@ -75,12 +69,8 @@ export module GameHandler {
     export function ready(player: string, game_id: string, ready: boolean) {
         const game = games[game_id];
 
-        if (!game) {
-            throw new Error("Game does not exist");
-        }
-        if (!game.players[player]) {
-            throw new Error("Player is not in game");
-        }
+        if (!game) throw new Error("Game does not exist");
+        if (!game.players[player]) throw new Error("Player is not in game");
 
         game.players[player].lobby_ready = ready;
 
@@ -95,9 +85,7 @@ export module GameHandler {
     export function end_game(game_id: string) {
         const game = games[game_id];
 
-        if (!game) {
-            throw new Error("Game does not exist");
-        }
+        if (!game) throw new Error("Game does not exist");
 
         game.state = "finished";
 

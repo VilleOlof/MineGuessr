@@ -37,6 +37,8 @@ export const request_type = {
     ABORTED: 12,
     ERROR: 13,
     PING: 14,
+    ROUND_TIMELIMIT: 15,
+    GOTO_NEXT_ROUND_TIMELIMIT: 16,
 } as const;
 export type request_type = typeof request_type[keyof typeof request_type];
 
