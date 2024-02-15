@@ -40,12 +40,14 @@ function Main() {
                         return;
                     }
 
-                    const { type, _payload, player_id, game_id, auth_session } = data_result.data;
+                    const { type, _payload, player_id, game_id } = data_result.data;
 
                     if (type === request_type.AUTH) {
                         const is_dev = Bun.env.DEV === "true";
 
-                        const { success, player_id: db_player_id } = db_session_valid_call(auth_session);
+                        const payload = _payload as Payloads.Auth;
+
+                        const { success, player_id: db_player_id } = db_session_valid_call(payload.auth_session);
                         if (!success) {
                             ws.send(JSON.stringify({
                                 type: request_type.ERROR,
@@ -100,7 +102,7 @@ function Main() {
                     }
 
                     // Passing just 'data' results in it thinking _payload is optional. This is a workaround
-                    handler(ws, server, { type, _payload, player_id, game_id, auth_session });
+                    handler(ws, server, { type, _payload, player_id, game_id });
                 }
                 catch (e) {
                     if (e instanceof Error) {

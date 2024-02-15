@@ -16,8 +16,7 @@ function send_message(type: request_type, payload: any) {
         type,
         player_id: user_id,
         _payload: payload,
-        game_id: game_id,
-        auth_session: "awf093j8ps8izzbropevxtxscqlicmo3perr1b4f"
+        game_id: game_id
     }));
 }
 
@@ -119,7 +118,9 @@ socket.onopen = () => {
         user_id = name;
         console.log(`Welcome ${user_id}`);
 
-        send_message(request_type.AUTH, {});
+        send_message(request_type.AUTH, {
+            auth_session: "awf093j8ps8izzbropevxtxscqlicmo3perr1b4f"
+        });
 
         menu();
     });

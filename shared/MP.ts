@@ -50,7 +50,6 @@ export type WebsocketRequest = {
     player_id: string,
     _payload: any
     game_id?: string,
-    auth_session: string
 };
 
 // TODO: Make these into schemas and validate?
@@ -108,5 +107,8 @@ export module Payloads {
     export type LeaveGame = {};
     export type OtherPlayerLeft = {
         player_id: string
+    }
+    export type Auth = {
+        auth_session: string
     }
 }
