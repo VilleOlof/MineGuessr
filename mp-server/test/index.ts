@@ -11,6 +11,16 @@ socket.onerror = (event) => {
     console.error(event);
 }
 
+function send_message(type: request_type, payload: any) {
+    socket.send(JSON.stringify({
+        type,
+        player_id: user_id,
+        _payload: payload,
+        game_id: game_id,
+        auth_session: "awf093j8ps8izzbropevxtxscqlicmo3perr1b4f"
+    }));
+}
+
 console.log('Client started');
 
 socket.onmessage = (event) => {
@@ -58,12 +68,28 @@ socket.onmessage = (event) => {
 
             break;
         }
+        case 12: {
+            console.error("Aborted: ", data.payload.reason);
+            break;
+        }
         case 13: {
-            console.error("Error: ", data.payload);
+            console.error("Error: ", data.payload.reason);
             break;
         }
         case 14: {
             // Ping
+            break;
+        }
+        case 15: {
+            console.log(`You have ${data.payload.time / 1000} seconds to guess the location`);
+            break;
+        }
+        case 16: {
+            console.log(`You have ${data.payload.time / 1000} seconds to go to the next round`);
+            break;
+        }
+        case 18: {
+            console.log(`Player left: ${data.payload.player_id}`);
             break;
         }
         default: {
@@ -73,29 +99,28 @@ socket.onmessage = (event) => {
 };
 
 socket.onclose = () => {
-    socket.send(JSON.stringify({
-        type: request_type.ABORTED,
-        player_id: user_id,
-        _payload: {
-            reason: "Client closed"
-        } as Payloads.Aborted
-    }));
+    send_message(
+        request_type.ABORTED,
+        { reason: "Client closed" } as Payloads.Aborted
+    );
+
+    process.exit(0);
 }
 
 socket.onopen = () => {
     console.log('Client connected');
 
-    setTimeout(() => {
-        socket.send(JSON.stringify({
-            type: request_type.PING,
-            player_id: user_id,
-            _payload: {}
-        }));
-    }, 1000 * 5);
+    const ping = () => {
+        send_message(request_type.PING, {});
+    }
+    setInterval(ping, 1000 * 5);
 
     rl.question('Enter your name: ', (name) => {
         user_id = name;
         console.log(`Welcome ${user_id}`);
+
+        send_message(request_type.AUTH, {});
+
         menu();
     });
 };
@@ -111,6 +136,7 @@ function menu() {
     console.log('\x1b[1;32m:: Menu ::\x1b[1;0m');
     menu_item('create', 'Create a game');
     menu_item('join', 'Join a game');
+    menu_item('leave', 'Leave a game');
     menu_item('ready', 'Ready up');
     menu_item('guess', 'Guess the location');
     menu_item('next', 'Go to the next round');
@@ -124,11 +150,11 @@ rl.on('line', (input) => {
     let write_menu = true;
 
     switch (input) {
+        case "c": { }
         case "create": {
-            socket.send(JSON.stringify({
-                type: request_type.CREATE_GAME,
-                player_id: user_id,
-                _payload: {
+            send_message(
+                request_type.CREATE_GAME,
+                {
                     panoramas: [
                         { id: 1, coordinates: [1, 0] },
                         { id: 2, coordinates: [0, 1] },
@@ -138,62 +164,66 @@ rl.on('line', (input) => {
                     ],
                     visibility: "public"
                 } as Payloads.CreateGame
-            }));
+            )
 
             break;
         }
+        case "j": { }
         case "join": {
             write_menu = false;
             rl.question('Game ID: ', (game_id) => {
                 console.log(`Joining game ${game_id}`);
-                socket.send(JSON.stringify({
-                    type: request_type.JOIN_GAME,
-                    player_id: user_id,
-                    _payload: {
-                        game_id
-                    } as Payloads.JoinGame
-                }));
+                send_message(
+                    request_type.JOIN_GAME,
+                    { game_id } as Payloads.JoinGame
+                );
 
                 menu();
             });
 
             break;
         }
-        case "ready": {
-            socket.send(JSON.stringify({
-                type: request_type.CHANGE_READY_STATUS,
-                player_id: user_id,
-                _payload: {
-                    ready: true
-                } as Payloads.ChangeReadyStatus,
-                game_id
-            }));
+        case "l": { }
+        case "leave": {
+            send_message(
+                request_type.LEAVE_GAME,
+                {}
+            );
 
             break;
         }
+        case "r": { }
+        case "ready": {
+            send_message(
+                request_type.CHANGE_READY_STATUS,
+                { ready: true } as Payloads.ChangeReadyStatus
+            );
+
+            break;
+        }
+        case "g": { }
         case "guess": {
             const [x, z] = [Math.ceil(Math.random() * 2000), Math.ceil(Math.random() * 2000)];
 
-            socket.send(JSON.stringify({
-                type: request_type.GUESS_LOCATION,
-                player_id: user_id,
-                _payload: {
+            send_message(
+                request_type.GUESS_LOCATION,
+                {
                     location: new THREE.Vector2(x, z)
-                } as Payloads.GuessLocation,
-                game_id
-            }));
+                } as Payloads.GuessLocation
+            );
 
             break;
         }
+        case "n": { }
         case "next": {
-            socket.send(JSON.stringify({
-                type: request_type.GOTO_NEXT_ROUND,
-                player_id: user_id,
-                game_id
-            }));
+            send_message(
+                request_type.GOTO_NEXT_ROUND,
+                {}
+            );
 
             break;
         }
+        case "e": { }
         case "exit": {
             socket.close();
             process.exit(0);

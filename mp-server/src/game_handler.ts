@@ -1,4 +1,3 @@
-import { t } from "elysia";
 import { MPGame } from "./mp-game";
 import { Payloads, request_type } from "../../shared/MP";
 import { z } from "zod";
@@ -6,18 +5,12 @@ import { z } from "zod";
 export module GameHandler {
     export let games: { [game_id: string]: MPGame } = {};
 
-    export const message_schema = t.Object({
-        type: t.Enum(request_type),
-        player_id: t.String(),
-        _payload: t.Unknown(),
-        game_id: t.Optional(t.String())
-    });
-
     export const message = z.object({
         type: z.nativeEnum(request_type),
         player_id: z.string(),
         _payload: z.unknown(),
-        game_id: z.string().optional()
+        game_id: z.string().optional(),
+        auth_session: z.string()
     });
 
     function does_player_have_game(player: string) {
@@ -49,8 +42,6 @@ export module GameHandler {
 
         games[game.game_id] = game;
 
-        console.log(`Game created by ${player} | Game ID: ${game.game_id}`);
-
         return game.game_id;
     }
 
@@ -60,8 +51,6 @@ export module GameHandler {
         if (does_player_have_game(player)) throw new Error("Player already has a game");
 
         games[payload.game_id].add_player(player);
-
-        console.log(`${player} joined game ${payload.game_id}`);
 
         return games[payload.game_id];
     }
@@ -76,8 +65,6 @@ export module GameHandler {
 
         const all_ready = game.all_players_ready();
         if (all_ready) game.start_game();
-
-        console.log(`${player} is ${ready ? "ready" : "not ready"} for game ${game_id}`);
 
         return all_ready;
     }

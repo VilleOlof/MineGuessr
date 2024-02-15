@@ -39,6 +39,9 @@ export const request_type = {
     PING: 14,
     ROUND_TIMELIMIT: 15,
     GOTO_NEXT_ROUND_TIMELIMIT: 16,
+    LEAVE_GAME: 17,
+    OTHER_PLAYER_LEFT: 18,
+    AUTH: 19
 } as const;
 export type request_type = typeof request_type[keyof typeof request_type];
 
@@ -47,6 +50,7 @@ export type WebsocketRequest = {
     player_id: string,
     _payload: any
     game_id?: string,
+    auth_session: string
 };
 
 // TODO: Make these into schemas and validate?
@@ -94,5 +98,15 @@ export module Payloads {
     }
     export type Error = {
         reason: string
+    }
+    export type RoundTimelimit = {
+        time: number
+    }
+    export type GotoNextRoundTimelimit = {
+        time: number
+    };
+    export type LeaveGame = {};
+    export type OtherPlayerLeft = {
+        player_id: string
     }
 }
