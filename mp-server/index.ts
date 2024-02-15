@@ -1,9 +1,7 @@
 import { GameHandler } from 'src/game_handler';
 import { Payloads, request_type } from '../shared/MP';
 import { message_handlers } from 'src/websocket_handler';
-import { db_session_valid_call } from 'src/auth';
-
-let ws_authed_users: { [key: string]: boolean } = {};
+import { db_session_valid_call, get_auth_string, ws_authed_users } from 'src/auth';
 
 // TODO: add route that is in the mp page, to get lobbies and auto-refresh. /menu
 function Main() {
@@ -40,14 +38,14 @@ function Main() {
                         return;
                     }
 
-                    const { type, _payload, player_id, game_id } = data_result.data;
+                    const { type, _payload, player_id, game_id, auth_session } = data_result.data;
 
-                    if (type === request_type.AUTH) {
+
+                    if (!ws_authed_users[get_auth_string(player_id, auth_session)]) {
+                        // TODO: try to auth here
                         const is_dev = Bun.env.DEV === "true";
 
-                        const payload = _payload as Payloads.Auth;
-
-                        const { success, player_id: db_player_id } = db_session_valid_call(payload.auth_session);
+                        const { success, player_id: db_player_id } = db_session_valid_call(auth_session);
                         if (!success) {
                             ws.send(JSON.stringify({
                                 type: request_type.ERROR,
@@ -55,6 +53,8 @@ function Main() {
                                     reason: "Invalid auth session"
                                 } as Payloads.Error
                             }));
+
+                            ws.close();
 
                             return;
                         }
@@ -69,21 +69,8 @@ function Main() {
                             return;
                         }
 
-                        ws_authed_users[player_id] = true;
+                        ws_authed_users[get_auth_string(player_id, auth_session)] = true;
                         console.log(`Player ${player_id} authenticated`);
-
-                        return;
-                    }
-
-                    if (!ws_authed_users[player_id]) {
-                        ws.send(JSON.stringify({
-                            type: request_type.ERROR,
-                            payload: {
-                                reason: "Not authenticated"
-                            } as Payloads.Error
-                        }));
-
-                        ws.close();
 
                         return;
                     }
@@ -102,7 +89,7 @@ function Main() {
                     }
 
                     // Passing just 'data' results in it thinking _payload is optional. This is a workaround
-                    handler(ws, server, { type, _payload, player_id, game_id });
+                    handler(ws, server, { type, _payload, player_id, game_id, auth_session });
                 }
                 catch (e) {
                     if (e instanceof Error) {

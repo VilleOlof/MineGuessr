@@ -40,8 +40,7 @@ export const request_type = {
     ROUND_TIMELIMIT: 15,
     GOTO_NEXT_ROUND_TIMELIMIT: 16,
     LEAVE_GAME: 17,
-    OTHER_PLAYER_LEFT: 18,
-    AUTH: 19
+    OTHER_PLAYER_LEFT: 18
 } as const;
 export type request_type = typeof request_type[keyof typeof request_type];
 
@@ -50,6 +49,7 @@ export type WebsocketRequest = {
     player_id: string,
     _payload: any
     game_id?: string,
+    auth_session: string
 };
 
 // TODO: Make these into schemas and validate?
@@ -107,8 +107,5 @@ export module Payloads {
     export type LeaveGame = {};
     export type OtherPlayerLeft = {
         player_id: string
-    }
-    export type Auth = {
-        auth_session: string
     }
 }

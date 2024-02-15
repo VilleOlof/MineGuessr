@@ -9,7 +9,8 @@ export module GameHandler {
         type: z.nativeEnum(request_type),
         player_id: z.string(),
         _payload: z.unknown(),
-        game_id: z.string().optional()
+        game_id: z.string().optional(),
+        auth_session: z.string()
     });
 
     function does_player_have_game(player: string) {

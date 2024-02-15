@@ -23,3 +23,11 @@ export function db_session_valid_call(session: string): { success: boolean, play
         return { success: false, player_id: "" };
     }
 }
+
+export let ws_authed_users: { [key: string]: boolean } = {};
+export const get_auth_string = (player_id: string, auth_session: string) => `${player_id}-${auth_session}`;
+
+setInterval(() => {
+    // Clear out old auths
+    ws_authed_users = {};
+}, 1000 * 60 * 60); // 1 hour
