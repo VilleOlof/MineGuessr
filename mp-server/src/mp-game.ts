@@ -78,7 +78,6 @@ export class MPGame {
         }
 
         this.idle_data.timeout = setTimeout(() => {
-            // TODO: Broadcast to clients?
             this.state = "aborted";
         }, MPGame.IDLE_TIMEOUT);
     }
@@ -123,8 +122,9 @@ export class MPGame {
             delete this.players[player];
         }
         const players_left = Object.keys(this.players).length;
-        if (players_left === 0 || players_left === 1) {
+        if (players_left <= 1) {
             this.state = "aborted";
+            console.log(`Game ${this.game_id} has no players left`);
         }
 
         this.update_latest_activity();

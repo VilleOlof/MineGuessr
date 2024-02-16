@@ -1,5 +1,5 @@
 import { MPGame } from "./mp-game";
-import { Payloads, request_type } from "../../shared/MP";
+import { Lobby, Payloads, Visibility, request_type } from "../../shared/MP";
 import { z } from "zod";
 
 export module GameHandler {
@@ -34,7 +34,15 @@ export module GameHandler {
     }
 
     export function create_game(player: string, payload: Payloads.CreateGame) {
-        if (does_player_have_game(player)) throw new Error("Player already has a game");
+        if (does_player_have_game(player)) {
+            // Leave the old one
+            const old_game = get_game_player_is_in(player);
+            if (old_game) {
+                old_game.remove_player(player);
+            }
+
+            console.log(`Player ${player} left game ${old_game?.game_id ?? "unknown"} due to creating a new game`);
+        }
 
         let game = new MPGame(payload.panoramas);
         game.config.visibility = payload.visibility;
@@ -77,5 +85,27 @@ export module GameHandler {
         game.state = "finished";
 
         console.log(`Game ${game_id} ended`);
+    }
+
+    export function get_open_lobbies() {
+        const lobbies: Lobby[] = [];
+
+        for (let game_id in games) {
+            const game = games[game_id];
+
+            if (game.config.visibility === Visibility.PUBLIC) {
+                lobbies.push({
+                    players: Object.keys(game.players).map(player_id => {
+                        return {
+                            player_id,
+                            ready: game.players[player_id].lobby_ready // Rename to ready from lobby_ready??
+                        };
+                    }),
+                    game_id
+                });
+            }
+        }
+
+        return lobbies;
     }
 }

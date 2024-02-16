@@ -1,23 +1,43 @@
 import { GameHandler } from 'src/game_handler';
 import { Payloads, request_type } from '../shared/MP';
-import { message_handlers } from 'src/websocket_handler';
+import { PING_TIMEOUT, message_handlers } from 'src/websocket_handler';
 import { db_session_valid_call, get_auth_string, ws_authed_users } from 'src/auth';
+import { route_handlers } from 'src/route_handler';
+import { uuidv4 } from '../shared';
+
+export type WebSocketData = {
+    uuid: string;
+}
 
 // TODO: add route that is in the mp page, to get lobbies and auto-refresh. /menu
 function Main() {
     const PORT = Bun.env.PORT || 3000;
 
-    const server = Bun.serve({
+    const server = Bun.serve<WebSocketData>({
         port: PORT,
         fetch(request, server) {
 
-            if (server.upgrade(request)) {
+            // Upgrade to websocket
+            if (server.upgrade(request, {
+                data: {
+                    uuid: uuidv4()
+                },
+            })) {
                 return;
             }
 
-            return new Response("OK", { status: 200 });
+            const path = new URL(request.url).pathname;
+            console.log(`Received request: ${path}`);
+
+            const handler = route_handlers.get(path);
+            if (handler === undefined) {
+                return new Response("Not found", { status: 404 });
+            }
+
+            return handler(request, server);
         },
         websocket: {
+            idleTimeout: (PING_TIMEOUT * 1.5) / 1000, // Milliseconds to seconds
             message(ws, message) {
                 try {
                     if (message instanceof Buffer) {

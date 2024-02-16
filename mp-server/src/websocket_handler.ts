@@ -3,8 +3,9 @@ import { Payloads, WebsocketRequest, request_type } from '../../shared/MP';
 import { ROUNDS_PER_MATCH } from '../../shared';
 import { MPGame } from 'src/mp-game';
 import { Server, ServerWebSocket } from 'bun';
+import { WebSocketData } from 'index';
 
-const PING_TIMEOUT = 1000 * 20;
+export const PING_TIMEOUT = 1000 * 10;
 let ping_timeouts: { [key: string]: NodeJS.Timeout } = {};
 
 function get_game_label(game_id: string) {
@@ -238,15 +239,24 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<unkno
         ws_next_round(game, server);
     }],
     [request_type.PING, (ws, _, { player_id }) => {
-        if (ping_timeouts[player_id]) clearTimeout(ping_timeouts[player_id]);
+        const uuid = (ws.data as WebSocketData).uuid;
 
-        ping_timeouts[player_id] = setTimeout(() => {
+        if (ping_timeouts[uuid]) clearTimeout(ping_timeouts[uuid]);
+
+        ping_timeouts[uuid] = setTimeout(() => {
+            if (!player_id) {
+                ws.close();
+                console.log(`Socket ${uuid} timed out`);
+                return;
+            }
+
             const game = GameHandler.get_game_player_is_in(player_id);
             if (game) {
-                GameHandler.end_game(game.game_id);
+                game.state = "aborted";
             }
 
             ws.close();
+            console.log(`Player '${player_id}' timed out`);
 
         }, PING_TIMEOUT);
 

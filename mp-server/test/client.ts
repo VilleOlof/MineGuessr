@@ -1,7 +1,7 @@
 import * as THREE from "three";
-import { Payloads, request_type } from "../../shared/MP";
-import readline from 'readline';
-import { GameModule } from "../../shared";
+import { type Payloads, request_type } from "../../shared/MP";
+import * as readline from 'node:readline';
+import type { GameModule } from "../../shared";
 
 let user_id = "test";
 let game_id: string;
@@ -17,7 +17,7 @@ function send_message(type: request_type, payload: any) {
         player_id: user_id,
         _payload: payload,
         game_id: game_id,
-        auth_session: Bun.env.TEST_AUTH_TOKEN
+        auth_session: process.env.TEST_AUTH_TOKEN
     }));
 }
 

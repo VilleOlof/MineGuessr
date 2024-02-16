@@ -5,7 +5,11 @@ export type Config = {
     visibility: Visibility;
 };
 
-export type Visibility = "public" | "private";
+export const Visibility = {
+    PUBLIC: "public",
+    PRIVATE: "private"
+} as const;
+export type Visibility = typeof Visibility[keyof typeof Visibility];
 
 export type MPRound = GameModule.Round & {
     ready_for_next: boolean;
@@ -50,6 +54,11 @@ export type WebsocketRequest = {
     _payload: any
     game_id?: string,
     auth_session: string
+};
+
+export type Lobby = {
+    players: PlayerLobbyData[]
+    game_id: string
 };
 
 // TODO: Make these into schemas and validate?
