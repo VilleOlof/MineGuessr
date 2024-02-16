@@ -3,7 +3,8 @@ import Database from "bun:sqlite";
 const db = new Database(Bun.env.DB);
 
 export function db_session_valid_call(session: string): { success: boolean, player_id: string } {
-    // TODO: Implement
+    if (Bun.env.DB === undefined && Bun.env.DEV === "true") return { success: true, player_id: "" };
+
     const query = db.prepare(`
         SELECT * FROM Session
         WHERE id = ?

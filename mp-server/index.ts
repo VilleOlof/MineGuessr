@@ -42,7 +42,6 @@ function Main() {
 
 
                     if (!ws_authed_users[get_auth_string(player_id, auth_session)]) {
-                        // TODO: try to auth here
                         const is_dev = Bun.env.DEV === "true";
 
                         const { success, player_id: db_player_id } = db_session_valid_call(auth_session);

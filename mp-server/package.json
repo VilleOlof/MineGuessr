@@ -9,7 +9,8 @@
     "typescript": "^5.0.0"
   },
   "scripts": {
-    "start": "bun run index.ts"
+    "start": "bun run index.ts",
+    "test-client": "bun run test/client.ts"
   },
   "dependencies": {
     "@types/three": "^0.161.2",

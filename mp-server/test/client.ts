@@ -17,7 +17,7 @@ function send_message(type: request_type, payload: any) {
         player_id: user_id,
         _payload: payload,
         game_id: game_id,
-        auth_session: "awf093j8ps8izzbropevxtxscqlicmo3perr1b4f"
+        auth_session: Bun.env.TEST_AUTH_TOKEN
     }));
 }
 
@@ -110,13 +110,11 @@ socket.onclose = () => {
 socket.onopen = () => {
     console.log('Client connected');
 
-    const ping = () => {
-        send_message(request_type.PING, {});
-    }
+    const ping = () => send_message(request_type.PING, {});
 
     rl.question('Enter your name: ', (name) => {
         user_id = name;
-        console.log(`Welcome ${user_id}`);
+        console.log(`User_id: ${user_id}`);
 
         ping(); // First init verify auth
         setInterval(ping, 1000 * 5);
@@ -134,14 +132,14 @@ function menu() {
     const menu_item = (text: string, desc: string) => console.log(`\x1b[1;36m${text}\x1b[1;0m - \x1b[1;37m${desc}\x1b[1;0m`);
 
     console.log('\x1b[1;32m:: Menu ::\x1b[1;0m');
-    menu_item('create', 'Create a game');
-    menu_item('join', 'Join a game');
-    menu_item('leave', 'Leave a game');
-    menu_item('ready', 'Ready up');
-    menu_item('guess', 'Guess the location');
-    menu_item('next', 'Go to the next round');
+    menu_item('[c] create', 'Create a game');
+    menu_item('[j] join', 'Join a game');
+    menu_item('[l] leave', 'Leave a game');
+    menu_item('[r] ready', 'Ready up');
+    menu_item('[g] guess', 'Guess the location');
+    menu_item('[n] next', 'Go to the next round');
 
-    menu_item('exit', 'Exit the client');
+    menu_item('[e] exit', 'Exit the client');
 
     console.log('\x1b[1;90m:: ---- ::\x1b[1;0m');
 }
