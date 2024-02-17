@@ -3,6 +3,7 @@ import { GameModule, location_metadata } from ".";
 export type Config = {
     panoramas: location_metadata[];
     visibility: Visibility;
+    game_creator: string;
 };
 
 export const Visibility = {

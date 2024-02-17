@@ -240,6 +240,7 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<unkno
     }],
     [request_type.PING, (ws, _, { player_id }) => {
         const uuid = (ws.data as WebSocketData).uuid;
+        // console.log(`Ping from ${uuid}`);
 
         if (ping_timeouts[uuid]) clearTimeout(ping_timeouts[uuid]);
 

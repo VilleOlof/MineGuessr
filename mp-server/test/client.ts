@@ -138,13 +138,14 @@ function menu() {
     menu_item('[r] ready', 'Ready up');
     menu_item('[g] guess', 'Guess the location');
     menu_item('[n] next', 'Go to the next round');
+    menu_item('[o] lobbies', 'Get all open lobbies');
 
     menu_item('[e] exit', 'Exit the client');
 
     console.log('\x1b[1;90m:: ---- ::\x1b[1;0m');
 }
 
-rl.on('line', (input) => {
+rl.on('line', async (input) => {
     let write_menu = true;
 
     switch (input) {
@@ -218,6 +219,36 @@ rl.on('line', (input) => {
                 request_type.GOTO_NEXT_ROUND,
                 {}
             );
+
+            break;
+        }
+        case "o": { }
+        case "lobbies": {
+            try {
+                const res = await fetch("http://localhost:40402/lobby", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+
+                });
+                if (res.status === 204) {
+                    console.log("No lobbies");
+                    return;
+                }
+
+                if (res) {
+                    const lobbies = await res.json();
+                    for (const lobby of lobbies) {
+                        console.log(`[${lobby.game_id}] Players: ${lobby.players.length}`);
+                    }
+
+                    return;
+                }
+            }
+            catch (e) {
+                console.error(e);
+            }
 
             break;
         }

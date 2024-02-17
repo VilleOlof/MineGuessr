@@ -34,19 +34,21 @@ export module GameHandler {
     }
 
     export function create_game(player: string, payload: Payloads.CreateGame) {
-        if (does_player_have_game(player)) {
+        const previous_game = get_game_player_is_in(player);
+        if (previous_game !== null) {
             // Leave the old one
-            const old_game = get_game_player_is_in(player);
-            if (old_game) {
-                old_game.remove_player(player);
+            if (previous_game) {
+                previous_game.remove_player(player);
             }
 
-            console.log(`Player ${player} left game ${old_game?.game_id ?? "unknown"} due to creating a new game`);
+            console.log(`Player ${player} left game ${previous_game?.game_id ?? "unknown"} due to creating a new game`);
         }
 
         let game = new MPGame(payload.panoramas);
         game.config.visibility = payload.visibility;
+
         game.add_player(player);
+        game.set_game_creator(player);
 
         games[game.game_id] = game;
 

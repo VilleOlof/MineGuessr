@@ -5,6 +5,7 @@ import { Config, PlayerData } from "../../shared/MP";
 import EventEmitter from "events";
 import { GameHandler } from "./game_handler";
 
+// TODO: Send stats to db
 export class MPGame {
     private static PLAYER_LIMIT: number = 3;
     private static IDLE_TIMEOUT: number = 1000 * 60 * 5;
@@ -18,7 +19,6 @@ export class MPGame {
     private _state: MPGame.State = "lobby";
 
     public set state(value: MPGame.State) {
-        this.update_latest_activity();
         this._state = value;
 
         MPGame.MPEvents.emit(
@@ -34,7 +34,8 @@ export class MPGame {
 
     public config: Config = {
         panoramas: [],
-        visibility: "private"
+        visibility: "private",
+        game_creator: "Unknown"
     };
     public game_id: string;
 
@@ -80,6 +81,10 @@ export class MPGame {
         this.idle_data.timeout = setTimeout(() => {
             this.state = "aborted";
         }, MPGame.IDLE_TIMEOUT);
+    }
+
+    public set_game_creator(player_id: string) {
+        this.config.game_creator = player_id;
     }
 
     public add_player(player: string) {
