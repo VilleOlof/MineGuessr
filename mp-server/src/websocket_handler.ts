@@ -238,6 +238,7 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<unkno
         if (!game.all_players_ready_for_next_round()) return;
         ws_next_round(game, server);
     }],
+    //TODO: Send ping to client topic and await response from client instead of server waiting for client to send ping
     [request_type.PING, (ws, _, { player_id }) => {
         const uuid = (ws.data as WebSocketData).uuid;
         // console.log(`Ping from ${uuid}`);
@@ -270,12 +271,12 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<unkno
         if (!game) throw new Error(`Game ${game_id} does not exist`);
         const game_label = get_game_label(game_id);
 
-        ws.unsubscribe(game_label);
-
         server.publish(game_label, JSON.stringify({
             type: request_type.OTHER_PLAYER_LEFT,
             payload: { player_id } as Payloads.OtherPlayerLeft
         }));
+
+        ws.unsubscribe(game_label);
 
         ws_log(game_id, player_id, "left game");
 

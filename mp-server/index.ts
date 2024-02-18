@@ -85,13 +85,13 @@ function Main() {
                                 } as Payloads.Error
                             }));
 
+                            ws.close();
+
                             return;
                         }
 
                         ws_authed_users[get_auth_string(player_id, auth_session)] = true;
                         console.log(`Player ${player_id} authenticated`);
-
-                        return;
                     }
 
                     const handler = message_handlers.get(type);
