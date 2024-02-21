@@ -4,6 +4,7 @@ import { ROUNDS_PER_MATCH, location_metadata } from "../../shared";
 import { Config, PlayerData } from "../../shared/MP";
 import EventEmitter from "events";
 import { GameHandler } from "./game_handler";
+import { Ping } from "./ping";
 
 // TODO: Send stats to db
 export class MPGame {

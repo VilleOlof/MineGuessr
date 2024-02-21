@@ -4,9 +4,7 @@ import { ROUNDS_PER_MATCH } from '../../shared';
 import { MPGame } from 'src/mp-game';
 import { Server, ServerWebSocket } from 'bun';
 import { WebSocketData } from 'index';
-
-export const PING_TIMEOUT = 1000 * 10;
-let ping_timeouts: { [key: string]: NodeJS.Timeout } = {};
+import { Ping } from './ping';
 
 function get_game_label(game_id: string) {
     return `game_${game_id}`;
@@ -33,7 +31,7 @@ function ws_log(game_id: string, player_id: string, msg: string) {
 
 }
 
-export const message_handlers = new Map<request_type, (ws: ServerWebSocket<unknown>, server: Server, message: WebsocketRequest) => void>([
+export const message_handlers = new Map<request_type, (ws: ServerWebSocket<WebSocketData>, server: Server, message: WebsocketRequest) => void>([
     [request_type.CREATE_GAME, (ws, server, { _payload, player_id }) => {
         const payload = _payload as Payloads.CreateGame;
 
@@ -46,6 +44,8 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<unkno
                 players: [{ player_id, ready: false }]
             } as Payloads.JoinedGame
         }));
+
+        Ping.user_games[ws.data.uuid] = { game_id: new_game_id, player_id };
 
         ws_log(new_game_id, player_id, "created new game");
 
@@ -92,6 +92,8 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<unkno
         const payload = _payload as Payloads.JoinGame;
 
         const game = GameHandler.join_game(player_id, payload);
+
+        Ping.user_games[ws.data.uuid] = { game_id: payload.game_id, player_id };
 
         const game_label = get_game_label(payload.game_id);
 
@@ -148,7 +150,7 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<unkno
             } as Payloads.NextRound
         }));
     }],
-    [request_type.GUESS_LOCATION, (_, server, { _payload, player_id, game_id }) => {
+    [request_type.GUESS_LOCATION, (ws, server, { _payload, player_id, game_id }) => {
         const payload = _payload as Payloads.GuessLocation;
 
         if (!game_id) throw new Error("No game_id provided");
@@ -209,6 +211,7 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<unkno
 
                 // Clean up
                 game.self_destruct();
+                delete Ping.user_games[ws.data.uuid];
 
                 return;
             }
@@ -238,31 +241,8 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<unkno
         if (!game.all_players_ready_for_next_round()) return;
         ws_next_round(game, server);
     }],
-    //TODO: Send ping to client topic and await response from client instead of server waiting for client to send ping
-    [request_type.PING, (ws, _, { player_id }) => {
-        const uuid = (ws.data as WebSocketData).uuid;
-        // console.log(`Ping from ${uuid}`);
-
-        if (ping_timeouts[uuid]) clearTimeout(ping_timeouts[uuid]);
-
-        ping_timeouts[uuid] = setTimeout(() => {
-            if (!player_id) {
-                ws.close();
-                console.log(`Socket ${uuid} timed out`);
-                return;
-            }
-
-            const game = GameHandler.get_game_player_is_in(player_id);
-            if (game) {
-                game.state = "aborted";
-            }
-
-            ws.close();
-            console.log(`Player '${player_id}' timed out`);
-
-        }, PING_TIMEOUT);
-
-        ws.send(JSON.stringify({ type: request_type.PING, payload: {} }));
+    [request_type.PING, (ws, server) => {
+        Ping.handle(ws, server);
     }],
     [request_type.LEAVE_GAME, (ws, server, { game_id, player_id }) => {
         if (!game_id) throw new Error("No game_id provided");
@@ -281,5 +261,6 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<unkno
         ws_log(game_id, player_id, "left game");
 
         game.remove_player(player_id);
+        delete Ping.user_games[ws.data.uuid];
     }]
 ]);

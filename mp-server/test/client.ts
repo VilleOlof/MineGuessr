@@ -78,6 +78,7 @@ socket.onmessage = (event) => {
         }
         case 14: {
             // Ping
+            send_message(request_type.PING, {});
             break;
         }
         case 15: {
@@ -110,14 +111,14 @@ socket.onclose = () => {
 socket.onopen = () => {
     console.log('Client connected');
 
-    const ping = () => send_message(request_type.PING, {});
+    // const ping = () => send_message(request_type.PING, {});
 
     rl.question('Enter your name: ', (name) => {
         user_id = name;
         console.log(`User_id: ${user_id}`);
 
-        ping(); // First init verify auth
-        setInterval(ping, 1000 * 5);
+        // ping(); // First init verify auth
+        // setInterval(ping, 1000 * 5);
 
         menu();
     });

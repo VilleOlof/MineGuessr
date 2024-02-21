@@ -1,9 +1,10 @@
 import { GameHandler } from 'src/game_handler';
 import { Payloads, request_type } from '../shared/MP';
-import { PING_TIMEOUT, message_handlers } from 'src/websocket_handler';
+import { message_handlers } from 'src/websocket_handler';
 import { db_session_valid_call, get_auth_string, ws_authed_users } from 'src/auth';
 import { route_handlers } from 'src/route_handler';
 import { uuidv4 } from '../shared';
+import { Ping } from 'src/ping';
 
 export type WebSocketData = {
     uuid: string;
@@ -37,7 +38,7 @@ function Main() {
             return handler(request, server);
         },
         websocket: {
-            idleTimeout: (PING_TIMEOUT * 1.5) / 1000, // Milliseconds to seconds
+            idleTimeout: (Ping.INTERVAL * 1.5) / 1000, // Milliseconds to seconds
             message(ws, message) {
                 try {
                     if (message instanceof Buffer) {
@@ -120,9 +121,17 @@ function Main() {
             },
             open(ws) {
                 console.log(`New client connected: ${ws.remoteAddress}`);
+
+                ws.subscribe(ws.data.uuid);
+
+                setTimeout(() => {
+                    Ping.send(ws, server);
+                }, Ping.INTERVAL);
             },
             close(ws) {
                 console.log(`Client disconnected: ${ws.remoteAddress}`);
+
+                ws.unsubscribe(ws.data.uuid);
             }
         }
     });
