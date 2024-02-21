@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { type Payloads, request_type } from "../../shared/MP";
+import { type Payloads, request_type, get_request_type_name } from "../../shared/MP";
 import * as readline from 'node:readline';
 import type { GameModule } from "../../shared";
 
@@ -19,6 +19,8 @@ function send_message(type: request_type, payload: any) {
         game_id: game_id,
         auth_session: process.env.TEST_AUTH_TOKEN
     }));
+
+    console.log(`Sent message: ${get_request_type_name(type)}`);
 }
 
 console.log('Client started');

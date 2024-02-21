@@ -49,6 +49,10 @@ export const request_type = {
 } as const;
 export type request_type = typeof request_type[keyof typeof request_type];
 
+export function get_request_type_name(type: request_type) {
+    return Object.keys(request_type).find(key => request_type[key as keyof typeof request_type] === type);
+}
+
 export type WebsocketRequest = {
     type: request_type,
     player_id: string,
@@ -118,4 +122,6 @@ export module Payloads {
     export type OtherPlayerLeft = {
         player_id: string
     }
+
+    export type Any = CreateGame | JoinGame | JoinedGame | OtherPlayerJoined | ChangeReadyStatus | OtherPlayerReady | NextRound | GuessLocation | OtherPlayerGuessed | RoundEnded | GotoNextRound | GameFinished | Aborted | Error | RoundTimelimit | GotoNextRoundTimelimit | LeaveGame | OtherPlayerLeft;
 }
