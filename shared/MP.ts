@@ -53,10 +53,15 @@ export function get_request_type_name(type: request_type) {
     return Object.keys(request_type).find(key => request_type[key as keyof typeof request_type] === type);
 }
 
+export type ServerResponse = {
+    type: request_type,
+    payload: Payloads.Any
+}
+
 export type WebsocketRequest = {
     type: request_type,
     player_id: string,
-    _payload: any
+    _payload: Payloads.Any,
     game_id?: string,
     auth_session: string
 };
