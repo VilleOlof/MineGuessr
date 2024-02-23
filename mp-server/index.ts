@@ -59,7 +59,7 @@ function Main() {
                         return;
                     }
 
-                    const { type, _payload, player_id, game_id, auth_session } = data_result.data;
+                    let { type, _payload, player_id, game_id, auth_session } = data_result.data;
 
 
                     if (!ws_authed_users[get_auth_string(player_id, auth_session)]) {
@@ -109,7 +109,8 @@ function Main() {
                     }
 
                     // Passing just 'data' results in it thinking _payload is optional. This is a workaround
-                    handler(ws, server, { type, _payload, player_id, game_id, auth_session });
+                    const __payload = _payload as Payloads.Any; // Typescript is dumb
+                    handler(ws, server, { type, _payload: __payload, player_id, game_id, auth_session });
                 }
                 catch (e) {
                     if (e instanceof Error) {

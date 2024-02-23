@@ -1,4 +1,5 @@
 import { GameModule, location_metadata } from ".";
+import { z } from "zod";
 
 export type Config = {
     panoramas: location_metadata[];
@@ -11,6 +12,8 @@ export const Visibility = {
     PRIVATE: "private"
 } as const;
 export type Visibility = typeof Visibility[keyof typeof Visibility];
+
+export type State = "lobby" | "playing" | "intermission" | "finished" | "aborted" | "error" | "establishing";
 
 export type MPRound = GameModule.Round & {
     ready_for_next: boolean;
@@ -57,6 +60,11 @@ export type ServerResponse = {
     type: request_type,
     payload: Payloads.Any
 }
+
+export const ServerResponseMessage = z.object({
+    type: z.number(),
+    payload: z.any()
+});
 
 export type WebsocketRequest = {
     type: request_type,

@@ -9,5 +9,10 @@ export default defineConfig({
 			headless: true,
 			name: 'chrome'
 		}
+	},
+	server: {
+		fs: {
+			allow: ['.']
+		}
 	}
 });

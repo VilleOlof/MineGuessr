@@ -16,7 +16,7 @@ export module Ping {
             payload: {}
         }));
 
-        console.log(`Sent ping to ${ws.remoteAddress}`);
+        // console.log(`Sent ping to ${ws.remoteAddress}`);
 
         const timeout = setTimeout(() => {
             console.log(`Client ${ws.remoteAddress} timed out`);
@@ -41,7 +41,7 @@ export module Ping {
             delete timeouts[ws.data.uuid];
         }
 
-        console.log(`Received pong from ${ws.remoteAddress}`);
+        // console.log(`Received pong from ${ws.remoteAddress}`);
 
         setTimeout(() => {
             send(ws, server);

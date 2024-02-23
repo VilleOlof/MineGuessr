@@ -1,14 +1,13 @@
 import { GameModule } from "../../shared/GameModule";
 import * as THREE from "three";
 import { ROUNDS_PER_MATCH, location_metadata } from "../../shared";
-import { Config, PlayerData } from "../../shared/MP";
+import { Config, PlayerData, State } from "../../shared/MP";
 import EventEmitter from "events";
 import { GameHandler } from "./game_handler";
-import { Ping } from "./ping";
 
 // TODO: Send stats to db
 export class MPGame {
-    private static PLAYER_LIMIT: number = 3;
+    private static PLAYER_LIMIT: number = 2;
     private static IDLE_TIMEOUT: number = 1000 * 60 * 5;
 
     public static get_event_name(event: string, game_id: string) {
@@ -17,9 +16,9 @@ export class MPGame {
 
     public static MPEvents: EventEmitter = new EventEmitter();
 
-    private _state: MPGame.State = "lobby";
+    private _state: State = "lobby";
 
-    public set state(value: MPGame.State) {
+    public set state(value: State) {
         this._state = value;
 
         MPGame.MPEvents.emit(
@@ -81,6 +80,7 @@ export class MPGame {
 
         this.idle_data.timeout = setTimeout(() => {
             this.state = "aborted";
+            console.log(`Game ${this.game_id} timed out`);
         }, MPGame.IDLE_TIMEOUT);
     }
 
@@ -298,8 +298,6 @@ export class MPGame {
 }
 
 export module MPGame {
-    export type State = "lobby" | "playing" | "intermission" | "finished" | "aborted" | "error";
-
     export type IdleData = {
         created_at: number;
         last_updated: number;
