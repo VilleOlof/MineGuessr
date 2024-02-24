@@ -99,7 +99,7 @@
 
 	<p class="text-4xl">Spelare</p>
 	<ul class="bg-slate-600 px-2 py-1">
-		{#each Object.entries($players) as [player_id, data]}
+		{#each Object.entries($players) as [player_id, data], i}
 			<li class="flex items-center justify-between text-xl text-white">
 				<span>{player_id}</span>
 				<span>
@@ -130,6 +130,10 @@
 					{/if}
 				</span>
 			</li>
+
+			{#if i !== Object.entries($players).length - 1}
+				<div class="my-1 h-1 w-full rounded-md bg-slate-500"></div>
+			{/if}
 		{/each}
 	</ul>
 
