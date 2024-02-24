@@ -90,7 +90,8 @@ export module Payloads {
     }
     export type JoinedGame = {
         game_id: string,
-        players: PlayerLobbyData[]
+        players: PlayerLobbyData[],
+        visibility: Visibility
     }
     export type OtherPlayerJoined = {
         player_id: string

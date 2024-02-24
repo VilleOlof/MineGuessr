@@ -73,6 +73,7 @@ export class MPGame {
 
     private update_latest_activity() {
         this.idle_data.last_updated = Date.now();
+        if ((Bun.env.DISABLE_GAME_IDLE?.toLowerCase() === "true") ?? false) return;
 
         if (this.idle_data.timeout) {
             clearTimeout(this.idle_data.timeout);

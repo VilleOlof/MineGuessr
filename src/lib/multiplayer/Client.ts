@@ -10,7 +10,7 @@ export class MPClient {
     public metadata: MPClient.Metadata;
     public client_debug: boolean = true;
 
-    public state: Writable<State> = writable("lobby");
+    public state: Writable<State> = writable("establishing");
     public players: Writable<{ [key: string]: PlayerData }> = writable({});
 
     public round_index: Writable<number> = writable(0);
@@ -25,7 +25,8 @@ export class MPClient {
         this.metadata = {
             player_id: user_id,
             game_id: undefined,
-            auth_session: auth
+            auth_session: auth,
+            visibility: "private"
         };
 
         this.setup_message_handler();
@@ -150,6 +151,7 @@ export class MPClient {
                 });
             }
 
+            this.metadata.visibility = payload.visibility;
             this.state.set("lobby");
         }],
         [request_type.OTHER_PLAYER_JOINED, (_payload) => {
@@ -259,8 +261,14 @@ export module MPClient {
     export type Metadata = {
         player_id: string,
         game_id: string | undefined,
-        auth_session: string
+        auth_session: string,
+        visibility: Visibility
     };
+
+    export const MPClientEvent = {
+        JOINED_GAME: "joined_game"
+    } as const;
+    export type MPClientEvent = typeof MPClientEvent[keyof typeof MPClientEvent];
 
     export const SERVER_URL = `http${PUBLIC_MP_DEV ? '' : 's'}://${PUBLIC_MP_URL}`;
     export const WS_URL = `ws${PUBLIC_MP_DEV ? '' : 's'}://${PUBLIC_MP_URL}`;

@@ -8,6 +8,7 @@
 	import toast from 'svelte-french-toast';
 	import { GetDiscordAvatarUrl, toast_style } from '$lib';
 	import type { LayoutData } from './$types';
+	import Header from '$lib/Components/Header.svelte';
 
 	export let data: LayoutData;
 
@@ -31,14 +32,7 @@
 <div
 	class="container flex w-full flex-col items-center justify-start gap-6 p-2 text-white sm:w-3/4 lg:w-2/4"
 >
-	<header class="logo flex h-16 items-center gap-4 lg:h-24">
-		<img
-			src="/Earth.webp"
-			alt="Minecraft Earth"
-			class="h-full transition-transform hover:-translate-y-4 hover:-rotate-12"
-		/>
-		<h1 class="text-4xl font-bold md:text-6xl xl:text-7xl">90gQ Guessr</h1>
-	</header>
+	<Header />
 
 	<p class="text-lg md:text-2xl">
 		Gissa platsen från Minecraft servern <a

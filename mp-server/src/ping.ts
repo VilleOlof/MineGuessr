@@ -2,6 +2,7 @@ import { Server, ServerWebSocket } from "bun";
 import { message_handlers } from "./websocket_handler";
 import { request_type } from "../../shared/MP";
 import { WebSocketData } from "index";
+import { GameHandler } from "./game_handler";
 
 export module Ping {
     export const INTERVAL = 1000 * 8;
@@ -19,10 +20,10 @@ export module Ping {
         // console.log(`Sent ping to ${ws.remoteAddress}`);
 
         const timeout = setTimeout(() => {
-            console.log(`Client ${ws.remoteAddress} timed out`);
+            console.log(`Socket [${ws.data.uuid}] timed out`);
             const { game_id, player_id } = user_games[ws.data.uuid] ?? {} as { game_id: string, player_id: string };
 
-            if (game_id && player_id) {
+            if (game_id && player_id && GameHandler.games[game_id]) {
                 // @ts-ignore
                 message_handlers.get(request_type.LEAVE_GAME)!(ws, server, { game_id, player_id });
             }
