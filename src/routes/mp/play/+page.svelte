@@ -37,30 +37,30 @@
 
 			client.create_game(data.random_locations, visibility_param as Visibility);
 		}
+
+		if (!client.client_debug) {
+			let url = new URL(window.location.href);
+			url.searchParams.delete('visibility');
+			url.searchParams.delete('game_id');
+			window.history.replaceState({}, '', url.toString());
+		}
 	});
 </script>
 
 {#if $state === 'lobby'}
-	<!-- Lobby -->
 	<Lobby {client} />
 {:else if $state === 'playing'}
-	<!-- Playing-->
-	<Playing />
+	<Playing {client} />
 {:else if $state === 'intermission'}
-	<!-- Intermission -->
 	<Intermission />
 {:else if $state === 'finished'}
-	<!-- Finished -->
 	<Finished />
 {:else if $state === 'aborted'}
-	<!-- Aborted -->
 	<Aborted />
 {:else if $state === 'error'}
-	<!-- Error -->
 	<Error />
 {:else if $state === 'establishing'}
 	<Establishing />
 {:else}
-	<!-- Unknown -->
 	<p>Unknown state: {$state}</p>
 {/if}

@@ -25,6 +25,27 @@ export function db_session_valid_call(session: string): { success: boolean, play
     }
 }
 
+export function get_username(player_id: string): string {
+    const query = db.prepare(`
+        SELECT * FROM User
+        WHERE id = ?
+    `);
+
+    const db_user = query.get(player_id) as {
+        id: string;
+        username: string;
+    } | null;
+
+    if (db_user) {
+        return db_user.username;
+    }
+    else {
+        console.error(`User ${player_id} not found`);
+        return player_id;
+    }
+
+}
+
 export let ws_authed_users: { [key: string]: boolean } = {};
 export const get_auth_string = (player_id: string, auth_session: string) => `${player_id}-${auth_session}`;
 

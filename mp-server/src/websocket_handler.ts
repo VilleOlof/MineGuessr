@@ -5,6 +5,7 @@ import { MPGame } from 'src/mp-game';
 import { Server, ServerWebSocket } from 'bun';
 import { WebSocketData } from 'index';
 import { Ping } from './ping';
+import { get_username } from './auth';
 
 function get_game_label(game_id: string) {
     return `game_${game_id}`;
@@ -41,7 +42,7 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<WebSo
             type: request_type.JOINED_GAME,
             payload: {
                 game_id: new_game_id,
-                players: [{ player_id, ready: false }],
+                players: [{ player_id, username: get_username(player_id), ready: false }],
                 visibility: payload.visibility
             } as Payloads.JoinedGame
         }));
@@ -100,7 +101,10 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<WebSo
 
         server.publish(game_label, JSON.stringify({
             type: request_type.OTHER_PLAYER_JOINED,
-            payload: { player_id } as Payloads.OtherPlayerJoined
+            payload: {
+                player_id,
+                username: game.players[player_id].username,
+            } as Payloads.OtherPlayerJoined
         }));
 
         ws_log(payload.game_id, player_id, "joined game");
@@ -109,6 +113,7 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<WebSo
             .keys(game.players)
             .map(player_id => ({
                 player_id,
+                username: game.players[player_id].username,
                 ready: game.players[player_id].lobby_ready
             }));
 

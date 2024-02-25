@@ -4,6 +4,7 @@ import { ROUNDS_PER_MATCH, location_metadata } from "../../shared";
 import { Config, PlayerData, State } from "../../shared/MP";
 import EventEmitter from "events";
 import { GameHandler } from "./game_handler";
+import { get_username } from "./auth";
 
 // TODO: Send stats to db
 export class MPGame {
@@ -100,6 +101,7 @@ export class MPGame {
 
         this.players[player] = {
             rounds: [],
+            username: get_username(player),
             lobby_ready: false
         };
 
@@ -129,7 +131,7 @@ export class MPGame {
             delete this.players[player];
         }
         const players_left = Object.keys(this.players).length;
-        if (players_left <= 1) {
+        if (players_left <= 0) {
             this.state = "aborted";
             console.log(`Game ${this.game_id} has no players left`);
         }
@@ -138,14 +140,21 @@ export class MPGame {
     }
 
     public all_players_ready() {
+        this.update_latest_activity();
+
+        let players_ready: number = 0;
+
         for (const player_id in this.players) {
-            if (!this.players[player_id].lobby_ready) {
-                return false;
+            if (this.players[player_id].lobby_ready) {
+                players_ready += 1;
             }
         }
 
-        this.update_latest_activity();
-        return true;
+        if (players_ready === MPGame.PLAYER_LIMIT) {
+            return true;
+        }
+
+        return false;
     }
 
     private static generate_game_id() {

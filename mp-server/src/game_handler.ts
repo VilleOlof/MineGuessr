@@ -100,6 +100,7 @@ export module GameHandler {
                     players: Object.keys(game.players).map(player_id => {
                         return {
                             player_id,
+                            username: game.players[player_id].username,
                             ready: game.players[player_id].lobby_ready // Rename to ready from lobby_ready??
                         };
                     }),

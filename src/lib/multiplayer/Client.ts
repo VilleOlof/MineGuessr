@@ -3,12 +3,15 @@ import { ROUNDS_PER_MATCH, type GameModule, type location_metadata } from "../..
 import { ServerResponseMessage, Visibility, get_request_type_name, request_type, type Lobby, type MPRound, type Payloads, type PlayerData, type ServerResponse, type State, type WebsocketRequest } from "../../../shared/MP";
 import * as THREE from "three";
 import { PUBLIC_MP_DEV, PUBLIC_MP_URL } from "$env/static/public";
+import toast from "svelte-french-toast";
+import { toast_style } from "$lib";
 
 export class MPClient {
     private ws: WebSocket;
 
     public metadata: MPClient.Metadata;
-    public client_debug: boolean = true;
+    public client_debug: boolean = PUBLIC_MP_DEV === "true";
+    public notifications_enabled: boolean = true;
 
     public state: Writable<State> = writable("establishing");
     public players: Writable<{ [key: string]: PlayerData }> = writable({});
@@ -144,6 +147,7 @@ export class MPClient {
                 this.players.update((players) => {
                     players[player.player_id] = {
                         rounds: MPClient.get_empty_rounds(),
+                        username: player.username,
                         lobby_ready: player.ready
                     };
 
@@ -153,18 +157,24 @@ export class MPClient {
 
             this.metadata.visibility = payload.visibility;
             this.state.set("lobby");
+
+            if (this.notifications_enabled) toast.success("Gick med i ett spel", MPClient.toast_options);
         }],
         [request_type.OTHER_PLAYER_JOINED, (_payload) => {
             const payload = _payload as Payloads.OtherPlayerJoined;
+            console.log(payload);
 
             this.players.update((players) => {
                 players[payload.player_id] = {
                     rounds: MPClient.get_empty_rounds(),
+                    username: payload.username,
                     lobby_ready: false
                 };
 
                 return players;
             });
+
+            if (this.notifications_enabled) toast.success(`${payload.player_id} gick nyss med`, MPClient.toast_options);
         }],
         [request_type.OTHER_PLAYER_READY, (_payload) => {
             const payload = _payload as Payloads.OtherPlayerReady;
@@ -174,6 +184,11 @@ export class MPClient {
 
                 return players;
             });
+
+            if (this.notifications_enabled) {
+                if (payload.ready) toast.success(`${payload.player_id} är redo`, MPClient.toast_options);
+                else toast.error(`${payload.player_id} är inte redo`, MPClient.toast_options);
+            }
         }],
         [request_type.NEXT_ROUND, (_payload) => {
             const payload = _payload as Payloads.NextRound;
@@ -307,4 +322,9 @@ export module MPClient {
             };
         });
     }
+
+    export const toast_options = {
+        style: toast_style,
+        duration: 3000
+    } as const;
 }

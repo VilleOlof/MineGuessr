@@ -175,6 +175,8 @@
 				<MapCore
 					bind:bluemap
 					on:mapInteraction={(event) => {
+						// TODO MP: Remove game_instance from this component
+						// Somehow import if the round is finished or not.
 						if (game_instance.get_current_round().finished) return;
 
 						let pos = GetPosFromInteraction(event);
