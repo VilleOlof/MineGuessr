@@ -248,6 +248,7 @@ export class Game {
             (correct_loc.x + guess_loc.x) / 2,
             (correct_loc.y + guess_loc.y) / 2
         );
+        console.log(mid_loc);
         map.popupMarkerSet.updateMarkerFromData(`guess_line${index !== undefined ? `_${index}` : ''}`, {
             position: { x: mid_loc.x + 0.5, y: Game.MARKER_Y_OFFSET, z: mid_loc.y + 0.5 },
             label: '',

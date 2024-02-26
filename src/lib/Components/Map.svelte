@@ -10,7 +10,7 @@
 
 	export let fullscreen: boolean = false;
 	export let enlarge_map: boolean = false;
-	export let game_instance: Game;
+	export let round_finished: boolean;
 
 	let bluemap: BlueMapApp | null = null;
 
@@ -175,9 +175,7 @@
 				<MapCore
 					bind:bluemap
 					on:mapInteraction={(event) => {
-						// TODO MP: Remove game_instance from this component
-						// Somehow import if the round is finished or not.
-						if (game_instance.get_current_round().finished) return;
+						if (round_finished) return;
 
 						let pos = GetPosFromInteraction(event);
 						if (pos) $current_pos = pos;

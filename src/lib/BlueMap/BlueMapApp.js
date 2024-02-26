@@ -379,6 +379,8 @@ export class BlueMapApp {
     }
 
     initMarkerFileManager() {
+        return; // TODO: fix real markers
+
         if (this.markerFileManager)
             this.markerFileManager.dispose();
 

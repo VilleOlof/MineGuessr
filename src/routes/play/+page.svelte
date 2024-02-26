@@ -19,6 +19,7 @@
 	let rounds = game.rounds;
 	let curr_round = game.current_round;
 	let game_finished = game.game_finished;
+	$: curr_round_finished = $rounds[$curr_round].finished;
 
 	let show_end_map: Writable<boolean> = writable(false);
 
@@ -82,7 +83,7 @@
 	<img src="/Earth.webp" alt="Tillbaka" />
 </a>
 
-<Map fullscreen={$game_finished} game_instance={game}>
+<Map fullscreen={$game_finished} round_finished={curr_round_finished}>
 	<div class="m-3">
 		<GuessButton {game} />
 	</div>
