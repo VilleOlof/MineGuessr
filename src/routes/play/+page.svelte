@@ -67,6 +67,9 @@
 		removeEventListener('keyup', handle_keyup);
 		removeEventListener('perfect_guess', perfect_guess);
 	});
+
+	const submit = async () =>
+		await game.submit_guess(new THREE.Vector2($current_pos?.x, $current_pos?.z));
 </script>
 
 <!-- Just dont show the panorama when the map is in fullscreen, no need to load it -->
@@ -83,9 +86,14 @@
 	<img src="/Earth.webp" alt="Tillbaka" />
 </a>
 
-<Map fullscreen={$game_finished} round_finished={curr_round_finished}>
+<Map fullscreen={$game_finished} stop_interaction={curr_round_finished}>
 	<div class="m-3">
-		<GuessButton {game} />
+		<GuessButton
+			submit_guess={submit}
+			next_round={() => game.next_round()}
+			{show_guess}
+			{show_next}
+		/>
 	</div>
 </Map>
 
@@ -95,7 +103,12 @@
 	<div
 		class="pointer-events-none absolute bottom-0 left-0 z-10 hidden w-full items-start justify-center p-4 lg:bottom-0 lg:flex"
 	>
-		<GuessButton {game} />
+		<GuessButton
+			submit_guess={submit}
+			next_round={() => game.next_round()}
+			{show_guess}
+			{show_next}
+		/>
 	</div>
 {/if}
 

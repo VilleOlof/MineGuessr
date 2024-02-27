@@ -40,15 +40,6 @@
 
 		client.change_ready_status(!current_ready_status);
 	}
-
-	function leave() {
-		// Just for loading visuals
-		client.state.set('establishing');
-
-		client.leave_game();
-
-		goto('/mp');
-	}
 </script>
 
 <Header />
@@ -164,7 +155,7 @@
 
 	<div class="actions flex w-full gap-2 text-2xl text-white">
 		<button
-			on:click={leave}
+			on:click={() => client.fancy_leave_game()}
 			title="Lämna spel"
 			class="w-1/2 bg-slate-600 transition-all hover:scale-95 hover:bg-slate-500 active:scale-105"
 			>Lämna</button

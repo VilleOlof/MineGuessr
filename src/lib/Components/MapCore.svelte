@@ -26,6 +26,8 @@
 			});
 
 			$curr_bluemap = bluemap;
+
+			dispatchEvent(new CustomEvent('bluemapAppReady', { detail: bluemap }));
 		} catch (e) {
 			console.error(e);
 		}

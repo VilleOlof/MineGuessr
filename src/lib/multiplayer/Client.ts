@@ -5,6 +5,7 @@ import * as THREE from "three";
 import { PUBLIC_MP_DEV, PUBLIC_MP_URL } from "$env/static/public";
 import toast from "svelte-french-toast";
 import { toast_style } from "$lib";
+import { goto } from "$app/navigation";
 
 export class MPClient {
     private ws: WebSocket;
@@ -16,8 +17,12 @@ export class MPClient {
     public state: Writable<State> = writable("establishing");
     public players: Writable<{ [key: string]: PlayerData }> = writable({});
 
+    // Game state stores
     public round_index: Writable<number> = writable(0);
     public current_panorama: Writable<number> = writable(0);
+    public self_guessed: Writable<boolean> = writable(false);
+    public self_next_round_ready: Writable<boolean> = writable(false);
+    // ###
 
     constructor(user_id: string, auth: string) {
         if (this.client_debug) {
@@ -120,6 +125,15 @@ export class MPClient {
         this.send_message(request_type.LEAVE_GAME, {});
     }
 
+    public fancy_leave_game() {
+        // Just for loading visuals
+        this.state.set('establishing');
+
+        this.leave_game();
+
+        goto('/mp');
+    }
+
     public change_ready_status(ready: boolean) {
         this.send_message(request_type.CHANGE_READY_STATUS, {
             ready
@@ -133,6 +147,9 @@ export class MPClient {
     }
 
     public next_round() {
+        // Dont like setting it client side, but otherwise i have to update payloads
+        this.self_next_round_ready.set(true);
+
         this.send_message(request_type.GOTO_NEXT_ROUND, {});
     }
 
@@ -206,11 +223,16 @@ export class MPClient {
 
             this.round_index.set(payload.round_index);
             this.current_panorama.set(payload.panorama_id);
+            this.self_next_round_ready.set(false);
 
             this.state.set("playing");
         }],
         [request_type.OTHER_PLAYER_GUESSED, (_payload) => {
             const payload = _payload as Payloads.OtherPlayerGuessed;
+
+            if (payload.player_id === this.metadata.player_id) {
+                this.self_guessed.set(true);
+            }
         }],
         [request_type.ROUND_ENDED, (_payload) => {
             const payload = _payload as Payloads.RoundEnded;
@@ -227,6 +249,7 @@ export class MPClient {
             });
 
             this.state.set("intermission");
+            this.self_guessed.set(false);
         }],
         [request_type.GAME_FINISHED, (_payload) => {
             const payload = _payload as Payloads.GameFinished;

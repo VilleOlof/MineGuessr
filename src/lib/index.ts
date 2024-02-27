@@ -44,8 +44,9 @@ export type GameType = typeof GameType[keyof typeof GameType];
  * @param pos The position of the marker
  * @param index The index of the marker, often used together with a round index
  */
-export function UpdatePOIMarker(map: BlueMapApp, pos: THREE.Vector3, index?: number) {
-    map.popupMarkerSet.updateMarkerFromData(`current_pos${index !== undefined ? `_${index}` : ''}`, {
+export function UpdatePOIMarker(map: BlueMapApp, pos: THREE.Vector3, index?: number): string {
+    const name = `current_pos${index !== undefined ? `_${index}` : ''}`;
+    map.popupMarkerSet.updateMarkerFromData(name, {
         position: { x: pos.x + 0.5, y: pos.y, z: pos.z + 0.65 },
         anchor: { x: 18.5, y: 36.5 },
         label: '',
@@ -58,6 +59,8 @@ export function UpdatePOIMarker(map: BlueMapApp, pos: THREE.Vector3, index?: num
         maxDistance: 10000000,
         type: 'poi'
     });
+
+    return name;
 }
 
 /**

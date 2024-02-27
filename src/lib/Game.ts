@@ -237,7 +237,7 @@ export class Game {
      * @param guess_loc The guess location
      * @param index The index of the round, optional for marker indexing
      */
-    static draw_line_to_guess(correct_loc: THREE.Vector2, guess_loc: THREE.Vector2, index?: number) {
+    static draw_line_to_guess(correct_loc: THREE.Vector2, guess_loc: THREE.Vector2, index?: number): string {
         let map = get(curr_bluemap);
 
         if (map === null) {
@@ -248,8 +248,8 @@ export class Game {
             (correct_loc.x + guess_loc.x) / 2,
             (correct_loc.y + guess_loc.y) / 2
         );
-        console.log(mid_loc);
-        map.popupMarkerSet.updateMarkerFromData(`guess_line${index !== undefined ? `_${index}` : ''}`, {
+        const name = `guess_line${index !== undefined ? `_${index}` : ''}`;
+        map.popupMarkerSet.updateMarkerFromData(name, {
             position: { x: mid_loc.x + 0.5, y: Game.MARKER_Y_OFFSET, z: mid_loc.y + 0.5 },
             label: '',
             detail: '',
@@ -266,6 +266,8 @@ export class Game {
             maxDistance: 10000000,
             type: 'line'
         });
+
+        return name;
     }
 
     /**
@@ -290,14 +292,15 @@ export class Game {
      * @param correct_loc The correct location
      * @param index The index of the round, optional for marker indexing
      */
-    static place_correct_marker(correct_loc: THREE.Vector2, index?: number) {
+    static place_correct_marker(correct_loc: THREE.Vector2, index?: number): string {
         let map = get(curr_bluemap);
 
         if (map === null) {
             throw new Error("BlueMap is not initialized");
         }
 
-        map.popupMarkerSet.updateMarkerFromData(`correct_pos${index !== undefined ? `_${index}` : ''}`, {
+        const name = `correct_pos${index !== undefined ? `_${index}` : ''}`;
+        map.popupMarkerSet.updateMarkerFromData(name, {
             position: { x: correct_loc.x + 0.5, y: Game.MARKER_Y_OFFSET, z: correct_loc.y + 0.65 },
             anchor: { x: 18.5, y: 36.5 },
             label: '',
@@ -310,6 +313,8 @@ export class Game {
             maxDistance: 10000000,
             type: 'poi'
         });
+
+        return name;
     }
 
     /**

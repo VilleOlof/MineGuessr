@@ -10,7 +10,7 @@
 
 	export let fullscreen: boolean = false;
 	export let enlarge_map: boolean = false;
-	export let round_finished: boolean;
+	export let stop_interaction: boolean;
 
 	let bluemap: BlueMapApp | null = null;
 
@@ -175,7 +175,7 @@
 				<MapCore
 					bind:bluemap
 					on:mapInteraction={(event) => {
-						if (round_finished) return;
+						if (stop_interaction) return;
 
 						let pos = GetPosFromInteraction(event);
 						if (pos) $current_pos = pos;

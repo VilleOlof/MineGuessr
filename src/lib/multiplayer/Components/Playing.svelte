@@ -2,88 +2,121 @@
 	import type { MPClient } from '../Client';
 	import Panorama from '$lib/Components/Panorama.svelte';
 	import Map from '$lib/Components/Map.svelte';
-	import Intermission from './Intermission.svelte';
 	import { UpdatePOIMarker, current_pos, curr_bluemap } from '$lib';
 	import * as THREE from 'three';
 	import { Game } from '$lib/Game';
 	import { get } from 'svelte/store';
+	import GuessButton from '$lib/Components/GuessButton.svelte';
 
 	export let client: MPClient;
 	const state = client.state;
 	const panorama = client.current_panorama;
 
-	function guess() {
+	const self_guessed = client.self_guessed;
+	const self_next_round = client.self_next_round_ready;
+
+	let markers_to_clear: string[] = [];
+
+	const guess = async () => {
 		const [x, z] = $current_pos !== null ? [$current_pos.x, $current_pos.z] : [0, 0];
 		client.guess_location(new THREE.Vector2(x, z));
-	}
+	};
 
 	$: round_over = $state === 'intermission';
+	$: show_guess = $current_pos !== null && !round_over && !$self_guessed;
+	$: show_next = round_over && !$self_next_round;
 
 	function over() {
-		console.log('round over');
+		if (!round_over) return;
 
 		const round_index = get(client.round_index);
 		const players = get(client.players);
-		console.log(round_index);
 
 		let user_count: number = 0;
 		for (const [_, data] of Object.entries(players)) {
 			const round = data.rounds[round_index];
-			console.log(round.score);
+			const line_marker = Game.draw_line_to_guess(round.location, round.guess_location, user_count);
 
-			Game.draw_line_to_guess(round.location, round.guess_location, user_count);
-			Game.place_correct_marker(round.location, user_count);
-
-			UpdatePOIMarker(
+			const user_guess_marker = UpdatePOIMarker(
 				get(curr_bluemap)!,
 				new THREE.Vector3(round.guess_location.x, 100, round.guess_location.y),
 				user_count
 			);
 
+			markers_to_clear.push(line_marker, user_guess_marker);
 			user_count++;
 		}
 
-		let player = players[client.metadata.player_id];
-		console.log(player);
-		Game.move_camera_to_pos(player.rounds[round_index].location);
+		const player = players[client.metadata.player_id];
+		const round = player.rounds[round_index];
+
+		const correct_marker = Game.place_correct_marker(round.location, user_count);
+		Game.move_camera_to_pos(round.location);
+
+		// current_pos is the user's guess
+		markers_to_clear.push(correct_marker, 'current_pos');
 	}
 
 	$: {
 		if (round_over) {
-			// over();
+			over();
+		} else {
+			const map = get(curr_bluemap);
+			if (map) {
+				// Remove markers
+				for (let marker_id of markers_to_clear) {
+					let marker = map.popupMarkerSet.markers.get(marker_id);
+					if (marker) {
+						map.popupMarkerSet.remove(marker);
+					}
+				}
+			}
+
+			// Reset recent clicked position
+			$current_pos = null;
+			Game.reset_view();
 		}
 	}
 </script>
 
 <Panorama bind:index={$panorama} />
 
-<Map fullscreen={round_over} round_finished={round_over}>
-	<!-- <div class="m-3">
-		<GuessButton {game} />
-	</div> -->
+<button
+	class="rounds absolute left-0 top-0 aspect-square h-auto w-16 transition-transform hover:-rotate-6 hover:scale-110 active:scale-90 sm:w-24"
+	title="Lämna spel"
+	on:click={() => client.fancy_leave_game()}
+>
+	<img src="/Earth.webp" alt="Tillbaka" />
+</button>
+
+<Map fullscreen={false} stop_interaction={round_over || $self_guessed}>
+	<div class="m-3">
+		<GuessButton
+			submit_guess={guess}
+			next_round={() => client.next_round()}
+			{show_guess}
+			{show_next}
+		/>
+	</div>
 </Map>
 
-{#if !round_over}
-	<button on:click={guess} class="absolute bottom-0 mb-8 bg-slate-800 px-4 py-1 text-5xl"
-		>Gissa</button
-	>
-{/if}
+<div
+	class="pointer-events-none absolute bottom-0 left-0 z-10 hidden w-full items-start justify-center p-4 lg:bottom-0 lg:flex"
+>
+	<GuessButton
+		submit_guess={guess}
+		next_round={() => client.next_round()}
+		{show_guess}
+		{show_next}
+	/>
+</div>
 
 {#if round_over}
-	<Intermission />
-
-	<button on:click={over} class="absolute bottom-0 mb-8 bg-slate-800 px-4 py-1 text-5xl"
-		>SHOW</button
-	>
-
-	<button
-		on:click={() => client.next_round()}
-		class="absolute bottom-0 left-5 mb-8 bg-slate-800 px-4 py-1 text-5xl">NEXT</button
-	>
+	<!-- <Intermission /> -->
 {/if}
 
 <p
-	class="pointer-events-none absolute bottom-0 left-0 m-1 text-sm text-white/80 md:text-base"
+	class="pointer-events-none absolute bottom-0 left-0 m-1 bg-black/50 px-2 text-sm text-white/80 md:text-base"
 	title="Spelkod"
 >
 	{client.metadata.game_id}

@@ -54,7 +54,7 @@ export class MPGame {
 
     public players: { [key: string]: PlayerData } = {};
 
-    public current_round: number = 0;
+    public current_round: number = -1;
 
     public constructor(panoramas: location_metadata[]) {
         this.state = "lobby";
@@ -175,6 +175,7 @@ export class MPGame {
         }
 
         this.state = "playing";
+        this.next_round();
 
         this.update_latest_activity();
     }

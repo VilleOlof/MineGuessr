@@ -10,7 +10,6 @@
 		Error,
 		Establishing,
 		Finished,
-		Intermission,
 		Lobby,
 		Playing
 	} from '$lib/multiplayer/Components';
