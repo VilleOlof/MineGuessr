@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { MPClient } from '../Client';
+	import { MPClient } from '../Client';
 	import Panorama from '$lib/Components/Panorama.svelte';
 	import Map from '$lib/Components/Map.svelte';
 	import { UpdatePOIMarker, current_pos, curr_bluemap } from '$lib';
@@ -7,6 +7,8 @@
 	import { Game } from '$lib/Game';
 	import { get } from 'svelte/store';
 	import GuessButton from '$lib/Components/GuessButton.svelte';
+	import { onDestroy, onMount } from 'svelte';
+	import XpBarMp from './XPBar_MP.svelte';
 
 	export let client: MPClient;
 	const state = client.state;
@@ -17,14 +19,18 @@
 
 	let markers_to_clear: string[] = [];
 
+	$: round_over = $state === 'intermission';
+	$: show_guess = $current_pos !== null && !round_over && !$self_guessed;
+	$: show_next = round_over && !$self_next_round;
+
+	const [players, round_index] = [client.players, client.round_index];
+	$: curr_self_round = $players[client.metadata.player_id].rounds[$round_index];
+	// ####
+
 	const guess = async () => {
 		const [x, z] = $current_pos !== null ? [$current_pos.x, $current_pos.z] : [0, 0];
 		client.guess_location(new THREE.Vector2(x, z));
 	};
-
-	$: round_over = $state === 'intermission';
-	$: show_guess = $current_pos !== null && !round_over && !$self_guessed;
-	$: show_next = round_over && !$self_next_round;
 
 	function over() {
 		if (!round_over) return;
@@ -60,23 +66,33 @@
 	$: {
 		if (round_over) {
 			over();
-		} else {
-			const map = get(curr_bluemap);
-			if (map) {
-				// Remove markers
-				for (let marker_id of markers_to_clear) {
-					let marker = map.popupMarkerSet.markers.get(marker_id);
-					if (marker) {
-						map.popupMarkerSet.remove(marker);
-					}
-				}
-			}
-
-			// Reset recent clicked position
-			$current_pos = null;
-			Game.reset_view();
 		}
 	}
+
+	function next_round() {
+		const map = get(curr_bluemap);
+		if (map) {
+			// Remove markers
+			for (let marker_id of markers_to_clear) {
+				let marker = map.popupMarkerSet.markers.get(marker_id);
+				if (marker) {
+					map.popupMarkerSet.remove(marker);
+				}
+			}
+		}
+
+		// Reset recent clicked position
+		$current_pos = null;
+		Game.reset_view();
+	}
+
+	onMount(() => {
+		addEventListener(MPClient.MPClientEvent.NEXT_ROUND, next_round);
+	});
+
+	onDestroy(() => {
+		removeEventListener(MPClient.MPClientEvent.NEXT_ROUND, next_round);
+	});
 </script>
 
 <Panorama bind:index={$panorama} />
@@ -100,6 +116,8 @@
 	</div>
 </Map>
 
+<XpBarMp {client} round={curr_self_round} />
+
 <div
 	class="pointer-events-none absolute bottom-0 left-0 z-10 hidden w-full items-start justify-center p-4 lg:bottom-0 lg:flex"
 >
@@ -111,12 +129,8 @@
 	/>
 </div>
 
-{#if round_over}
-	<!-- <Intermission /> -->
-{/if}
-
 <p
-	class="pointer-events-none absolute bottom-0 left-0 m-1 bg-black/50 px-2 text-sm text-white/80 md:text-base"
+	class="pointer-events-none absolute bottom-0 left-0 m-1 bg-black/50 px-2 text-base text-white/80 md:text-xl"
 	title="Spelkod"
 >
 	{client.metadata.game_id}

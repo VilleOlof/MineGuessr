@@ -7,6 +7,7 @@ import { GameHandler } from "./game_handler";
 import { get_username } from "./auth";
 
 // TODO: Send stats to db
+// TODO: Calculate and keep track of time each user spent on each round
 export class MPGame {
     private static PLAYER_LIMIT: number = 2;
     private static IDLE_TIMEOUT: number = 1000 * 60 * 5;

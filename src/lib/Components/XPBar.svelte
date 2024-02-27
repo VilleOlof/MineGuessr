@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { GameType, format_time } from '$lib';
 	import type { Game } from '$lib/Game';
+	import { step_time } from '$lib/XPBarUtil';
 	import { onDestroy, onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
 
@@ -11,15 +12,13 @@
 
 	const TIMER_UPDATE = 10;
 	let timer_date: Date = new Date();
-	function step_time() {
-		let now = new Date();
-		let diff = now.getTime() - timer_date.getTime();
-		let milliseconds = Math.floor(diff);
+	function tick() {
+		const [timer, time] = step_time(timer_date, $rounds[$curr_round].time);
 
-		$rounds[$curr_round].time += milliseconds;
-		timer_date = now;
+		$rounds[$curr_round].time = time;
+		timer_date = timer;
 	}
-	let timer = setInterval(step_time, TIMER_UPDATE);
+	let timer = setInterval(tick, TIMER_UPDATE);
 
 	$: if ($rounds[$curr_round].finished) {
 		clearInterval(timer);
@@ -27,7 +26,7 @@
 
 	let next_round = () => {
 		timer_date = new Date();
-		timer = setInterval(step_time, TIMER_UPDATE);
+		timer = setInterval(tick, TIMER_UPDATE);
 	};
 
 	onMount(() => {

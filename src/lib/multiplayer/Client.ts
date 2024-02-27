@@ -226,6 +226,10 @@ export class MPClient {
             this.self_next_round_ready.set(false);
 
             this.state.set("playing");
+
+            dispatchEvent(new CustomEvent(MPClient.MPClientEvent.NEXT_ROUND, {
+                detail: payload
+            }));
         }],
         [request_type.OTHER_PLAYER_GUESSED, (_payload) => {
             const payload = _payload as Payloads.OtherPlayerGuessed;
@@ -253,6 +257,8 @@ export class MPClient {
         }],
         [request_type.GAME_FINISHED, (_payload) => {
             const payload = _payload as Payloads.GameFinished;
+
+            console.log(payload.players);
 
             this.state.set("finished");
         }],
@@ -293,6 +299,16 @@ export class MPClient {
             });
         }]
     ]);
+
+    public get_current_round_data(): MPRound {
+        return get(this.players)[this.metadata.player_id].rounds[get(this.round_index)];
+    }
+
+    public get_rounds_completed(): boolean[] {
+        const rounds = get(this.players)[this.metadata.player_id].rounds;
+
+        return rounds.map((round) => round.finished);
+    }
 }
 
 export module MPClient {
@@ -304,7 +320,8 @@ export module MPClient {
     };
 
     export const MPClientEvent = {
-        JOINED_GAME: "joined_game"
+        JOINED_GAME: "joined_game",
+        NEXT_ROUND: "next_round"
     } as const;
     export type MPClientEvent = typeof MPClientEvent[keyof typeof MPClientEvent];
 
