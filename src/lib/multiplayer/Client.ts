@@ -153,7 +153,6 @@ export class MPClient {
         this.send_message(request_type.GOTO_NEXT_ROUND, {});
     }
 
-    // TODO: Implement these
     private message_handler: Map<request_type, (_payload: Payloads.Any) => void> = new Map([
         [request_type.JOINED_GAME, (_payload) => {
             const payload = _payload as Payloads.JoinedGame;
@@ -245,7 +244,6 @@ export class MPClient {
                 for (const player_id in players) {
                     players[player_id].rounds[get(this.round_index)] = {
                         ...payload.rounds[player_id],
-                        ready_for_next: false
                     };
                 }
 

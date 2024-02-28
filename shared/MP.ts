@@ -17,6 +17,7 @@ export type State = "lobby" | "playing" | "intermission" | "finished" | "aborted
 
 export type MPRound = GameModule.Round & {
     ready_for_next: boolean;
+    started_at: number;
 }
 
 export type PlayerData = {
@@ -117,11 +118,11 @@ export module Payloads {
         player_id: string,
     }
     export type RoundEnded = {
-        rounds: { [key: string]: GameModule.Round }
+        rounds: { [key: string]: MPRound }
     }
     export type GotoNextRound = {};
     export type GameFinished = {
-        players: { [key: string]: GameModule.Round[] };
+        players: { [key: string]: MPRound[] };
     }
     export type Aborted = {
         reason: string

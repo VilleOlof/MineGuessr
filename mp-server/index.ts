@@ -10,7 +10,6 @@ export type WebSocketData = {
     uuid: string;
 }
 
-// TODO: add route that is in the mp page, to get lobbies and auto-refresh. /menu
 function Main() {
     const PORT = Bun.env.PORT || 3000;
 

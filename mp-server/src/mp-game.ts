@@ -1,7 +1,7 @@
 import { GameModule } from "../../shared/GameModule";
 import * as THREE from "three";
 import { ROUNDS_PER_MATCH, location_metadata } from "../../shared";
-import { Config, PlayerData, State } from "../../shared/MP";
+import { Config, MPRound, PlayerData, State } from "../../shared/MP";
 import EventEmitter from "events";
 import { GameHandler } from "./game_handler";
 import { get_username } from "./auth";
@@ -120,7 +120,8 @@ export class MPGame {
             this.players[player].rounds.push({
                 ...round_template,
                 panorama_id: this.config.panoramas[i].id,
-                ready_for_next: false
+                ready_for_next: false,
+                started_at: 0
             });
         }
 
@@ -217,7 +218,8 @@ export class MPGame {
             this.players[player_id].rounds[this.current_round] = {
                 ...round,
                 location: new THREE.Vector2(x, z),
-                ready_for_next: false
+                ready_for_next: false,
+                started_at: Date.now()
             }
         }
 
@@ -239,9 +241,14 @@ export class MPGame {
         round.distance = round.location.distanceTo(guess);
         round.score = GameModule.calculate_score(round.distance);
         round.finished = true;
+        round.time = MPGame.calculate_time(round);
 
         this.update_latest_activity();
         return round;
+    }
+
+    private static calculate_time(round: MPRound): number {
+        return Date.now() - round.started_at;
     }
 
     public ready_for_next_round(player_id: string) {
