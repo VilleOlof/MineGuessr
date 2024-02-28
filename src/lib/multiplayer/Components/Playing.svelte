@@ -16,6 +16,7 @@
 
 	const self_guessed = client.self_guessed;
 	const self_next_round = client.self_next_round_ready;
+	const timelimit = client.current_timelimit;
 
 	let markers_to_clear: string[] = [];
 
@@ -135,3 +136,34 @@
 >
 	{client.metadata.game_id}
 </p>
+
+{#if $timelimit !== undefined && !$self_guessed}
+	<div class="mp_danger pointer-events-none absolute z-20 h-screen w-screen animate-pulse"></div>
+{/if}
+
+<style>
+	:global(.mp_danger) {
+		/* https://cssgradient.io/ */
+		background: rgb(255, 0, 0);
+		background: linear-gradient(
+			90deg,
+			rgba(255, 0, 0, 0.25) 0%,
+			rgba(255, 0, 0, 0) 15%,
+			rgba(255, 0, 0, 0) 85%,
+			rgba(255, 0, 0, 0.25) 100%
+		);
+	}
+
+	@media screen and (max-width: 640px) {
+		:global(.mp_danger) {
+			background: rgb(255, 0, 0);
+			background: linear-gradient(
+				90deg,
+				rgba(255, 0, 0, 0.25) 0%,
+				rgba(255, 0, 0, 0) 25%,
+				rgba(255, 0, 0, 0) 75%,
+				rgba(255, 0, 0, 0.25) 100%
+			);
+		}
+	}
+</style>

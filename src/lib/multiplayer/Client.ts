@@ -6,6 +6,7 @@ import { PUBLIC_MP_DEV, PUBLIC_MP_URL } from "$env/static/public";
 import toast from "svelte-french-toast";
 import { toast_style } from "$lib";
 import { goto } from "$app/navigation";
+import { set } from "zod";
 
 export class MPClient {
     private ws: WebSocket;
@@ -22,6 +23,7 @@ export class MPClient {
     public current_panorama: Writable<number> = writable(0);
     public self_guessed: Writable<boolean> = writable(false);
     public self_next_round_ready: Writable<boolean> = writable(false);
+    public current_timelimit: Writable<number | undefined> = writable(undefined);
     // ###
 
     constructor(user_id: string, auth: string) {
@@ -190,7 +192,7 @@ export class MPClient {
                 return players;
             });
 
-            if (this.notifications_enabled) toast.success(`${payload.player_id} gick nyss med`, MPClient.toast_options);
+            if (this.notifications_enabled) toast.success(`${payload.discord.username} gick nyss med`, MPClient.toast_options);
         }],
         [request_type.OTHER_PLAYER_READY, (_payload) => {
             const payload = _payload as Payloads.OtherPlayerReady;
@@ -202,8 +204,9 @@ export class MPClient {
             });
 
             if (this.notifications_enabled) {
-                if (payload.ready) toast.success(`${payload.player_id} är redo`, MPClient.toast_options);
-                else toast.error(`${payload.player_id} är inte redo`, MPClient.toast_options);
+                const user = get(this.players)[payload.player_id].discord.username;
+                if (payload.ready) toast.success(`@${user} är redo`, MPClient.toast_options);
+                else toast.error(`@${user} är inte redo`, MPClient.toast_options);
             }
         }],
         [request_type.NEXT_ROUND, (_payload) => {
@@ -280,12 +283,22 @@ export class MPClient {
         [request_type.ROUND_TIMELIMIT, (_payload) => {
             const payload = _payload as Payloads.RoundTimelimit;
 
-            console.log(`You have ${payload.time / 1000} seconds to guess the location`);
+            this.current_timelimit.set(payload.time);
+            dispatchEvent(new CustomEvent(MPClient.MPClientEvent.TIMELIMIT, {
+                detail: payload
+            }));
+
+            if (this.notifications_enabled) toast.error(`Du har ${Math.floor(payload.time / 1000)} sekunder kvar`, MPClient.toast_options);
         }],
         [request_type.GOTO_NEXT_ROUND_TIMELIMIT, (_payload) => {
             const payload = _payload as Payloads.GotoNextRoundTimelimit;
 
-            console.log(`You have ${payload.time / 1000} seconds to go to the next round`);
+            this.current_timelimit.set(payload.time);
+            dispatchEvent(new CustomEvent(MPClient.MPClientEvent.TIMELIMIT, {
+                detail: payload
+            }));
+
+            if (this.notifications_enabled) toast.error(`Nästa runda börjar om ${Math.floor(payload.time / 1000)}s`, MPClient.toast_options);
         }],
         [request_type.OTHER_PLAYER_LEFT, (_payload) => {
             const payload = _payload as Payloads.OtherPlayerLeft;
@@ -319,7 +332,8 @@ export module MPClient {
 
     export const MPClientEvent = {
         JOINED_GAME: "joined_game",
-        NEXT_ROUND: "next_round"
+        NEXT_ROUND: "next_round",
+        TIMELIMIT: "timelimit"
     } as const;
     export type MPClientEvent = typeof MPClientEvent[keyof typeof MPClientEvent];
 

@@ -144,6 +144,10 @@ export class MPGame {
             this.state = "aborted";
             console.log(`Game ${this.game_id} has no players left`);
         }
+        if (this.state !== "lobby" && players_left < MPGame.PLAYER_LIMIT) {
+            this.state = "aborted";
+            console.log(`Game ${this.game_id} has too few players`);
+        }
 
         this.update_latest_activity();
     }

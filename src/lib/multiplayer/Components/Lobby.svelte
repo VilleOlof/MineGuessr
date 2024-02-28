@@ -4,7 +4,6 @@
 	import toast from 'svelte-french-toast';
 	import { GetDiscordAvatarUrl, toast_style } from '$lib';
 	import { get } from 'svelte/store';
-	import { goto } from '$app/navigation';
 
 	export let client: MPClient;
 	const players = client.players;

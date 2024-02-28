@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { format_time } from '$lib';
-	import { step_time } from '$lib/XPBarUtil';
+	import { decrease_time, step_time } from '$lib/XPBarUtil';
 	import { onDestroy, onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { ROUNDS_PER_MATCH } from '../../../../shared';
@@ -11,6 +11,7 @@
 	export let client: MPClient;
 	const round_index = client.round_index;
 	const self_guessed = client.self_guessed;
+	const timelimit = client.current_timelimit;
 
 	const TIMER_UPDATE = 10;
 	let timer_date: Date = new Date();
@@ -20,24 +21,53 @@
 		round.time = time;
 		timer_date = timer;
 	}
+	function timelimit_tick() {
+		if ($timelimit === undefined) {
+			$timelimit = undefined;
+			clearInterval(timelimit_timer);
+			return;
+		}
+		const [timer, time] = decrease_time(timer_date, $timelimit);
+		console.log('Time since last tick', time);
+
+		$timelimit = time;
+		timer_date = timer;
+	}
+
 	let timer = setInterval(tick, TIMER_UPDATE);
+	let timelimit_timer: NodeJS.Timeout;
 
 	$: if (round.finished || $self_guessed) {
 		clearInterval(timer);
 	}
 
-	let next_round = () => {
+	const next_round = () => {
+		console.log('next_round');
+
+		$timelimit = undefined;
+		clearInterval(timelimit_timer);
+		clearInterval(timer);
+
 		timer_date = new Date();
 		timer = setInterval(tick, TIMER_UPDATE);
 	};
 
+	const timelimit_handle = () => {
+		timer_date = new Date();
+		clearInterval(timelimit_timer);
+		timelimit_timer = setInterval(timelimit_tick, TIMER_UPDATE);
+	};
+
 	onMount(() => {
 		addEventListener(MPClient.MPClientEvent.NEXT_ROUND, next_round);
+		addEventListener(MPClient.MPClientEvent.TIMELIMIT, timelimit_handle);
 	});
 
 	onDestroy(() => {
 		clearInterval(timer);
+		clearInterval(timelimit_timer);
 		removeEventListener(MPClient.MPClientEvent.NEXT_ROUND, next_round);
+		removeEventListener(MPClient.MPClientEvent.TIMELIMIT, timelimit_handle);
 	});
 </script>
 
@@ -65,7 +95,12 @@
 		{$round_index + 1}
 	</p>
 
-	<p class="text-3xl drop-shadow-lg">{format_time(round.time / 1000)}</p>
+	{#if $timelimit !== undefined}
+		<!--TODO: this gets slow sometimes? usually after the first round? after another client triggers it?-->
+		<p class="text-3xl text-red-600 drop-shadow-lg">{format_time($timelimit / 1000)}</p>
+	{:else}
+		<p class="text-3xl drop-shadow-lg">{format_time(round.time / 1000)}</p>
+	{/if}
 
 	{#if round.finished}
 		<p

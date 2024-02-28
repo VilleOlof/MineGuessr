@@ -88,7 +88,6 @@ export function format_time(time: number) {
  */
 export function GetDiscordAvatarUrl(user_id: string, avatar_hash: string | null) {
     if (!avatar_hash) {
-        // i want the random index to be between 0 and 4
         const random_index = Math.floor(Math.random() * 5);
         return `https://cdn.discordapp.com/embed/avatars/${random_index}.png`;
     }
