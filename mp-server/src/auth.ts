@@ -25,7 +25,7 @@ export function db_session_valid_call(session: string): { success: boolean, play
     }
 }
 
-export function get_username(player_id: string): string {
+export function get_user(player_id: string) {
     const query = db.prepare(`
         SELECT * FROM User
         WHERE id = ?
@@ -33,15 +33,30 @@ export function get_username(player_id: string): string {
 
     const db_user = query.get(player_id) as {
         id: string;
+        user_id: string;
         username: string;
+        avatar: string | null;
+        labels: string;
+        perm_lvl: number;
     } | null;
 
     if (db_user) {
-        return db_user.username;
+        return db_user;
     }
     else {
+        if (Bun.env.DEV === "true") {
+            return {
+                id: player_id,
+                user_id: player_id,
+                username: player_id,
+                avatar: null,
+                labels: "",
+                perm_lvl: 0
+            };
+        }
+
         console.error(`User ${player_id} not found`);
-        return player_id;
+        return null;
     }
 
 }

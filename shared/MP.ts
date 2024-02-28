@@ -22,13 +22,19 @@ export type MPRound = GameModule.Round & {
 
 export type PlayerData = {
     rounds: MPRound[],
-    username: string,
+    discord: DiscordData,
     lobby_ready: boolean
 };
 
+export type DiscordData = {
+    user_id: string,
+    username: string,
+    avatar: string | null,
+}
+
 export type PlayerLobbyData = {
     player_id: string,
-    username: string,
+    discord: DiscordData,
     ready: boolean,
 };
 
@@ -98,7 +104,7 @@ export module Payloads {
     }
     export type OtherPlayerJoined = {
         player_id: string,
-        username: string
+        discord: DiscordData,
     }
     export type ChangeReadyStatus = {
         ready: boolean

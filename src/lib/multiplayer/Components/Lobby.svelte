@@ -2,7 +2,7 @@
 	import { MPClient } from '../Client';
 	import Header from '$lib/Components/Header.svelte';
 	import toast from 'svelte-french-toast';
-	import { toast_style } from '$lib';
+	import { GetDiscordAvatarUrl, toast_style } from '$lib';
 	import { get } from 'svelte/store';
 	import { goto } from '$app/navigation';
 
@@ -115,7 +115,14 @@
 	<ul class="bg-slate-600 px-2 py-1">
 		{#each Object.entries($players) as [_, data], i}
 			<li class="flex items-center justify-between text-xl text-white">
-				<span>@{data.username}</span>
+				<span class="flex gap-2">
+					<img
+						src={GetDiscordAvatarUrl(data.discord.user_id, data.discord.avatar)}
+						alt=""
+						class="h-6 w-6 rounded-full"
+					/>
+					@{data.discord.username}
+				</span>
 				<span>
 					{#if data.lobby_ready}
 						<svg

@@ -163,7 +163,7 @@ export class MPClient {
                 this.players.update((players) => {
                     players[player.player_id] = {
                         rounds: MPClient.get_empty_rounds(),
-                        username: player.username,
+                        discord: player.discord,
                         lobby_ready: player.ready
                     };
 
@@ -183,7 +183,7 @@ export class MPClient {
             this.players.update((players) => {
                 players[payload.player_id] = {
                     rounds: MPClient.get_empty_rounds(),
-                    username: payload.username,
+                    discord: payload.discord,
                     lobby_ready: false
                 };
 

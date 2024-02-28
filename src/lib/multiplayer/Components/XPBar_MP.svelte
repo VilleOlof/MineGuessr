@@ -10,6 +10,7 @@
 	export let round: MPRound;
 	export let client: MPClient;
 	const round_index = client.round_index;
+	const self_guessed = client.self_guessed;
 
 	const TIMER_UPDATE = 10;
 	let timer_date: Date = new Date();
@@ -21,7 +22,7 @@
 	}
 	let timer = setInterval(tick, TIMER_UPDATE);
 
-	$: if (round.finished) {
+	$: if (round.finished || $self_guessed) {
 		clearInterval(timer);
 	}
 

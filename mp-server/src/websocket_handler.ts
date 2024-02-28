@@ -1,11 +1,11 @@
 import { GameHandler } from 'src/game_handler';
-import { Payloads, WebsocketRequest, request_type } from '../../shared/MP';
+import { Payloads, PlayerLobbyData, WebsocketRequest, request_type } from '../../shared/MP';
 import { ROUNDS_PER_MATCH } from '../../shared';
 import { MPGame } from 'src/mp-game';
 import { Server, ServerWebSocket } from 'bun';
 import { WebSocketData } from 'index';
 import { Ping } from './ping';
-import { get_username } from './auth';
+import { get_user } from './auth';
 
 function get_game_label(game_id: string) {
     return `game_${game_id}`;
@@ -38,11 +38,22 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<WebSo
 
         const new_game_id = GameHandler.create_game(player_id, payload);
 
+        const user_data = get_user(player_id);
+        if (!user_data) throw new Error(`User ${player_id} does not exist`);
+
         ws.send(JSON.stringify({
             type: request_type.JOINED_GAME,
             payload: {
                 game_id: new_game_id,
-                players: [{ player_id, username: get_username(player_id), ready: false }],
+                players: [{
+                    player_id,
+                    discord: {
+                        user_id: user_data.user_id,
+                        username: user_data.username,
+                        avatar: user_data.avatar
+                    },
+                    ready: false
+                }],
                 visibility: payload.visibility
             } as Payloads.JoinedGame
         }));
@@ -103,17 +114,17 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<WebSo
             type: request_type.OTHER_PLAYER_JOINED,
             payload: {
                 player_id,
-                username: game.players[player_id].username,
+                discord: game.players[player_id].discord
             } as Payloads.OtherPlayerJoined
         }));
 
         ws_log(payload.game_id, player_id, "joined game");
 
-        const players = Object
+        const players: PlayerLobbyData[] = Object
             .keys(game.players)
             .map(player_id => ({
                 player_id,
-                username: game.players[player_id].username,
+                discord: game.players[player_id].discord,
                 ready: game.players[player_id].lobby_ready
             }));
 

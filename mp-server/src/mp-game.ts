@@ -4,7 +4,7 @@ import { ROUNDS_PER_MATCH, location_metadata } from "../../shared";
 import { Config, MPRound, PlayerData, State } from "../../shared/MP";
 import EventEmitter from "events";
 import { GameHandler } from "./game_handler";
-import { get_username } from "./auth";
+import { get_user } from "./auth";
 
 // TODO: Send stats to db
 // TODO: Calculate and keep track of time each user spent on each round
@@ -100,9 +100,16 @@ export class MPGame {
             throw new Error("Game is not in lobby state");
         }
 
+        const user_data = get_user(player);
+        if (!user_data) throw new Error("User not found");
+
         this.players[player] = {
             rounds: [],
-            username: get_username(player),
+            discord: {
+                user_id: user_data.user_id,
+                username: user_data.username,
+                avatar: user_data.avatar,
+            },
             lobby_ready: false
         };
 
