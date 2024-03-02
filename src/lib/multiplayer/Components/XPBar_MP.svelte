@@ -13,6 +13,8 @@
 	const self_guessed = client.self_guessed;
 	const timelimit = client.current_timelimit;
 
+	$: timelimit_active = $timelimit !== undefined;
+
 	const TIMER_UPDATE = 10;
 	let timer_date: Date = new Date();
 	function tick() {
@@ -37,7 +39,7 @@
 	let timer = setInterval(tick, TIMER_UPDATE);
 	let timelimit_timer: NodeJS.Timeout;
 
-	$: if (round.finished || $self_guessed) {
+	$: if (round.finished || $self_guessed || timelimit_active) {
 		clearInterval(timer);
 	}
 
@@ -96,7 +98,6 @@
 	</p>
 
 	{#if $timelimit !== undefined}
-		<!--TODO: this gets slow sometimes? usually after the first round? after another client triggers it?-->
 		<p class="text-3xl text-red-600 drop-shadow-lg">{format_time($timelimit / 1000)}</p>
 	{:else}
 		<p class="text-3xl drop-shadow-lg">{format_time(round.time / 1000)}</p>
