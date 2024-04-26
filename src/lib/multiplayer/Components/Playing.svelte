@@ -9,6 +9,7 @@
 	import GuessButton from '$lib/Components/GuessButton.svelte';
 	import { onDestroy, onMount } from 'svelte';
 	import XpBarMp from './XPBar_MP.svelte';
+	import PlayerList from './PlayerList.svelte';
 
 	export let client: MPClient;
 	const state = client.state;
@@ -137,7 +138,9 @@
 	{client.metadata.game_id}
 </p>
 
-{#if $timelimit !== undefined && !$self_guessed}
+<PlayerList players={$players} client_player_id={client.metadata.player_id} />
+
+{#if $timelimit !== undefined && !$self_guessed && $state === 'playing'}
 	<div class="mp_danger pointer-events-none absolute z-20 h-screen w-screen animate-pulse"></div>
 {/if}
 

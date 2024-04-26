@@ -7,6 +7,16 @@
 Guess the Minecraft ingame location based off a 360 panorama view and use the map to guess the location.  
 This site should be pretty modular and easy to setup for other worlds, assuming the design is changed.  
 
+## TODO BEFORE VID
+[ ] - Multiplayer Finish State
+[ ] - Multiplayer Error State
+[ ] - Multiplayer Aborted State
+[ ] - Multiplayer Homepage
+[ ] - Convert EVERYTHING to english
+[ ] - Rebrand site to non 90gq
+[ ] - More and better documentation for setup etc, VitePress?
+[ ] - Setup on alternative test domains and test with friends
+
 ## TODO
 [ ] - achivements?  
 [/] - database panel with auth for checking db data  

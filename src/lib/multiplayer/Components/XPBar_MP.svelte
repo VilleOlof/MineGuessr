@@ -76,7 +76,7 @@
 <div
 	class="xpWrapper pointer-events-none absolute left-0 top-0 z-10 flex w-full flex-col items-center justify-start p-2"
 >
-	<div class="xpbar pointer-events-auto relative flex h-8 w-1/2 bg-gray-900 p-1 shadow-lg md:w-1/4">
+	<div class="xpbar relative flex h-8 w-1/2 bg-gray-900 p-1 shadow-lg md:w-1/4">
 		{#key $round_index}
 			{#each client.get_rounds_completed() as state}
 				{@const percentage = 100 / ROUNDS_PER_MATCH}

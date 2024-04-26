@@ -24,6 +24,7 @@ export class MPClient {
     public self_guessed: Writable<boolean> = writable(false);
     public self_next_round_ready: Writable<boolean> = writable(false);
     public current_timelimit: Writable<number | undefined> = writable(undefined);
+    public error_abort_reason: Writable<string | undefined> = writable(undefined);
     // ###
 
     constructor(user_id: string, auth: string) {
@@ -268,6 +269,7 @@ export class MPClient {
 
             console.error(`Aborted: ${payload.reason}`);
 
+            this.error_abort_reason.set(payload.reason);
             this.state.set("aborted");
         }],
         [request_type.ERROR, (_payload) => {
@@ -275,6 +277,7 @@ export class MPClient {
 
             console.error(`Error: ${payload.reason}`);
 
+            this.error_abort_reason.set(payload.reason);
             this.state.set("error");
         }],
         [request_type.PING, (_payload) => {

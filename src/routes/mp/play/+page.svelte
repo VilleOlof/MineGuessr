@@ -53,9 +53,9 @@
 {:else if $state === 'finished'}
 	<Finished />
 {:else if $state === 'aborted'}
-	<Aborted />
+	<Aborted {client} />
 {:else if $state === 'error'}
-	<Error />
+	<Error {client} />
 {:else if $state === 'establishing'}
 	<Establishing />
 {:else}
