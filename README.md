@@ -8,7 +8,7 @@ Guess the Minecraft ingame location based off a 360 panorama view and use the ma
 This site should be pretty modular and easy to setup for other worlds, assuming the design is changed.  
 
 ## TODO BEFORE VID
-[ ] - Multiplayer Finish State  
+[X] - Multiplayer Finish State  
 [X] - Multiplayer Error State  
 [X] - Multiplayer Aborted State  
 [ ] - Multiplayer Homepage  

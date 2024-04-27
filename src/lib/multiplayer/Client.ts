@@ -260,6 +260,13 @@ export class MPClient {
             const payload = _payload as Payloads.GameFinished;
 
             console.log(payload.players);
+            this.players.update((players) => {
+                for (const player_id in players) {
+                    players[player_id].rounds = payload.players[player_id];
+                }
+
+                return players;
+            });
 
             this.state.set("finished");
         }],

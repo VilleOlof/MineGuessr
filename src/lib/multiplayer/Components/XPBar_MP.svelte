@@ -30,7 +30,6 @@
 			return;
 		}
 		const [timer, time] = decrease_time(timer_date, $timelimit);
-		console.log('Time since last tick', time);
 
 		$timelimit = time;
 		timer_date = timer;
