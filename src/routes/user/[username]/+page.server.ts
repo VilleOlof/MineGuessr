@@ -3,10 +3,10 @@ import { error } from '@sveltejs/kit';
 
 export async function load({ params }) {
     const { username } = params;
-    if (!username) error(404, 'Användare hittades inte');
+    if (!username) error(404, 'User not found');
 
     const user = await DB.GetUserByUsername(username);
-    if (!user) error(404, 'Användare hittades inte');
+    if (!user) error(404, 'User not found');
 
     return {
         profile_user: user

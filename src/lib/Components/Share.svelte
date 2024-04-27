@@ -12,8 +12,8 @@
 		if (navigator?.canShare?.()) {
 			const date = new Date();
 			await navigator.share({
-				title: '90gQ Guessr',
-				text: `Jag fick ${total_points} poäng på dagliga 90gQ Guessr!${
+				title: 'MineGuessr',
+				text: `I got ${total_points} points on daily MineGuessr!${
 					game_type === GameType.Daily
 						? `(${date.getFullYear()}/${date.getMonth()}/${date.getDate()})`
 						: ''
@@ -22,7 +22,7 @@
 			});
 		} else {
 			await navigator.clipboard.writeText(`${PUBLIC_ORIGIN}/game/${game_id}`);
-			toast.success('Länken har kopierats till urklipp!', {
+			toast.success('Link copied to your clipboard!', {
 				style: toast_style
 			});
 		}

@@ -42,7 +42,7 @@
 	async function fetch_page(page: number | null): Promise<TopGame[]> {
 		loading = true;
 		if (!page) {
-			toast.error('Kunde inte ladda in datan, försök igen senare', {
+			toast.error('Failed to load in data, try again later', {
 				style: toast_style
 			});
 
@@ -52,14 +52,14 @@
 		const res = await fetch(`/top/get?page=${page}`);
 		loading = false;
 		if (res.status === 404) {
-			toast.error('Det finns inga fler sidor!', {
+			toast.error('No more pages found!', {
 				style: toast_style
 			});
 			return [];
 		}
 
 		if (!res.ok) {
-			toast.error('Kunde inte ladda in datan, försök igen senare', {
+			toast.error('Failed to load in data, try again later', {
 				style: toast_style
 			});
 			return [];
@@ -74,7 +74,7 @@
 		const new_page = ($page ?? 1) + pageIn;
 
 		if (new_page < 1 || new_page > data.pages) {
-			toast.error('Det finns inga fler sidor!', {
+			toast.error('No more pages found!', {
 				style: toast_style
 			});
 			return;
@@ -97,17 +97,17 @@
 </script>
 
 {#if loading}
-	<p class="text-center text-5xl">Laddar datan just för dig...</p>
+	<p class="text-center text-5xl">Loading the data just for you...</p>
 {:else}
 	<div class="flex flex-col items-center gap-4">
-		<h1 class="text-4xl">Topplista</h1>
+		<h1 class="text-4xl">Leaderboard</h1>
 
 		{#if !data.logged_in}
 			<p class="text-lg text-gray-300">
 				<button
 					on:click={Discord}
-					class="underline underline-offset-4 transition-colors hover:text-white">Logga in</button
-				> för att synas på topplistan!
+					class="underline underline-offset-4 transition-colors hover:text-white">Log in</button
+				> to get a spot on the leaderboard!
 			</p>
 		{/if}
 
@@ -120,10 +120,10 @@
 				>
 					<tr>
 						<th scope="col" class="px-3 py-1 md:px-6 md:py-3"></th>
-						<th scope="col" class="px-3 py-1 md:px-6 md:py-3"> Tid </th>
-						<th scope="col" class="px-3 py-1 md:px-6 md:py-3"> Poäng </th>
-						<th scope="col" class="hidden px-3 py-1 md:table-cell md:px-6 md:py-3"> Distans </th>
-						<th scope="col" class="px-3 py-1 md:px-6 md:py-3"> Användare </th>
+						<th scope="col" class="px-3 py-1 md:px-6 md:py-3"> Time </th>
+						<th scope="col" class="px-3 py-1 md:px-6 md:py-3"> Points </th>
+						<th scope="col" class="hidden px-3 py-1 md:table-cell md:px-6 md:py-3"> Distance </th>
+						<th scope="col" class="px-3 py-1 md:px-6 md:py-3"> User </th>
 					</tr>
 				</thead>
 				<tbody>
@@ -188,9 +188,9 @@
 
 	<a
 		class="rounds absolute left-0 top-0 m-2 aspect-square h-auto w-16 transition-transform hover:-rotate-6 hover:scale-110 active:scale-90 sm:w-24"
-		title="Tillbaka till menyn"
+		title="Back to the menu"
 		href="/"
 	>
-		<img src="/Earth.webp" alt="Tillbaka" />
+		<img src="/Earth.webp" alt="Back" />
 	</a>
 {/if}

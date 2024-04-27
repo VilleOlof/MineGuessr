@@ -27,7 +27,7 @@
 			last_ready_change &&
 			new Date().getTime() - last_ready_change.getTime() < ready_change_cooldown
 		) {
-			toast.error('Du ändrar redo status för snabbt!', {
+			toast.error('Changing ready status too quickly!', {
 				style: toast_style,
 				duration: 2000
 			});
@@ -48,16 +48,16 @@
 
 	<div class="flex items-center gap-2">
 		<p class="text-3xl">
-			Spelkod: <span
+			Game code: <span
 				class="rounded-md px-1 text-white transition-all"
 				class:hide_mp_lobby_code={!code_visible}
-				>{client.metadata.game_id ?? 'Laddar in kod...'}</span
+				>{client.metadata.game_id ?? 'Loading game code...'}</span
 			>
 		</p>
 
 		<button
 			on:click={() => (code_visible = !code_visible)}
-			title={code_visible ? 'Göm koden' : 'Visa koden'}
+			title={code_visible ? 'Hide code' : 'Show code'}
 			class="h-8 w-8 transition-colors"
 		>
 			{#if code_visible}
@@ -87,7 +87,7 @@
 			{/if}
 		</button>
 
-		<button on:click={copy_code} title="Kopiera koden">
+		<button on:click={copy_code} title="Copy code">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				height="24"
@@ -103,14 +103,14 @@
 	</div>
 
 	<p class="text-2xl">
-		Synlighet: <span class="text-white"
-			>{client.metadata.visibility === 'public' ? 'Publik' : 'Privat'}</span
+		Visibility: <span class="text-white"
+			>{client.metadata.visibility === 'public' ? 'Public' : 'Private'}</span
 		>
 	</p>
 
 	<div class="my-4 h-1 w-full rounded-md bg-slate-700"></div>
 
-	<p class="text-4xl">Spelare</p>
+	<p class="text-4xl">Players</p>
 	<ul class="bg-slate-600 px-2 py-1">
 		{#each Object.entries($players) as [_, data], i}
 			<li class="flex items-center justify-between text-xl text-white">
@@ -162,13 +162,13 @@
 	<div class="actions flex w-full gap-2 text-2xl text-white">
 		<button
 			on:click={() => client.fancy_leave_game()}
-			title="Lämna spel"
+			title="Leave game"
 			class="w-1/2 bg-slate-600 transition-all hover:scale-95 hover:bg-slate-500 active:scale-105"
 			>Lämna</button
 		>
 		<button
 			on:click={ready}
-			title="Ändra redo status"
+			title="Change ready status"
 			class="w-1/2 bg-slate-600 transition-all hover:scale-95 hover:bg-slate-500 active:scale-105"
 			>Redo</button
 		>

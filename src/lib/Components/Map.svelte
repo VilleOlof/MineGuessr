@@ -209,7 +209,7 @@
 							{#if $current_pos}
 								x {$current_pos.x}, z {$current_pos.z}
 							{:else}
-								Ingen position
+								No position
 							{/if}
 						</p>
 					</div>
@@ -221,7 +221,7 @@
 							bind:this={place_element}
 							on:change={() => PlaceTeleport()}
 						>
-							<option value="0, 0" disabled selected>Platser</option>
+							<option value="0, 0" disabled selected>Places</option>
 
 							{#each places as place}
 								<option value={place.position.x + ', ' + place.position.y}>{place.name}</option>

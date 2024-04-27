@@ -7,9 +7,9 @@ export type Place = {
 };
 
 /**
- * Gets the location metadata from the loc_metadata.json file
+ * Gets the places from the places.json file
  * 
- * @returns {location_metadata[]} The location metadata
+ * @returns {location_metadata[]} The places
  */
 export function get_places(): Place[] {
     let file_content = readFileSync("src/lib/server/places.json", "utf-8");

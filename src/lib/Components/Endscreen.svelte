@@ -23,20 +23,19 @@
 	<div
 		class="end flex w-full flex-col items-center gap-4 bg-gray-900 px-2 py-6 sm:w-3/4 md:w-1/2 xl:w-2/5"
 	>
-		<h1 class="text-6xl font-bold">Resultat</h1>
+		<h1 class="text-6xl font-bold">Result</h1>
 
 		{#if !data.user}
 			<p class="text-lg text-lime-300 md:text-2xl">
 				<button
 					on:click={Discord}
-					class="underline underline-offset-4 transition-colors hover:text-lime-500"
-					>Logga in</button
-				> för att synas på topplistan!
+					class="underline underline-offset-4 transition-colors hover:text-lime-500">Log in</button
+				> to get a spot on the leaderboard!
 			</p>
 		{/if}
 
-		<p class="text-4xl">Totalt: {total_points}</p>
-		<p class="text-3xl">Tid: {format_time(total_time / 1000)}s</p>
+		<p class="text-4xl">Total: {total_points}</p>
+		<p class="text-3xl">Time: {format_time(total_time / 1000)}s</p>
 
 		<div class="flex flex-col gap-2 text-2xl">
 			{#each $rounds as round, i}
@@ -49,14 +48,14 @@
 		</div>
 
 		<div class="buttons flex gap-4">
-			<Button on:click={() => (location.href = '/')}>Spela Igen</Button>
+			<Button on:click={() => (location.href = '/')}>Play again</Button>
 			<Button
 				on:click={() => {
 					show_end_map = true;
 
 					// Show all the guesses made
 					game.draw_all_guess_lines();
-				}}>Kolla kartan</Button
+				}}>Check map</Button
 			>
 			<Share game_id={game.game_id} {total_points} game_type={game.game_type} />
 		</div>

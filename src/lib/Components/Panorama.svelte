@@ -59,7 +59,7 @@
 	<div
 		class="loadingContainer absolute left-0 top-0 flex h-full w-full items-center justify-center"
 	>
-		<p class="text-5xl text-cyan-400">Laddar panorama screenshot...</p>
+		<p class="text-5xl text-cyan-400">Loading panorama screenshot...</p>
 	</div>
 {/if}
 <div id="threewrapper" bind:this={three_wrapper}></div>

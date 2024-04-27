@@ -13,13 +13,13 @@
 		{/if}
 	</div>
 
-	<p>Ajdå, något gick fel :(</p>
+	<p>Ouch, something went wrong :(</p>
 
 	<div class="info flex flex-col items-center text-xl text-gray-300">
 		<p>
-			Oroa dig inte! Klicka <a href="/" class="text-cyan-400 underline underline-offset-2">här</a> för
-			att komma tillbaka!
+			Don't worry! Click <a href="/" class="text-cyan-400 underline underline-offset-2">here</a> to get
+			back!
 		</p>
-		<p>Våra kaniner har redan rapporterat ditt problem!</p>
+		<p>Our bunnies have already reported your problem!</p>
 	</div>
 </div>

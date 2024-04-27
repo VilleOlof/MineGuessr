@@ -176,7 +176,7 @@ export class MPClient {
             this.metadata.visibility = payload.visibility;
             this.state.set("lobby");
 
-            if (this.notifications_enabled) toast.success("Gick med i ett spel", MPClient.toast_options);
+            if (this.notifications_enabled) toast.success("Joined a game", MPClient.toast_options);
         }],
         [request_type.OTHER_PLAYER_JOINED, (_payload) => {
             const payload = _payload as Payloads.OtherPlayerJoined;
@@ -192,7 +192,7 @@ export class MPClient {
                 return players;
             });
 
-            if (this.notifications_enabled) toast.success(`${payload.discord.username} gick nyss med`, MPClient.toast_options);
+            if (this.notifications_enabled) toast.success(`${payload.discord.username} just joined`, MPClient.toast_options);
         }],
         [request_type.OTHER_PLAYER_READY, (_payload) => {
             const payload = _payload as Payloads.OtherPlayerReady;
@@ -205,8 +205,8 @@ export class MPClient {
 
             if (this.notifications_enabled) {
                 const user = get(this.players)[payload.player_id].discord.username;
-                if (payload.ready) toast.success(`@${user} är redo`, MPClient.toast_options);
-                else toast.error(`@${user} är inte redo`, MPClient.toast_options);
+                if (payload.ready) toast.success(`@${user} is ready`, MPClient.toast_options);
+                else toast.error(`@${user} is not ready`, MPClient.toast_options);
             }
         }],
         [request_type.NEXT_ROUND, (_payload) => {
@@ -297,7 +297,7 @@ export class MPClient {
                 detail: payload
             }));
 
-            if (this.notifications_enabled) toast.error(`Du har ${Math.floor(payload.time / 1000)} sekunder kvar`, MPClient.toast_options);
+            if (this.notifications_enabled) toast.error(`You have ${Math.floor(payload.time / 1000)} seconds left`, MPClient.toast_options);
         }],
         [request_type.GOTO_NEXT_ROUND_TIMELIMIT, (_payload) => {
             const payload = _payload as Payloads.GotoNextRoundTimelimit;
@@ -307,7 +307,7 @@ export class MPClient {
                 detail: payload
             }));
 
-            if (this.notifications_enabled) toast.error(`Nästa runda börjar om ${Math.floor(payload.time / 1000)}s`, MPClient.toast_options);
+            if (this.notifications_enabled) toast.error(`Next round begins in ${Math.floor(payload.time / 1000)}s`, MPClient.toast_options);
         }],
         [request_type.OTHER_PLAYER_LEFT, (_payload) => {
             const payload = _payload as Payloads.OtherPlayerLeft;

@@ -59,7 +59,7 @@
 
 	<p
 		class="pointer-events-auto absolute flex items-center text-2xl drop-shadow-[0_2px_2px_rgba(0,0,0,1)]"
-		title="Runda"
+		title="Round"
 	>
 		{$curr_round + 1}
 	</p>
@@ -81,7 +81,7 @@
 
 <style>
 	.daily-game-text::after {
-		content: 'Dagligt';
+		content: 'Daily';
 		position: absolute;
 		top: 0;
 		right: 0;

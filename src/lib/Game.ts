@@ -420,7 +420,7 @@ export class Game {
         catch (e) {
             console.log(`Error while sending stats: ${e}`);
 
-            toast.error("Kunde inte skicka statistik till servern", {
+            toast.error("Failed to send statistics to the server", {
                 style: toast_style
             });
         }

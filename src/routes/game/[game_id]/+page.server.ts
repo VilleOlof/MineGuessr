@@ -1,6 +1,7 @@
 import { logger } from '$lib/server/logger';
 import { DB } from '$lib/server/db.js';
 import { error } from '@sveltejs/kit';
+import { get_places } from '$lib/server/places';
 
 export const ssr = false;
 
@@ -17,8 +18,11 @@ export async function load({ params }) {
         throw error(404, 'Not found');
     }
 
+    const places = get_places();
+
     return {
         game_id: game_id,
+        places: places,
         game: game
     }
 }

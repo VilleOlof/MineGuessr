@@ -1,43 +1,41 @@
-<h2 class="my-1 text-2xl font-bold">Hur fungerar det?</h2>
+<h2 class="my-1 text-2xl font-bold">How does it work?</h2>
 <p class="md:text-xl">
-	Ett spel har 5 rundor i sig. <br />
-	Varje runda får du en slumpmässig plats från 90gQ's karta. <br />
-	Din uppgift är att gissa var på kartan du tror att platsen är. <br />
+	One game has 5 rounds in it. <br />
+	For each round, you'll get a randomized location from the world. <br />
+	Your task is to guess where you are in the world, using the map. <br />
 	<br />
-	Du får poäng baserat på hur nära du gissar. <br />
-	<br />
-	Finns över 150+ platser att gissa på! <br />
+	You earn points based on how close you guessed. <br />
 </p>
 
-<h2 class="my-1 mt-4 text-2xl font-bold">Poängsystemet</h2>
+<h2 class="my-1 mt-4 text-2xl font-bold">Points system</h2>
 <p class="md:text-xl">
-	Om du har inom 16 block av platsen får du 5000 poäng. <br />
-	För varje block du är ifrån platsen så förlorar du 0,25 poäng. <br />
-	Tiden du har på dig för att gissa påverkar inte poängen. <br />
+	If you're within 16 blocks of the location, you'll get 5000 points. <br />
+	For each block away from the location, you lose 0.25 points. <br />
+	The timer doesn't effect your points at all. <br />
 </p>
 
-<h2 class="my-1 mt-4 text-2xl font-bold">Dagligt läge</h2>
+<h2 class="my-1 mt-4 text-2xl font-bold">Daily mode</h2>
 <p class="md:text-xl">
-	Varje ny dag (01:00) så byts platserna ut. <br />
-	Du kan endast spela dagligt läge en gång per dag. <br />
+	Each day, the places gets swapped out. <br />
+	You can only play the daily mode once a day. <br />
 	<br />
-	Detta gör det enkelt att tävla mot sina vänner!
+	This makes it easy to challenge your friends!
 </p>
 
-<h2 class="my-1 mt-4 text-2xl font-bold">Topplistan</h2>
+<h2 class="my-1 mt-4 text-2xl font-bold">Leaderboard</h2>
 <p class="md:text-xl">
-	Se vilka som är bäst på att gissa platser! <br />
-	Ifall man är inloggad så syns endast sitt bästa resultat. <br />
+	See who guesses the best! <br />
+	Log in to get a spot on the leaderboard. <br />
 	<br />
-	Först sorterar den efter poäng, sen efter tid. <br />
-	Topplistan inkluderar inte dagligt läge.
+	First sorts after points, and then time. <br />
+	Leaderboard doesn't include daily mode games.
 </p>
 
-<h2 class="my-1 mt-4 text-2xl font-bold">Snabbknappar</h2>
+<h2 class="my-1 mt-4 text-2xl font-bold">Hotkeys</h2>
 <p class="md:text-xl">
-	<kbd>M</kbd> - Fullskärm/minska kartan <br />
-	<kbd>H</kbd> - Visa/dölj kartan <br />
-	<kbd>G</kbd> - Gissa/vidare <br />
-	<kbd>0</kbd> - Nollställ kameran <br />
-	<kbd>1-8</kbd> - Teleportera till x plats (ordning i listan) <br />
+	<kbd>M</kbd> - Fullscreen/minimize map <br />
+	<kbd>H</kbd> - Show/hide map <br />
+	<kbd>G</kbd> - Guess/next <br />
+	<kbd>0</kbd> - Reset camera <br />
+	<kbd>1-8</kbd> - Teleport to x place (order in list) <br />
 </p>

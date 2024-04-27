@@ -13,7 +13,7 @@ This site should be pretty modular and easy to setup for other worlds, assuming 
 [X] - Multiplayer Aborted State  
 [ ] - Multiplayer Homepage  
 [X] - Move places dropdown to gitignored metadata file  
-[ ] - Convert EVERYTHING to english  
+[/] - Convert EVERYTHING to english  
 [ ] - Rebrand site to non 90gq  
 [ ] - More and better documentation for setup etc, VitePress?  
 [ ] - Setup on alternative test domains and test with friends  

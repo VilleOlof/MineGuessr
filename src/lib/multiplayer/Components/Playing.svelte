@@ -103,10 +103,10 @@
 
 <button
 	class="rounds absolute left-0 top-0 aspect-square h-auto w-16 transition-transform hover:-rotate-6 hover:scale-110 active:scale-90 sm:w-24"
-	title="Lämna spel"
+	title="Leave game"
 	on:click={() => client.fancy_leave_game()}
 >
-	<img src="/Earth.webp" alt="Tillbaka" />
+	<img src="/Earth.webp" alt="Back" />
 </button>
 
 <Map fullscreen={false} stop_interaction={round_over || $self_guessed} {places}>

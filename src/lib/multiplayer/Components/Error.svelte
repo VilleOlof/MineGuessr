@@ -7,16 +7,16 @@
 
 <div class=" flex flex-col items-center gap-4 text-5xl">
 	<div class="actual flex items-center gap-4 text-4xl text-gray-400">
-		<h1>"{$reason ?? 'Något??'}"</h1>
+		<h1>"{$reason ?? 'Something??'}"</h1>
 	</div>
 
-	<p class="text-center">Ajdå, någt gick fel :(</p>
+	<p class="text-center">Ouch, something went wrong :(</p>
 
 	<div class="info flex flex-col items-center gap-3 text-xl text-gray-300">
 		<p class="text-balance text-center">
-			Oroa dig inte! Klicka <a href="/mp" class="text-cyan-400 underline underline-offset-2">här</a>
-			för att komma tillbaka!
+			Don't worry! Click <a href="/mp" class="text-cyan-400 underline underline-offset-2">here</a>
+			to get back!
 		</p>
-		<p class="text-balance text-center">Våra kaniner har redan rapporterat ditt problem!</p>
+		<p class="text-balance text-center">Our bunnies have already reported your problem!</p>
 	</div>
 </div>

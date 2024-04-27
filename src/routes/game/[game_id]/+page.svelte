@@ -17,7 +17,7 @@
 	$: total_time = $rounds.reduce((acc: number, curr: GameModule.Round) => acc + curr.time, 0);
 </script>
 
-<Map fullscreen={true} {game_instance}></Map>
+<Map fullscreen={true} stop_interaction={false} places={data.places}></Map>
 
 {#if show_popup}
 	<div
@@ -26,8 +26,8 @@
 		<div
 			class="end flex w-full flex-col items-center gap-4 bg-gray-900 px-2 py-6 sm:w-3/4 md:w-1/2 xl:w-2/5"
 		>
-			<p class="text-4xl">Totalt: {total_points}</p>
-			<p class="text-3xl">Tid: {format_time(total_time / 1000)}s</p>
+			<p class="text-4xl">Total: {total_points}</p>
+			<p class="text-3xl">Time: {format_time(total_time / 1000)}s</p>
 
 			<div class="flex flex-col gap-2 text-2xl">
 				{#each $rounds as round, i}
@@ -40,7 +40,7 @@
 			</div>
 
 			<div class="buttons flex gap-4">
-				<Button on:click={() => (location.href = '/')}>Menyn</Button>
+				<Button on:click={() => (location.href = '/')}>Menu</Button>
 				<Button
 					on:click={() => {
 						// Show all the guesses made
@@ -48,14 +48,14 @@
 							game_instance.draw_all_guess_lines();
 							show_popup = false;
 						}
-					}}>Kolla kartan</Button
+					}}>Check the map</Button
 				>
 				<Share game_id={data.game_id} {total_points} game_type={game_instance.game_type} />
 			</div>
 
 			{#if data.user}
 				<div class="flex gap-4 text-2xl">
-					<span class="text-gray-400">Av:</span>
+					<span class="text-gray-400">By:</span>
 					{data.game[0].user?.username ? `@${data.game[0].user?.username}` : '???'}
 				</div>
 			{/if}
@@ -64,7 +64,7 @@
 				{@const date = data.game[data.game.length - 1].date}
 
 				<p class="text-3xl text-gray-200">
-					Dagligt läge ({date.getFullYear()}/{date.getMonth() + 1}/{date.getDate()})
+					Daily mode ({date.getFullYear()}/{date.getMonth() + 1}/{date.getDate()})
 				</p>
 			{:else}
 				<p class="text-lg text-gray-300">{data.game[data.game.length - 1].date.toLocaleString()}</p>
@@ -80,6 +80,6 @@
 			game_instance.clear_markers();
 		}}
 		class="g-drop pointer-events-auto absolute left-0 top-0 m-4 flex border-4 border-gray-900 bg-gray-700 px-6 py-2 text-4xl shadow-gray-900 transition-transform hover:-translate-y-2 active:scale-90"
-		>Visa Resultat</button
+		>Show results</button
 	>
 {/if}

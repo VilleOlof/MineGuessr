@@ -8,7 +8,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
     let stats = null;
     if (session) {
         if (session.user.perm_lvl === DB.Permissions.Banned) {
-            throw error(403, "Du är bannad");
+            throw error(403, "You're banned");
         }
 
         stats = await DB.GetStatistics(session.user.user_id);

@@ -4,7 +4,7 @@
 
 <Header />
 
-<h1 class="my-4 text-4xl">Försöker prata med servern...</h1>
+<h1 class="my-4 text-4xl">Trying to talk with the server...</h1>
 
 <div class="lds-ring">
 	<div></div>

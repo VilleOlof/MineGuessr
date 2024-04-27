@@ -100,7 +100,7 @@ export async function Discord() {
         location.href = url;
     } catch (e) {
         console.error(e);
-        toast.error('Något gick fel!', {
+        toast.error('Something went wrong!', {
             duration: 5000,
             style: toast_style
         });

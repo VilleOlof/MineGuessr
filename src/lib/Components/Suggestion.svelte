@@ -15,14 +15,14 @@
 				body: JSON.stringify({ text })
 			});
 
-			toast.success('Tack för din ide!', {
+			toast.success('Thanks for your idea!', {
 				duration: 5000,
 				style: toast_style
 			});
 		} catch (e) {
 			console.error(e);
 
-			toast.error('Något gick fel!', {
+			toast.error('Something went wrong!', {
 				duration: 5000,
 				style: toast_style
 			});
@@ -33,15 +33,15 @@
 </script>
 
 <p>
-	Föreslå en ide! <br />
-	Kan vara allt från platser, förbättringar, buggar, etc.
+	Suggest an idea! <br />
+	Kan be everything from places, improvements, bugs, etc.
 </p>
 
 <textarea
 	name=""
 	id=""
 	class="my-3 h-24 w-full bg-gray-900 p-1"
-	placeholder="Skriv något här..."
+	placeholder="Write something here..."
 	bind:value={text}
 ></textarea>
 
@@ -49,7 +49,7 @@
 	<button
 		on:click={async () => await submit()}
 		class="flex items-center gap-2 bg-gray-900 p-2 text-xl text-white transition-transform hover:scale-90 active:scale-95"
-		>Skicka in <svg
+		>Submit <svg
 			xmlns="http://www.w3.org/2000/svg"
 			height="24"
 			viewBox="0 -960 960 960"

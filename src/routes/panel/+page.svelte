@@ -63,7 +63,7 @@
 		</PanelWrapper>
 
 		<PanelWrapper>
-			<PanelGoto title="Statistik" href="/panel/stats" />
+			<PanelGoto title="Statistics" href="/panel/stats" />
 
 			<h2 class="text-2xl"><span class="text-gray-300">Total Games:</span> {data.total_games}</h2>
 			<h2 class="text-2xl">

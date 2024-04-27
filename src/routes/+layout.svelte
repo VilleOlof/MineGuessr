@@ -33,10 +33,10 @@
 </script>
 
 <svelte:head>
-	<title>90gQ Guessr</title>
+	<title>MineGuessr</title>
 
-	<meta property="og:title" content="90gQ Guessr" />
-	<meta property="og:description" content="Liknande GeoGuessr, fast för minecraft servern 90gQ" />
+	<meta property="og:title" content="MineGuessr" />
+	<meta property="og:description" content="Like GeoGussr, but for Minecraft!" />
 	<meta property="og:image" content="{PUBLIC_ORIGIN}/Earth.webp" />
 	<meta property="og:url" content={PUBLIC_ORIGIN} />
 	<meta content="#22c55e" name="theme-color" />

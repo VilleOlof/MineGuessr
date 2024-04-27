@@ -13,5 +13,5 @@
 		<h1 class="text-6xl">{profile_user.username}</h1>
 	</header>
 
-	<p class="text-gray-300">Vad gör du här? Detta är inte klart än!</p>
+	<p class="text-gray-300">Watcha doing here? This isn't done...</p>
 </div>

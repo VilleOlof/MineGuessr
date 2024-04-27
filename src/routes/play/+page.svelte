@@ -79,11 +79,11 @@
 
 <a
 	class="rounds absolute left-0 top-0 aspect-square h-auto w-16 transition-transform hover:-rotate-6 hover:scale-110 active:scale-90 sm:w-24"
-	title="Tillbaka till menyn"
+	title="Back to the menu"
 	href="/"
 	class:ontop={$show_end_map}
 >
-	<img src="/Earth.webp" alt="Tillbaka" />
+	<img src="/Earth.webp" alt="Back" />
 </a>
 
 <Map fullscreen={$game_finished} stop_interaction={curr_round_finished} places={data.places}>
@@ -118,7 +118,7 @@
 
 <p
 	class="pointer-events-none absolute bottom-0 left-0 m-1 text-sm text-white/80 md:text-base"
-	title="Spel id"
+	title="Game id"
 >
 	{game.game_id}
 </p>

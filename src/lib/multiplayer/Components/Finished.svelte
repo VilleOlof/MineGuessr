@@ -27,7 +27,7 @@
 			}
 		}
 
-		return winner || 'Ingen';
+		return winner || 'Nobody';
 	}
 
 	function get_player_total(player: PlayerData) {
@@ -62,8 +62,8 @@
 		<div
 			class="end flex w-full flex-col items-center gap-4 bg-gray-900 px-2 py-6 sm:w-3/4 md:w-1/2 xl:w-2/5"
 		>
-			<h1 class="text-6xl font-bold">Resultat</h1>
-			<p class="text-4xl">Vinnare: <span class="text-lime-400">{get_winner($players)}</span></p>
+			<h1 class="text-6xl font-bold">Result</h1>
+			<p class="text-4xl">Winner: <span class="text-lime-400">{get_winner($players)}</span></p>
 
 			<div class="players flex">
 				{#each Object.entries($players) as [_, player]}
@@ -78,8 +78,8 @@
 						</div>
 
 						<div class="mid">
-							<p class="text-3xl">Totalt: {get_player_total(player)}</p>
-							<p class="text-1xl">Tid: {format_time(get_player_total_time(player) / 1000)}s</p>
+							<p class="text-3xl">Total: {get_player_total(player)}</p>
+							<p class="text-1xl">Time: {format_time(get_player_total_time(player) / 1000)}s</p>
 						</div>
 
 						<div class="flex flex-col gap-2 lg:text-2xl">
@@ -96,7 +96,7 @@
 			</div>
 
 			<div class="buttons flex gap-4">
-				<Button on:click={() => (location.href = '/mp')}>Spela Igen</Button>
+				<Button on:click={() => (location.href = '/mp')}>Play again</Button>
 				<Button
 					on:click={() => {
 						show_map = true;
@@ -104,7 +104,6 @@
 						let count = 0;
 						for (const [_, player] of Object.entries($players)) {
 							for (const round of player.rounds) {
-								// client.draw_all_guess_lines(round.guesses);
 								Game.draw_line_to_guess(round.location, round.guess_location, count);
 								Game.place_correct_marker(round.location, count);
 
@@ -117,7 +116,7 @@
 								count++;
 							}
 						}
-					}}>Kolla kartan</Button
+					}}>Check map</Button
 				>
 				<!-- <Share game_id={game.game_id} {total_points} game_type={game.game_type} /> -->
 			</div>
@@ -126,9 +125,9 @@
 {:else}
 	<button
 		class="rounds absolute left-0 top-0 aspect-square h-auto w-16 transition-transform hover:-rotate-6 hover:scale-110 active:scale-90 sm:w-24"
-		title="Lämna spel"
+		title="Back to the menu"
 		on:click={() => (location.href = '/mp')}
 	>
-		<img src="/Earth.webp" alt="Tillbaka" />
+		<img src="/Earth.webp" alt="Back" />
 	</button>
 {/if}

@@ -85,6 +85,15 @@
 				>{new URL(PUBLIC_MAP_URL).host}</a
 			>
 		</p>
+
+		<p>
+			Wanna host your own instance? Check it out on <a
+				href="https://github.com/VilleOlof/90gqguessr"
+				target="_blank"
+				class="font-bold text-cyan-600 underline underline-offset-2 transition-colors hover:text-cyan-400"
+				>Github</a
+			>
+		</p>
 	</div>
 </div>
 
