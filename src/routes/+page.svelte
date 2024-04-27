@@ -9,6 +9,7 @@
 	import { GetDiscordAvatarUrl, toast_style } from '$lib';
 	import type { LayoutData } from './$types';
 	import Header from '$lib/Components/Header.svelte';
+	import { PUBLIC_MAP_URL } from '$env/static/public';
 
 	export let data: LayoutData;
 
@@ -34,25 +35,18 @@
 >
 	<Header />
 
-	<p class="text-lg md:text-2xl">
-		Gissa platsen från Minecraft servern <a
-			href="https://90gq.se"
-			target="_blank"
-			class="font-bold text-cyan-400 underline underline-offset-2 transition-colors hover:text-cyan-200"
-			>90gQ</a
-		>
-	</p>
+	<p class="text-lg md:text-2xl">Guess the location from Minecraft world</p>
 
 	<div class="instructions flex flex-col items-start justify-start gap-1">
-		<MenuInstruction text="Du kommer få en slumpmässig plats" />
-		<MenuInstruction text="Ditt mål är att använda kartan för att gissa rätt" />
-		<MenuInstruction text="Desto nämre platsen, desto mer poäng får du!" />
-		<MenuInstruction text="Exakt som riktiga GeoGuessr fast för 90gQ!" />
+		<MenuInstruction text="You're gonna get a randomized location" />
+		<MenuInstruction text="Your goal is to use the map to guess right" />
+		<MenuInstruction text="The closer to location, the more points you get!" />
+		<MenuInstruction text="Exactly like the real GeoGuessr, but for Minecraft!" />
 	</div>
 
 	<div class="buttons flex items-center justify-between gap-4">
-		<Button on:click={() => (location.href = '/play')}>Spela</Button>
-		<Button on:click={() => (location.href = '/play?daily=true')}>Dagligt</Button>
+		<Button on:click={() => (location.href = '/play')}>Play</Button>
+		<Button on:click={() => (location.href = '/play?daily=true')}>Daily</Button>
 
 		<Button on:click={() => (location.href = '/top')}>Top</Button>
 
@@ -77,26 +71,18 @@
 	<button
 		class="text-xl text-gray-300 underline underline-offset-4 transition-colors hover:text-cyan-400"
 		on:click={() => (show_suggestion = !show_suggestion)}
-		>Har du förslag på platser, eller annat?</button
+		>Do you have suggestions on locations, or other?</button
 	>
 
 	<div
 		class="credits md:text-md absolute bottom-0 left-0 m-2 flex flex-col items-start text-gray-400"
 	>
 		<p>
-			Karta från <a
-				href="https://map.90gq.se"
+			Map from <a
+				href={PUBLIC_MAP_URL}
 				target="_blank"
 				class="font-bold text-cyan-600 underline underline-offset-2 transition-colors hover:text-cyan-400"
-				>map.90gq.se</a
-			>
-		</p>
-		<p>
-			Panorama screenshots från <a
-				href="https://www.twitch.tv/liiindaa_"
-				target="_blank"
-				class="font-bold text-cyan-600 underline underline-offset-2 transition-colors hover:text-cyan-400"
-				>Liiindaa</a
+				>{new URL(PUBLIC_MAP_URL).host}</a
 			>
 		</p>
 	</div>
@@ -129,12 +115,12 @@
 		<Info />
 	</PopupWrapper>
 {:else if show_stats}
-	<PopupWrapper title="Statistik" on:click={() => (show_stats = false)} mini={true}>
+	<PopupWrapper title="Statistics" on:click={() => (show_stats = false)} mini={true}>
 		<Stats />
 	</PopupWrapper>
 {:else if show_suggestion}
 	<PopupWrapper
-		title="Skicka in förslag"
+		title="Send in suggestions"
 		on:click={() => (show_suggestion = !show_suggestion)}
 		mini={true}
 	>
@@ -159,7 +145,7 @@
 				location.reload();
 			}}
 			class="c-shadow bg-gray-800 px-4 shadow-cyan-600 transition-transform hover:-translate-x-1 hover:-translate-y-1 active:scale-90"
-			>Logga ut</button
+			>Log out</button
 		>
 	{:else}
 		<Button
@@ -169,7 +155,7 @@
 					location.href = url;
 				} catch (e) {
 					console.error(e);
-					toast.error('Något gick fel!', {
+					toast.error('Something went wrong!', {
 						duration: 5000,
 						style: toast_style
 					});
@@ -177,16 +163,7 @@
 			}}
 		>
 			<img src="/discord.svg" alt="" class="h-8 w-8" />
-			Logga in</Button
+			Log in</Button
 		>
 	{/if}
 </div>
-
-<style>
-	/* https://x.com/artur_bien/status/1750944453538283933 */
-	/* .pfp_colored {
-		background-size: 1px 1px;
-		background-repeat: repeat;
-		filter: invert(0.1) contrast(1) saturate(2) grayscale(0.2) brightness(2);
-	} */
-</style>

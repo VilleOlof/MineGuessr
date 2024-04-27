@@ -63,21 +63,7 @@
 			class="end flex w-full flex-col items-center gap-4 bg-gray-900 px-2 py-6 sm:w-3/4 md:w-1/2 xl:w-2/5"
 		>
 			<h1 class="text-6xl font-bold">Resultat</h1>
-
-			<!-- <p class="text-4xl">Totalt: {total_points}</p>
-    <p class="text-3xl">Tid: {format_time(total_time / 1000)}s</p> -->
-
 			<p class="text-4xl">Vinnare: <span class="text-lime-400">{get_winner($players)}</span></p>
-
-			<!-- <div class="flex flex-col gap-2 text-2xl">
-        {#each $rounds as round, i}
-            <p>
-                <span class="text-gray-400">[{i + 1}]</span> -
-                <span class="text-cyan-400">{round.score}</span>
-                ({Math.floor(round.distance)} blocks)
-            </p>
-        {/each}
-    </div> -->
 
 			<div class="players flex">
 				{#each Object.entries($players) as [_, player]}
@@ -110,7 +96,7 @@
 			</div>
 
 			<div class="buttons flex gap-4">
-				<Button on:click={() => client.fancy_leave_game()}>Spela Igen</Button>
+				<Button on:click={() => (location.href = '/mp')}>Spela Igen</Button>
 				<Button
 					on:click={() => {
 						show_map = true;
@@ -141,7 +127,7 @@
 	<button
 		class="rounds absolute left-0 top-0 aspect-square h-auto w-16 transition-transform hover:-rotate-6 hover:scale-110 active:scale-90 sm:w-24"
 		title="Lämna spel"
-		on:click={() => client.fancy_leave_game()}
+		on:click={() => (location.href = '/mp')}
 	>
 		<img src="/Earth.webp" alt="Tillbaka" />
 	</button>

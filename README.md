@@ -26,6 +26,7 @@ This site should be pretty modular and easy to setup for other worlds, assuming 
 [ ] - Leaderboards for each daily  
 [ ] - Profile
 [ ] - Duels  
+[ ] - QoL feature, make MP guess_markers different colors for each player  
 [LATER] - Make games server-sided  
 
 # Setup & Start
