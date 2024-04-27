@@ -10,8 +10,10 @@
 	import { onDestroy, onMount } from 'svelte';
 	import XpBarMp from './XPBar_MP.svelte';
 	import PlayerList from './PlayerList.svelte';
+	import type { Place } from '$lib/server/places';
 
 	export let client: MPClient;
+	export let places: Place[];
 	const state = client.state;
 	const panorama = client.current_panorama;
 
@@ -107,7 +109,7 @@
 	<img src="/Earth.webp" alt="Tillbaka" />
 </button>
 
-<Map fullscreen={false} stop_interaction={round_over || $self_guessed}>
+<Map fullscreen={false} stop_interaction={round_over || $self_guessed} {places}>
 	<div class="m-3">
 		<GuessButton
 			submit_guess={guess}

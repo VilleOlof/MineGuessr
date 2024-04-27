@@ -49,9 +49,9 @@
 {#if $state === 'lobby'}
 	<Lobby {client} />
 {:else if $state === 'playing' || $state === 'intermission'}
-	<Playing {client} />
+	<Playing {client} places={data.places} />
 {:else if $state === 'finished'}
-	<Finished />
+	<Finished {client} />
 {:else if $state === 'aborted'}
 	<Aborted {client} />
 {:else if $state === 'error'}

@@ -12,6 +12,7 @@ This site should be pretty modular and easy to setup for other worlds, assuming 
 [X] - Multiplayer Error State  
 [X] - Multiplayer Aborted State  
 [ ] - Multiplayer Homepage  
+[X] - Move places dropdown to gitignored metadata file  
 [ ] - Convert EVERYTHING to english  
 [ ] - Rebrand site to non 90gq  
 [ ] - More and better documentation for setup etc, VitePress?  
@@ -101,6 +102,22 @@ And `coordinates` is just an array of first `x` and then `z`.
   },
 ]
 ```
+
+#### **Places Metadata**
+
+Sometimes you might want to have a view preset locations to choose from.  
+(Specially if it's a big world!)  
+
+This can be achieved by having a `places.json` file located in `./src/lib/server/`  
+
+```json
+{
+  "Main City": [10, -42],
+  "Far away place": [-1251, 14011]
+}
+```
+
+The key is the name of the place and the value is an array of `x` and `z` coordinates.  
 
 #### **Panorama Screenshots**
 

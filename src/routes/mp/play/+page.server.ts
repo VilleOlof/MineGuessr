@@ -3,6 +3,7 @@ import { get_loc_metadata } from '$lib/server/metadata';
 import { error } from '@sveltejs/kit';
 import prand from 'pure-rand';
 import { ROUNDS_PER_MATCH } from '../../../../shared';
+import { get_places } from '$lib/server/places';
 
 export const ssr = false;
 
@@ -29,9 +30,12 @@ export async function load({ cookies, url }) {
         )
     );
 
+    const places = get_places();
+
     return {
         auth: auth_cookie,
         random_locations: locations,
+        places: places,
         game_id: params.get('game_id')
     }
 }

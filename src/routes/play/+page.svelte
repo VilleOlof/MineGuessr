@@ -86,7 +86,7 @@
 	<img src="/Earth.webp" alt="Tillbaka" />
 </a>
 
-<Map fullscreen={$game_finished} stop_interaction={curr_round_finished}>
+<Map fullscreen={$game_finished} stop_interaction={curr_round_finished} places={data.places}>
 	<div class="m-3">
 		<GuessButton
 			submit_guess={submit}

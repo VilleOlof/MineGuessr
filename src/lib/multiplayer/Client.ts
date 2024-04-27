@@ -6,7 +6,6 @@ import { PUBLIC_MP_DEV, PUBLIC_MP_URL } from "$env/static/public";
 import toast from "svelte-french-toast";
 import { toast_style } from "$lib";
 import { goto } from "$app/navigation";
-import { set } from "zod";
 
 export class MPClient {
     private ws: WebSocket;

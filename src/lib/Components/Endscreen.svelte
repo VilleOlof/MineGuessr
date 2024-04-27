@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Discord, format_time } from '$lib';
-	import type { Game, GameModule } from '$lib/Game';
+	import type { Game } from '$lib/Game';
+	import { GameModule } from '../../../shared/GameModule';
 	import type { LayoutData } from '../../routes/$types';
 	import Button from './Button.svelte';
 	import Share from './Share.svelte';

@@ -5,29 +5,18 @@
 	import { BlueMapApp } from '$lib/BlueMap/BlueMap';
 	import { Game } from '$lib/Game';
 	import { onDestroy, onMount } from 'svelte';
+	import type { Place } from '$lib/server/places';
 
 	let show_map_force: boolean = true;
 
 	export let fullscreen: boolean = false;
 	export let enlarge_map: boolean = false;
 	export let stop_interaction: boolean;
+	export let places: Place[];
 
 	let bluemap: BlueMapApp | null = null;
 
 	let place_element: HTMLSelectElement;
-
-	const places: { [key: string]: THREE.Vector2 } = {
-		Nirethia: new THREE.Vector2(279, 232),
-		Valyria: new THREE.Vector2(102620, -32210),
-		Avalon: new THREE.Vector2(360, 22490),
-		Qurumaa: new THREE.Vector2(-37850, 280),
-		Norendor: new THREE.Vector2(250, -20840),
-		Tesora: new THREE.Vector2(-4000, -10600),
-		Farmania: new THREE.Vector2(-100000, 250),
-		Erathon: new THREE.Vector2(-7200, 8800),
-		Ossyria: new THREE.Vector2(-37300, -2100),
-		'Nyaste nya': new THREE.Vector2(20000, 0)
-	};
 
 	function GetPosFromInteraction(event: Event): THREE.Vector3 | null {
 		// trust me bro, .detail exists
@@ -98,35 +87,43 @@
 				break;
 			}
 			case '1': {
-				PlaceTeleport(Object.values(places)[0]);
+				if (places[0] === null) break;
+				PlaceTeleport(new THREE.Vector2(places[0].position.x, places[0].position.y));
 				break;
 			}
 			case '2': {
-				PlaceTeleport(Object.values(places)[1]);
+				if (places[1] === null) break;
+				PlaceTeleport(new THREE.Vector2(places[1].position.x, places[1].position.y));
 				break;
 			}
 			case '3': {
-				PlaceTeleport(Object.values(places)[2]);
+				if (places[2] === null) break;
+				PlaceTeleport(new THREE.Vector2(places[2].position.x, places[2].position.y));
 				break;
 			}
 			case '4': {
-				PlaceTeleport(Object.values(places)[3]);
+				if (places[3] === null) break;
+				PlaceTeleport(new THREE.Vector2(places[3].position.x, places[3].position.y));
 				break;
 			}
 			case '5': {
-				PlaceTeleport(Object.values(places)[4]);
+				if (places[4] === null) break;
+				PlaceTeleport(new THREE.Vector2(places[4].position.x, places[4].position.y));
 				break;
 			}
 			case '6': {
-				PlaceTeleport(Object.values(places)[7]);
+				if (places[5] === null) break;
+				PlaceTeleport(new THREE.Vector2(places[5].position.x, places[5].position.y));
 				break;
 			}
 			case '7': {
-				PlaceTeleport(Object.values(places)[8]);
+				if (places[6] === null) break;
+				PlaceTeleport(new THREE.Vector2(places[6].position.x, places[6].position.y));
 				break;
 			}
 			case '8': {
-				PlaceTeleport(Object.values(places)[9]);
+				if (places[7] === null) break;
+				PlaceTeleport(new THREE.Vector2(places[7].position.x, places[7].position.y));
 				break;
 			}
 		}
@@ -217,18 +214,20 @@
 						</p>
 					</div>
 
-					<select
-						class="pointer-events-auto w-fit bg-black/70 p-1 px-2 text-gray-100"
-						bind:value={selected_place}
-						bind:this={place_element}
-						on:change={() => PlaceTeleport()}
-					>
-						<option value="0, 0" disabled selected>Platser</option>
+					{#if places.length > 0}
+						<select
+							class="pointer-events-auto w-fit bg-black/70 p-1 px-2 text-gray-100"
+							bind:value={selected_place}
+							bind:this={place_element}
+							on:change={() => PlaceTeleport()}
+						>
+							<option value="0, 0" disabled selected>Platser</option>
 
-						{#each Object.keys(places) as place}
-							<option value={places[place].x + ', ' + places[place].y}>{place}</option>
-						{/each}
-					</select>
+							{#each places as place}
+								<option value={place.position.x + ', ' + place.position.y}>{place.name}</option>
+							{/each}
+						</select>
+					{/if}
 				</div>
 			</div>
 
