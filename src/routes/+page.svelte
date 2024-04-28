@@ -45,27 +45,38 @@
 	</div>
 
 	<div class="buttons flex items-center justify-between gap-4">
-		<Button on:click={() => (location.href = '/play')}>Play</Button>
-		<Button on:click={() => (location.href = '/play?daily=true')}>Daily</Button>
+		<!-- Dont really wanna copy the Button component but these need better screen size adjusting specifically-->
+		<button
+			on:click={() => (location.href = '/play')}
+			class="c-shadow flex items-center gap-2 rounded-sm bg-gray-700 px-4 py-1 text-sm shadow-cyan-400 transition-transform hover:-translate-x-1 hover:-translate-y-1 active:scale-90 sm:text-base md:text-2xl lg:text-3xl"
+		>
+			Play
+		</button>
+		<button
+			on:click={() => (location.href = '/play?daily=true')}
+			class="c-shadow flex items-center gap-2 rounded-sm bg-gray-700 px-4 py-1 text-sm shadow-cyan-400 transition-transform hover:-translate-x-1 hover:-translate-y-1 active:scale-90 sm:text-base md:text-2xl lg:text-3xl"
+		>
+			Daily
+		</button>
+		<button
+			on:click={() => (location.href = '/mp')}
+			class="c-shadow flex items-center gap-2 rounded-sm bg-gray-700 px-4 py-1 text-sm shadow-cyan-400 transition-transform hover:-translate-x-1 hover:-translate-y-1 active:scale-90 sm:text-base md:text-2xl lg:text-3xl"
+		>
+			Multiplayer
+		</button>
+		<button
+			on:click={() => (location.href = '/top')}
+			class="c-shadow flex items-center gap-2 rounded-sm bg-gray-700 px-4 py-1 text-sm shadow-cyan-400 transition-transform hover:-translate-x-1 hover:-translate-y-1 active:scale-90 sm:text-base md:text-2xl lg:text-3xl"
+		>
+			Top
+		</button>
 
-		<Button on:click={() => (location.href = '/top')}>Top</Button>
-
-		<!--TODO: Advancements?-->
-		<!-- <Button on:click={() => (location.href = '/top')}>
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				height="24"
-				viewBox="0 -960 960 960"
-				width="24"
-				fill="currentColor"
-				class="h-8 w-8"
-				><path
-					d="M280-120v-80h160v-124q-49-11-87.5-41.5T296-442q-75-9-125.5-65.5T120-640v-40q0-33 23.5-56.5T200-760h80v-80h400v80h80q33 0 56.5 23.5T840-680v40q0 76-50.5 132.5T664-442q-18 46-56.5 76.5T520-324v124h160v80H280Zm0-408v-152h-80v40q0 38 22 68.5t58 43.5Zm200 128q50 0 85-35t35-85v-240H360v240q0 50 35 85t85 35Zm200-128q36-13 58-43.5t22-68.5v-40h-80v152Zm-200-52Z"
-				/></svg
-			>
-		</Button> -->
-
-		<Button on:click={() => (show_info = true)}>?</Button>
+		<button
+			on:click={() => (show_info = true)}
+			class="c-shadow flex items-center gap-2 rounded-sm bg-gray-700 px-4 py-1 text-sm shadow-cyan-400 transition-transform hover:-translate-x-1 hover:-translate-y-1 active:scale-90 sm:text-base md:text-2xl lg:text-3xl"
+		>
+			?
+		</button>
 	</div>
 
 	<button

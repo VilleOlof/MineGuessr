@@ -5,6 +5,7 @@ export type Config = {
     panoramas: location_metadata[];
     visibility: Visibility;
     game_creator: string;
+    game_name: string;
 };
 
 export const Visibility = {
@@ -86,13 +87,15 @@ export type WebsocketRequest = {
 export type Lobby = {
     players: PlayerLobbyData[]
     game_id: string
+    game_name: string
 };
 
 // TODO: Make these into schemas and validate?
 export module Payloads {
     export type CreateGame = {
         panoramas: location_metadata[],
-        visibility: Visibility
+        visibility: Visibility,
+        game_name: string;
     }
     export type JoinGame = {
         game_id: string
@@ -100,7 +103,8 @@ export module Payloads {
     export type JoinedGame = {
         game_id: string,
         players: PlayerLobbyData[],
-        visibility: Visibility
+        visibility: Visibility,
+        game_name: string
     }
     export type OtherPlayerJoined = {
         player_id: string,

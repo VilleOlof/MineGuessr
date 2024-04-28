@@ -36,7 +36,8 @@ export class MPClient {
             player_id: user_id,
             game_id: undefined,
             auth_session: auth,
-            visibility: "private"
+            visibility: "private",
+            game_name: ""
         };
 
         this.setup_message_handler();
@@ -111,9 +112,9 @@ export class MPClient {
         }
     }
 
-    public create_game(panoramas: location_metadata[], visibility: Visibility) {
+    public create_game(panoramas: location_metadata[], visibility: Visibility, game_name: string) {
         this.send_message(request_type.CREATE_GAME, {
-            panoramas, visibility
+            panoramas, visibility, game_name
         } as Payloads.CreateGame);
     }
 
@@ -174,6 +175,7 @@ export class MPClient {
             }
 
             this.metadata.visibility = payload.visibility;
+            this.metadata.game_name = payload.game_name;
             this.state.set("lobby");
 
             if (this.notifications_enabled) toast.success("Joined a game", MPClient.toast_options);
@@ -336,7 +338,8 @@ export module MPClient {
         player_id: string,
         game_id: string | undefined,
         auth_session: string,
-        visibility: Visibility
+        visibility: Visibility,
+        game_name: string,
     };
 
     export const MPClientEvent = {

@@ -37,7 +37,8 @@ export class MPGame {
     public config: Config = {
         panoramas: [],
         visibility: "private",
-        game_creator: "Unknown"
+        game_creator: "Unknown",
+        game_name: "Unknown"
     };
     public game_id: string;
 

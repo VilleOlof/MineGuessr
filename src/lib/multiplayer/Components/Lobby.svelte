@@ -44,7 +44,8 @@
 <Header />
 
 <div class="flex flex-col text-slate-300">
-	<h1 class="mb-4 text-3xl text-white">Multiplayer Lobby</h1>
+	<h1 class="text-3xl text-white">Multiplayer Lobby</h1>
+	<p class="mb-4 text-xl text-cyan-400/80">{client.metadata.game_name}</p>
 
 	<div class="flex items-center gap-2">
 		<p class="text-3xl">

@@ -13,7 +13,6 @@ export type Place = {
  */
 export function get_places(): Place[] {
     let file_content = readFileSync("src/lib/server/places.json", "utf-8");
-    console.log(file_content);
     try {
         let places_Raw: { [key: string]: [number, number] } = JSON.parse(file_content);
 

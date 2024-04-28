@@ -54,7 +54,8 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<WebSo
                     },
                     ready: false
                 }],
-                visibility: payload.visibility
+                visibility: payload.visibility,
+                game_name: payload.game_name,
             } as Payloads.JoinedGame
         }));
 
@@ -133,7 +134,8 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<WebSo
             payload: {
                 game_id: payload.game_id,
                 players,
-                visibility: game.config.visibility
+                visibility: game.config.visibility,
+                game_name: game.config.game_name
             } as Payloads.JoinedGame
         }));
 

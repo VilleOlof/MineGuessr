@@ -104,7 +104,8 @@ export module GameHandler {
                             ready: game.players[player_id].lobby_ready // Rename to ready from lobby_ready??
                         };
                     }),
-                    game_id
+                    game_id,
+                    game_name: game.config.game_name
                 });
             }
         }

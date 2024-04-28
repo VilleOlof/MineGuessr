@@ -13,6 +13,7 @@
 		Lobby,
 		Playing
 	} from '$lib/multiplayer/Components';
+	import { random_game_name } from '$lib/multiplayer/random_name';
 
 	export let data: PageData;
 	if (!data?.user || !data.auth || !data?.user?.userId) {
@@ -29,12 +30,16 @@
 		if (data.game_id) client.join_game(data.game_id);
 		else {
 			let visibility_param = new URLSearchParams(window.location.search).get('visibility');
+			let game_name_param = new URLSearchParams(window.location.search).get('game_name');
 
 			if (visibility_param === null) visibility_param = 'public';
 			if (visibility_param !== 'public' && visibility_param !== 'private')
 				visibility_param = 'public';
 
-			client.create_game(data.random_locations, visibility_param as Visibility);
+			if (game_name_param === null || game_name_param === undefined || game_name_param === '')
+				game_name_param = random_game_name();
+
+			client.create_game(data.random_locations, visibility_param as Visibility, game_name_param);
 		}
 
 		if (!client.client_debug) {
