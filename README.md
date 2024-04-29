@@ -15,7 +15,9 @@ This site should be pretty modular and easy to setup for other worlds, assuming 
 [X] - Move places dropdown to gitignored metadata file  
 [X] - Convert EVERYTHING to english  
 [X] - Rebrand site to non 90gq  
-[ ] - More and better documentation for setup etc, VitePress?  
+[ ] - Some more customizations options so the site isnt out of the box generic.  
+      - Custom tagline, site title, favicon, logo, colors, etc.?  
+[X] - More and better documentation for setup etc, VitePress?  
 [ ] - Setup on alternative test domains and test with friends  
 
 ## TODO
@@ -54,7 +56,6 @@ node -r dotenv/config build
 ```sh
 DATABASE_URL = "file:./db.sqlite" # Local sqlite db
 PUBLIC_MAP_URL = "http://127.0.0.1:40401" # Url to Map Proxy
-ORIGIN = "http://localhost:5173" # Self
 PUBLIC_ORIGIN = "http://localhost:5173" # Self
 PORT = 40400 # Just for production
 

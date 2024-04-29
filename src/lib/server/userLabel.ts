@@ -2,12 +2,18 @@ import { readFileSync } from "fs";
 import { logger } from "./logger";
 
 export function load_labels_in_server() {
-    const file_content = readFileSync('src/lib/server/userLabel.json', 'utf-8');
-    const labels: { [key: string]: string } = JSON.parse(file_content);
+    try {
+        const file_content = readFileSync('src/lib/server/userLabel.json', 'utf-8');
+        const labels: { [key: string]: string } = JSON.parse(file_content);
 
-    logger.info(`Labels loaded in server: ${Object.keys(labels).length}`);
+        logger.info(`Labels loaded in server: ${Object.keys(labels).length}`);
 
-    return labels ?? {};
+        return labels ?? {};
+    }
+    catch (e) {
+        console.error(e);
+        return {};
+    }
 }
 
 export module UserLabel {
