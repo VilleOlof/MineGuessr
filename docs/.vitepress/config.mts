@@ -16,7 +16,8 @@ export default defineConfig({
         text: 'Introduction',
         items: [
           { text: 'Setup Guide', link: '/guide/' },
-          { text: 'Admin Panel', link: '/guide/panel' }
+          { text: 'Admin Panel', link: '/guide/panel' },
+          { text: 'Development', link: '/guide/dev' }
         ]
       }
     ],

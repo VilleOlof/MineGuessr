@@ -34,7 +34,14 @@
 
 <p>
 	Suggest an idea! <br />
-	Kan be everything from places, improvements, bugs, etc.
+	Like a new location, or if you want to report someone. <br />
+	<br />
+	<b>Important</b> <br />
+	Make a
+	<a
+		class="underline transition-colors hover:text-cyan-400"
+		href="https://github.com/VilleOlof/90gqguessr/issues">Github</a
+	> issue if you want to suggest a feature or report a bug,
 </p>
 
 <textarea
