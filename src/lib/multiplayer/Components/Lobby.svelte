@@ -45,7 +45,11 @@
 
 <div class="flex flex-col text-slate-300">
 	<h1 class="text-3xl text-white">Multiplayer Lobby</h1>
-	<p class="mb-4 text-xl text-cyan-400/80">{client.metadata.game_name}</p>
+
+	<div class="mb-4 flex items-center gap-4">
+		<p class=" text-xl text-cyan-400/80">{client.metadata.game_name}</p>
+		<p>{Object.keys($players).length} / {client.metadata.player_limit}</p>
+	</div>
 
 	<div class="flex items-center gap-2">
 		<p class="text-3xl">
@@ -111,7 +115,7 @@
 
 	<div class="my-4 h-1 w-full rounded-md bg-slate-700"></div>
 
-	<p class="text-4xl">Players</p>
+	<p class="mb-2 text-4xl">Players</p>
 	<ul class="bg-slate-600 px-2 py-1">
 		{#each Object.entries($players) as [_, data], i}
 			<li class="flex items-center justify-between text-xl text-white">

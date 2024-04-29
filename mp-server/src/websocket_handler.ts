@@ -37,6 +37,7 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<WebSo
         const payload = _payload as Payloads.CreateGame;
 
         const new_game_id = GameHandler.create_game(player_id, payload);
+        const game = GameHandler.games[new_game_id];
 
         const user_data = get_user(player_id);
         if (!user_data) throw new Error(`User ${player_id} does not exist`);
@@ -55,7 +56,8 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<WebSo
                     ready: false
                 }],
                 visibility: payload.visibility,
-                game_name: payload.game_name,
+                game_name: game.config.game_name,
+                player_limit: payload.player_limit
             } as Payloads.JoinedGame
         }));
 
@@ -135,7 +137,8 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<WebSo
                 game_id: payload.game_id,
                 players,
                 visibility: game.config.visibility,
-                game_name: game.config.game_name
+                game_name: game.config.game_name,
+                player_limit: game.config.player_limit
             } as Payloads.JoinedGame
         }));
 

@@ -37,7 +37,8 @@ export class MPClient {
             game_id: undefined,
             auth_session: auth,
             visibility: "private",
-            game_name: ""
+            game_name: "",
+            player_limit: 0
         };
 
         this.setup_message_handler();
@@ -112,9 +113,9 @@ export class MPClient {
         }
     }
 
-    public create_game(panoramas: location_metadata[], visibility: Visibility, game_name: string) {
+    public create_game(panoramas: location_metadata[], visibility: Visibility, player_limit: number, game_name?: string) {
         this.send_message(request_type.CREATE_GAME, {
-            panoramas, visibility, game_name
+            panoramas, visibility, game_name, player_limit
         } as Payloads.CreateGame);
     }
 
@@ -176,6 +177,7 @@ export class MPClient {
 
             this.metadata.visibility = payload.visibility;
             this.metadata.game_name = payload.game_name;
+            this.metadata.player_limit = payload.player_limit;
             this.state.set("lobby");
 
             if (this.notifications_enabled) toast.success("Joined a game", MPClient.toast_options);
@@ -340,6 +342,7 @@ export module MPClient {
         auth_session: string,
         visibility: Visibility,
         game_name: string,
+        player_limit: number
     };
 
     export const MPClientEvent = {
@@ -355,7 +358,12 @@ export module MPClient {
     export async function get_lobbies(): Promise<Lobby[]> {
         try {
             const response = await fetch(SERVER_URL + "/lobby");
-            if (!response.ok) {
+            if (response.status === 204) {
+                // No lobbies
+                return [];
+            }
+
+            if (response.status !== 200) {
                 console.error("Failed to get lobbies");
                 return [];
             }

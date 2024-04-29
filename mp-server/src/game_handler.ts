@@ -1,6 +1,7 @@
 import { MPGame } from "./mp-game";
 import { Lobby, Payloads, Visibility, request_type } from "../../shared/MP";
 import { z } from "zod";
+import { random_game_name } from "./random_game_name";
 
 export module GameHandler {
     export let games: { [game_id: string]: MPGame } = {};
@@ -46,6 +47,14 @@ export module GameHandler {
 
         let game = new MPGame(payload.panoramas);
         game.config.visibility = payload.visibility;
+
+        if (payload.game_name) game.config.game_name = payload.game_name;
+        else game.config.game_name = random_game_name();
+
+        if (payload.player_limit < MPGame.MIN_PLAYERS) {
+            throw new Error("Player limit is too low");
+        }
+        game.config.player_limit = payload.player_limit ?? MPGame.MIN_PLAYERS;
 
         game.add_player(player);
         game.set_game_creator(player);
@@ -105,7 +114,8 @@ export module GameHandler {
                         };
                     }),
                     game_id,
-                    game_name: game.config.game_name
+                    game_name: game.config.game_name,
+                    player_limit: game.config.player_limit
                 });
             }
         }

@@ -13,7 +13,6 @@
 		Lobby,
 		Playing
 	} from '$lib/multiplayer/Components';
-	import { random_game_name } from '$lib/multiplayer/random_name';
 
 	export let data: PageData;
 	if (!data?.user || !data.auth || !data?.user?.userId) {
@@ -31,20 +30,33 @@
 		else {
 			let visibility_param = new URLSearchParams(window.location.search).get('visibility');
 			let game_name_param = new URLSearchParams(window.location.search).get('game_name');
+			let player_limit_param = new URLSearchParams(window.location.search).get('player_limit');
 
 			if (visibility_param === null) visibility_param = 'public';
 			if (visibility_param !== 'public' && visibility_param !== 'private')
 				visibility_param = 'public';
 
-			if (game_name_param === null || game_name_param === undefined || game_name_param === '')
-				game_name_param = random_game_name();
+			if (
+				player_limit_param === null ||
+				player_limit_param === undefined ||
+				player_limit_param === ''
+			)
+				player_limit_param = '2';
+			let player_limit = parseInt(player_limit_param);
 
-			client.create_game(data.random_locations, visibility_param as Visibility, game_name_param);
+			client.create_game(
+				data.random_locations,
+				visibility_param as Visibility,
+				player_limit,
+				game_name_param ?? undefined
+			);
 		}
 
 		if (!client.client_debug) {
 			let url = new URL(window.location.href);
 			url.searchParams.delete('visibility');
+			url.searchParams.delete('game_name');
+			url.searchParams.delete('player_limit');
 			url.searchParams.delete('game_id');
 			window.history.replaceState({}, '', url.toString());
 		}

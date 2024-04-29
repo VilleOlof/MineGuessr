@@ -165,7 +165,7 @@ rl.on('line', async (input) => {
                         { id: 5, coordinates: [2, 1] },
                     ],
                     visibility: "public",
-                    game_name: "Test game"
+                    game_name: undefined,
                 } as Payloads.CreateGame
             )
 

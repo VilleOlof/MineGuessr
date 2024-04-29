@@ -11,7 +11,7 @@ This site should be pretty modular and easy to setup for other worlds, assuming 
 [X] - Multiplayer Finish State  
 [X] - Multiplayer Error State  
 [X] - Multiplayer Aborted State  
-[ ] - Multiplayer Homepage  
+[X] - Multiplayer Homepage  
 [X] - Move places dropdown to gitignored metadata file  
 [X] - Convert EVERYTHING to english  
 [X] - Rebrand site to non 90gq  

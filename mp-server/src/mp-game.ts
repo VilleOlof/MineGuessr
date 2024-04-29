@@ -9,7 +9,7 @@ import { get_user } from "./auth";
 // TODO: Send stats to db
 // TODO: Calculate and keep track of time each user spent on each round
 export class MPGame {
-    private static PLAYER_LIMIT: number = 2;
+    public static MIN_PLAYERS: number = 2;
     private static IDLE_TIMEOUT: number = 1000 * 60 * 5;
 
     public static get_event_name(event: string, game_id: string) {
@@ -38,7 +38,8 @@ export class MPGame {
         panoramas: [],
         visibility: "private",
         game_creator: "Unknown",
-        game_name: "Unknown"
+        game_name: "Unknown",
+        player_limit: MPGame.MIN_PLAYERS
     };
     public game_id: string;
 
@@ -93,7 +94,7 @@ export class MPGame {
     }
 
     public add_player(player: string) {
-        if (Object.keys(this.players).length >= MPGame.PLAYER_LIMIT) {
+        if (Object.keys(this.players).length >= this.config.player_limit) {
             throw new Error("Game is full");
         }
 
@@ -145,7 +146,10 @@ export class MPGame {
             this.state = "aborted";
             console.log(`Game ${this.game_id} has no players left`);
         }
-        if (this.state !== "lobby" && players_left < MPGame.PLAYER_LIMIT) {
+
+        // Only abort if the player count is less than the minimum required
+        // But there can be people who leave and the game still goes on
+        if (this.state !== "lobby" && players_left < MPGame.MIN_PLAYERS) {
             this.state = "aborted";
             console.log(`Game ${this.game_id} has too few players`);
         }
@@ -164,7 +168,7 @@ export class MPGame {
             }
         }
 
-        if (players_ready === MPGame.PLAYER_LIMIT) {
+        if (players_ready === this.config.player_limit) {
             return true;
         }
 
