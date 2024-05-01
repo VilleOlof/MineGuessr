@@ -84,21 +84,6 @@ bun install
 
 :::
 
-Then we'll setup the database:
-::: code-group
-
-```bash [NodeJS]
-npx prisma db push
-```
-
-```bash [Bun]
-bunx prisma db push
-```
-> [!NOTE]
-> This is a locally ran SQLite Database
-
-:::
-
 The website then also needs 2 configuration files:
 - `.env` for the environment variables
 - `src/lib/server/loc_metadata.json` for the locations metadata
@@ -166,6 +151,21 @@ Add entries to this file to add more locations to the website.
 > [!CAUTION]
 > This file alone isn't enough to add a location to the website.  
 > We'll talk more about adding locations in the next section.
+
+Then we'll setup the database:
+::: code-group
+
+```bash [NodeJS]
+npx prisma db push
+```
+
+```bash [Bun]
+bunx prisma db push
+```
+> [!NOTE]
+> This is a locally ran SQLite Database
+
+:::
 
 ### **Building and Running**
 
