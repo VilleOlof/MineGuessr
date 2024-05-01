@@ -111,6 +111,10 @@ PUBLIC_ORIGIN = "http://localhost:5173"
 # Port the website will run on in production
 PORT = 40400 
 
+# Multiplayer stuff, required fields
+PUBLIC_MP_URl = "localhost:40402" # Without http(s)://
+PUBLIC_MP_DEV = false
+
 # Discord OAuth2
 DISCORD_CLIENT_ID = ""
 DISCORD_CLIENT_SECRET = ""

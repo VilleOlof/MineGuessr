@@ -352,8 +352,8 @@ export module MPClient {
     } as const;
     export type MPClientEvent = typeof MPClientEvent[keyof typeof MPClientEvent];
 
-    export const SERVER_URL = `http${PUBLIC_MP_DEV ? '' : 's'}://${PUBLIC_MP_URL}`;
-    export const WS_URL = `ws${PUBLIC_MP_DEV ? '' : 's'}://${PUBLIC_MP_URL}`;
+    export const SERVER_URL = `http${PUBLIC_MP_DEV === "true" ? '' : 's'}://${PUBLIC_MP_URL}`;
+    export const WS_URL = `ws${PUBLIC_MP_DEV === "true" ? '' : 's'}://${PUBLIC_MP_URL}`;
 
     export async function get_lobbies(): Promise<Lobby[]> {
         try {
