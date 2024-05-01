@@ -27,3 +27,5 @@ You can find documentation for the project [here](https://docs.90gqguessr.se).
 [ ] - Some more customizations options so the site isnt out of the box generic.  
       - Custom tagline, site title, favicon, logo, colors, etc.?  
 [ ] - Setup on alternative test domains and test with friends  
+[ ] - Display error message if not logged in when going into mp screen
+      - Some message telling you to log in and maybe even a button for it.

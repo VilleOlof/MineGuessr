@@ -230,7 +230,7 @@ The server needs a `.env` file with the following content:
 PORT = 40402 # Port the server will run on
 
 # This should point to the same database as the website
-DATABASE_URL = "../prisma/db.sqlite"
+DB = "../prisma/db.sqlite"
 
 # Development, optional
 DEV = false # If the server is in development mode
