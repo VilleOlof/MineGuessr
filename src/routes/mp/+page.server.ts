@@ -1,7 +1,12 @@
 import { MPClient } from "$lib/multiplayer/Client";
 import { error, type NumericRange } from "@sveltejs/kit";
 
-export async function load() {
+export async function load({ locals }) {
+    const session = await locals.auth.validate();
+    if (!session) {
+        return error(403, "You must be logged in to view this page");
+    }
+
     try {
         const res = await fetch(MPClient.SERVER_URL);
         if (res.status !== 200) {

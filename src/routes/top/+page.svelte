@@ -113,11 +113,9 @@
 
 		<div class="relative overflow-x-auto">
 			<table
-				class="w-full text-left text-sm text-gray-300 sm:text-base md:text-lg lg:text-xl rtl:text-right dark:text-gray-300"
+				class="w-full text-left text-sm text-gray-300 sm:text-base md:text-lg lg:text-xl rtl:text-right"
 			>
-				<thead
-					class="bg-gray-50 text-sm uppercase text-gray-800 md:text-base dark:bg-gray-700 dark:text-gray-400"
-				>
+				<thead class=" bg-gray-700 text-sm uppercase text-gray-400 md:text-base">
 					<tr>
 						<th scope="col" class="px-3 py-1 md:px-6 md:py-3"></th>
 						<th scope="col" class="px-3 py-1 md:px-6 md:py-3"> Time </th>
@@ -130,12 +128,9 @@
 					{#each $lb_data as game, i}
 						<tr
 							on:click={() => (window.location.href = `/game/${game.game_id}`)}
-							class="cursor-pointer border-b bg-white transition-colors hover:bg-gray-600 dark:border-gray-700 dark:bg-gray-800"
+							class="cursor-pointer border-b border-gray-700 bg-gray-800 transition-colors hover:bg-gray-600"
 						>
-							<th
-								scope="row"
-								class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
-							>
+							<th scope="row" class="whitespace-nowrap px-6 py-4 font-medium text-white">
 								{i + 1 + 10 * (($page ?? 1) - 1)}
 							</th>
 							<td class="px-3 py-2 md:px-6 md:py-4"> {format_time(game.total_time / 1000)} </td>

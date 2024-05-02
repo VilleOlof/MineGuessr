@@ -54,6 +54,10 @@ export module GameHandler {
         if (payload.player_limit < MPGame.MIN_PLAYERS) {
             throw new Error("Player limit is too low");
         }
+        if (payload.player_limit > MPGame.MAX_PLAYERS) {
+            throw new Error("Player limit is too high");
+        }
+
         game.config.player_limit = payload.player_limit ?? MPGame.MIN_PLAYERS;
 
         game.add_player(player);
@@ -104,7 +108,7 @@ export module GameHandler {
         for (let game_id in games) {
             const game = games[game_id];
 
-            if (game.config.visibility === Visibility.PUBLIC) {
+            if (game.config.visibility === Visibility.PUBLIC && game.state === "lobby") {
                 lobbies.push({
                     players: Object.keys(game.players).map(player_id => {
                         return {

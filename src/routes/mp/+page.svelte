@@ -21,12 +21,9 @@
 
 	onMount(() => {
 		// Fetch lobbies every minute
-		interval = setInterval(
-			async () => {
-				data.lobbies = await MPClient.get_lobbies();
-			},
-			1 * 60 * 1000
-		);
+		interval = setInterval(async () => {
+			data.lobbies = await MPClient.get_lobbies();
+		}, 10 * 1000);
 	});
 
 	onDestroy(() => {
@@ -67,7 +64,13 @@
 
 					<div class="flex flex-col">
 						<p>Player limit</p>
-						<input class="h-full w-32 bg-gray-700 px-2" type="number" bind:value={player_limit} />
+						<input
+							class="h-full w-32 bg-gray-700 px-2"
+							type="number"
+							min="2"
+							max="25"
+							bind:value={player_limit}
+						/>
 					</div>
 				</span>
 			</div>

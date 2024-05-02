@@ -59,7 +59,17 @@
 			Daily
 		</button>
 		<button
-			on:click={() => (location.href = '/mp')}
+			on:click={() => {
+				if (data.user) {
+					location.href = '/mp';
+				} else {
+					toast.error('You need to be logged in to play multiplayer!', {
+						duration: 5000,
+						style: toast_style
+					});
+				}
+			}}
+			class:mp-disabled={!data.user}
 			class="c-shadow flex items-center gap-2 rounded-sm bg-gray-700 px-4 py-1 text-sm shadow-cyan-400 transition-transform hover:-translate-x-1 hover:-translate-y-1 active:scale-90 sm:text-base md:text-2xl lg:text-3xl"
 		>
 			Multiplayer
@@ -187,3 +197,9 @@
 		>
 	{/if}
 </div>
+
+<style>
+	:global(.mp-disabled) {
+		opacity: 0.5;
+	}
+</style>

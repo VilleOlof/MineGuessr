@@ -59,7 +59,8 @@ export const request_type = {
     ROUND_TIMELIMIT: 15,
     GOTO_NEXT_ROUND_TIMELIMIT: 16,
     LEAVE_GAME: 17,
-    OTHER_PLAYER_LEFT: 18
+    OTHER_PLAYER_LEFT: 18,
+    OTHER_PLAYER_NEXT_ROUND: 19
 } as const;
 export type request_type = typeof request_type[keyof typeof request_type];
 
@@ -154,6 +155,9 @@ export module Payloads {
     export type OtherPlayerLeft = {
         player_id: string
     }
+    export type OtherPlayerNextRound = {
+        player_id: string
+    }
 
-    export type Any = CreateGame | JoinGame | JoinedGame | OtherPlayerJoined | ChangeReadyStatus | OtherPlayerReady | NextRound | GuessLocation | OtherPlayerGuessed | RoundEnded | GotoNextRound | GameFinished | Aborted | Error | RoundTimelimit | GotoNextRoundTimelimit | LeaveGame | OtherPlayerLeft;
+    export type Any = CreateGame | JoinGame | JoinedGame | OtherPlayerJoined | ChangeReadyStatus | OtherPlayerReady | NextRound | GuessLocation | OtherPlayerGuessed | RoundEnded | GotoNextRound | GameFinished | Aborted | Error | RoundTimelimit | GotoNextRoundTimelimit | LeaveGame | OtherPlayerLeft | OtherPlayerNextRound;
 }

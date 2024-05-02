@@ -3,6 +3,10 @@
 
 	export let client: MPClient;
 	let reason = client.error_abort_reason;
+
+	// Disconnect the client
+	// to not be left in any weird state
+	client.disconnect();
 </script>
 
 <div class=" flex flex-col items-center gap-4 text-5xl">

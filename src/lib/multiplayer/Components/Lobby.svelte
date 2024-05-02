@@ -4,17 +4,28 @@
 	import toast from 'svelte-french-toast';
 	import { GetDiscordAvatarUrl, toast_style } from '$lib';
 	import { get } from 'svelte/store';
+	import { PUBLIC_ORIGIN } from '$env/static/public';
 
 	export let client: MPClient;
 	const players = client.players;
 
 	let code_visible = client.metadata.visibility === 'public';
 
+	function copy_link() {
+		if (!client.metadata.game_id) return;
+		navigator.clipboard.writeText(`${PUBLIC_ORIGIN}/mp/play/?game_id=${client.metadata.game_id}`);
+
+		toast.success('Copied game link!', {
+			style: toast_style,
+			duration: 2000
+		});
+	}
+
 	function copy_code() {
 		if (!client.metadata.game_id) return;
 		navigator.clipboard.writeText(client.metadata.game_id);
 
-		toast.success('Kopierade spelkoden!', {
+		toast.success('Copied game code!', {
 			style: toast_style,
 			duration: 2000
 		});
@@ -53,8 +64,12 @@
 
 	<div class="flex items-center gap-2">
 		<p class="text-3xl">
-			Game code: <span
-				class="rounded-md px-1 text-white transition-all"
+			<!-- svelte-ignore a11y-no-static-element-interactions -->
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
+			Game code:
+			<span
+				on:click={copy_code}
+				class="cursor-pointer rounded-md px-1 text-white transition-all hover:text-slate-300"
 				class:hide_mp_lobby_code={!code_visible}
 				>{client.metadata.game_id ?? 'Loading game code...'}</span
 			>
@@ -92,7 +107,7 @@
 			{/if}
 		</button>
 
-		<button on:click={copy_code} title="Copy code">
+		<button on:click={copy_link} title="Copy code">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				height="24"
@@ -101,7 +116,7 @@
 				fill="currentColor"
 				class="h-8 w-8 hover:scale-95 hover:text-yellow-400 active:scale-105 active:text-yellow-300"
 				><path
-					d="M360-240q-33 0-56.5-23.5T280-320v-480q0-33 23.5-56.5T360-880h360q33 0 56.5 23.5T800-800v480q0 33-23.5 56.5T720-240H360Zm0-80h360v-480H360v480ZM200-80q-33 0-56.5-23.5T120-160v-560h80v560h440v80H200Zm160-240v-480 480Z"
+					d="M440-280H280q-83 0-141.5-58.5T80-480q0-83 58.5-141.5T280-680h160v80H280q-50 0-85 35t-35 85q0 50 35 85t85 35h160v80ZM320-440v-80h320v80H320Zm200 160v-80h160q50 0 85-35t35-85q0-50-35-85t-85-35H520v-80h160q83 0 141.5 58.5T880-480q0 83-58.5 141.5T680-280H520Z"
 				/></svg
 			>
 		</button>
@@ -169,13 +184,13 @@
 			on:click={() => client.fancy_leave_game()}
 			title="Leave game"
 			class="w-1/2 bg-slate-600 transition-all hover:scale-95 hover:bg-slate-500 active:scale-105"
-			>Lämna</button
+			>Leave</button
 		>
 		<button
 			on:click={ready}
 			title="Change ready status"
 			class="w-1/2 bg-slate-600 transition-all hover:scale-95 hover:bg-slate-500 active:scale-105"
-			>Redo</button
+			>Ready</button
 		>
 	</div>
 </div>

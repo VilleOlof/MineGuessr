@@ -191,7 +191,7 @@
 					<div class="flex items-center gap-2">
 						<button
 							on:click={async (ev) => await ResizeMap(ev)}
-							title={enlarge_map ? 'Förminska kartan' : 'Förstora kartan'}
+							title={enlarge_map ? 'Minimize map' : 'Enlarge map'}
 							class="pointer-events-auto h-full bg-black/70 p-1 transition-transform hover:scale-105 active:scale-95"
 						>
 							<svg

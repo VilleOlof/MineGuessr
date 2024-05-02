@@ -95,6 +95,10 @@ socket.onmessage = (event) => {
             console.log(`Player left: ${data.payload.player_id}`);
             break;
         }
+        case 19: {
+            console.log(`Player pressed next round: ${data.payload.player_id}`);
+            break;
+        }
         default: {
             console.log(`Unhandled message: ${data.type}`)
         }

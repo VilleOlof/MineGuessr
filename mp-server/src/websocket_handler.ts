@@ -29,7 +29,6 @@ function ws_next_round(game: MPGame, server: Server) {
 
 function ws_log(game_id: string, player_id: string, msg: string) {
     console.log(`[${game_id}, ${player_id}] ${msg}`);
-
 }
 
 export const message_handlers = new Map<request_type, (ws: ServerWebSocket<WebSocketData>, server: Server, message: WebsocketRequest) => void>([
@@ -194,7 +193,7 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<WebSo
         ws_log(game_id, player_id, `guessed at ${payload.location.x}, ${payload.location.y}`);
 
         // Give a time limit if one player has guessed
-        if (!game.guess_timeout) {
+        if (game.guess_timeout === null) {
             game.guess_timeout = setTimeout(() => {
                 const game_data = JSON.stringify({
                     type: request_type.ROUND_ENDED,
@@ -205,6 +204,8 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<WebSo
                 game.state = "intermission";
 
                 server.publish(game_label, game_data);
+
+                game.guess_timeout = null;
             }, MPGame.guess_timeout);
 
             server.publish(game_label, JSON.stringify({
@@ -213,7 +214,10 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<WebSo
             }));
         }
 
-        if (game.inbetween_round_timeout) clearTimeout(game.inbetween_round_timeout);
+        if (game.inbetween_round_timeout !== null) {
+            clearTimeout(game.inbetween_round_timeout);
+            game.inbetween_round_timeout = null;
+        }
 
         if (game.all_players_guessed()) {
             ws_log(game_id, player_id, "all players guessed");
@@ -259,9 +263,21 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<WebSo
         if (!game) throw new Error(`Game ${game_id} does not exist`);
         game.ready_for_next_round(player_id);
 
+        server.publish(get_game_label(game_id), JSON.stringify({
+            type: request_type.OTHER_PLAYER_NEXT_ROUND,
+            payload: { player_id } as Payloads.OtherPlayerNextRound
+        }));
+
         ws_log(game_id, player_id, "ready for next round");
 
         if (!game.all_players_ready_for_next_round()) return;
+
+        // Clear guess timeout if all players go to next round
+        if (game.guess_timeout) {
+            clearTimeout(game.guess_timeout);
+            game.guess_timeout = null;
+        }
+
         ws_next_round(game, server);
     }],
     [request_type.PING, (ws, server) => {

@@ -24,6 +24,7 @@ export class MPClient {
     public self_next_round_ready: Writable<boolean> = writable(false);
     public current_timelimit: Writable<number | undefined> = writable(undefined);
     public error_abort_reason: Writable<string | undefined> = writable(undefined);
+    public players_next_round: Writable<{ [key: string]: boolean }> = writable({});
     // ###
 
     constructor(user_id: string, auth: string) {
@@ -60,6 +61,10 @@ export class MPClient {
         }
 
         return client;
+    }
+
+    public disconnect() {
+        this.ws.close();
     }
 
     private send_message(type: request_type, payload: Payloads.Any) {
@@ -230,6 +235,7 @@ export class MPClient {
             this.round_index.set(payload.round_index);
             this.current_panorama.set(payload.panorama_id);
             this.self_next_round_ready.set(false);
+            this.players_next_round.set({});
 
             this.state.set("playing");
 
@@ -318,6 +324,16 @@ export class MPClient {
 
             this.players.update((players) => {
                 delete players[payload.player_id];
+
+                return players;
+            });
+        }],
+        [request_type.OTHER_PLAYER_NEXT_ROUND, (_payload) => {
+            const payload = _payload as Payloads.OtherPlayerNextRound;
+
+            // if (this.notifications_enabled) toast.success(`@${payload.player_id} is ready for the next round`, MPClient.toast_options);
+            this.players_next_round.update((players) => {
+                players[payload.player_id] = true;
 
                 return players;
             });

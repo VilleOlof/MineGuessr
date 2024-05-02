@@ -29,3 +29,6 @@ You can find documentation for the project [here](https://docs.90gqguessr.se).
 [ ] - Setup on alternative test domains and test with friends  
 [ ] - Display error message if not logged in when going into mp screen
       - Some message telling you to log in and maybe even a button for it.
+[ ] - MP Lobby invite link
+[ ] - MP Homepage Mobile support
+[ ] - Show if other person in MP has clicked "next round"  

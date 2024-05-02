@@ -4,6 +4,7 @@
 
 	export let players: { [key: string]: PlayerData };
 	export let client_player_id: string;
+	export let next_round_checks: { [key: string]: boolean };
 </script>
 
 <div
@@ -18,7 +19,8 @@
 			/>
 			<span
 				class="hidden max-w-24 overflow-hidden text-ellipsis whitespace-nowrap text-slate-300 sm:block md:max-w-48 lg:max-w-72 xl:max-w-96"
-				class:user_green={id === client_player_id}>@{data.discord.username}</span
+				class:user_green={id === client_player_id}
+				class:user_next={next_round_checks[id]}>@{data.discord.username}</span
 			>
 		</span>
 	{/each}
@@ -27,5 +29,9 @@
 <style>
 	:global(.user_green) {
 		color: #6be77c;
+	}
+
+	:global(.user_next) {
+		color: #f6e05e;
 	}
 </style>

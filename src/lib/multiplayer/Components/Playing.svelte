@@ -20,6 +20,7 @@
 	const self_guessed = client.self_guessed;
 	const self_next_round = client.self_next_round_ready;
 	const timelimit = client.current_timelimit;
+	const players_next_round = client.players_next_round;
 
 	let markers_to_clear: string[] = [];
 
@@ -140,7 +141,11 @@
 	{client.metadata.game_id}
 </p>
 
-<PlayerList players={$players} client_player_id={client.metadata.player_id} />
+<PlayerList
+	players={$players}
+	client_player_id={client.metadata.player_id}
+	next_round_checks={$players_next_round}
+/>
 
 {#if $timelimit !== undefined && !$self_guessed && $state === 'playing'}
 	<div class="mp_danger pointer-events-none absolute z-20 h-screen w-screen animate-pulse"></div>

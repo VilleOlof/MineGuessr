@@ -10,6 +10,7 @@ import { get_user } from "./auth";
 // TODO: Calculate and keep track of time each user spent on each round
 export class MPGame {
     public static MIN_PLAYERS: number = 2;
+    public static MAX_PLAYERS: number = 25;
     private static IDLE_TIMEOUT: number = 1000 * 60 * 5;
 
     public static get_event_name(event: string, game_id: string) {
@@ -215,11 +216,11 @@ export class MPGame {
             throw new Error("No more rounds left");
         }
 
-        if (this.guess_timeout) {
+        if (this.guess_timeout !== null) {
             clearTimeout(this.guess_timeout);
             this.guess_timeout = null;
         }
-        if (this.inbetween_round_timeout) {
+        if (this.inbetween_round_timeout !== null) {
             clearTimeout(this.inbetween_round_timeout);
             this.inbetween_round_timeout = null;
         }
