@@ -31,24 +31,24 @@
 	});
 </script>
 
-<div class="flex h-full w-full gap-4 p-4">
+<div class="flex h-full w-full flex-col p-4 lg:flex-row lg:gap-4">
 	<div class="left flex w-full flex-col items-end gap-4">
 		<div class="info flex h-1/3 w-full flex-col items-center justify-center gap-4 p-4">
 			<span class="flex gap-4">
 				<!-- Would look nice with some custom icon or something for MP-->
 				<!-- <img src="/Earth.webp" alt="Minecraft Earth" class="h-24 w-24" /> -->
-				<h1 class="text-8xl">Multiplayer</h1>
+				<h1 class="text-5xl lg:text-8xl">Multiplayer</h1>
 			</span>
 
-			<p class="text-2xl text-gray-200">
+			<p class="text-center text-xl text-gray-300/80 lg:text-left">
 				Compete against other players<br />
 				to see who can guess the closest, the fastest!
 			</p>
 		</div>
 		<div class="info flex h-2/3 w-full flex-col items-center justify-center gap-4">
-			<h2 class="text-5xl">Create a new lobby</h2>
+			<h2 class="text-3xl lg:text-5xl">Create a new lobby</h2>
 
-			<div class="inputs flex flex-col gap-4 text-3xl">
+			<div class="inputs flex flex-col gap-4 text-xl lg:text-3xl">
 				<span class="flex flex-col">
 					<p>Lobby name (?)</p>
 					<input class="bg-gray-700 px-2" type="text" placeholder="..." bind:value={game_name} />
@@ -77,18 +77,18 @@
 
 			<button
 				on:click={create_game}
-				class="c-shadow flex items-center gap-2 rounded-sm bg-gray-700 px-4 py-1 text-5xl shadow-cyan-400 transition-transform hover:-translate-x-1 hover:-translate-y-1 active:scale-90"
+				class="c-shadow flex items-center gap-2 rounded-sm bg-gray-700 px-4 py-1 text-3xl shadow-cyan-400 transition-transform hover:-translate-x-1 hover:-translate-y-1 active:scale-90 lg:text-5xl"
 			>
 				Create
 			</button>
 		</div>
 	</div>
 
-	<div class="right flex w-full flex-col items-center justify-center py-4">
-		<h2 class="text-5xl">Join with code</h2>
+	<div class="right flex w-full flex-grow flex-col items-center justify-center lg:py-4">
+		<h2 class="text-2xl lg:text-5xl">Join with code</h2>
 		<div class="flex gap-4">
 			<input
-				class="bg-gray-700 px-2 text-xl"
+				class="bg-gray-700 px-2 lg:text-xl"
 				type="text"
 				placeholder="code..."
 				bind:value={game_code}
@@ -109,9 +109,9 @@
 
 		<div class="my-6 h-1 w-1/2 rounded-lg bg-slate-50/10"></div>
 
-		<h2 class="my-4 text-5xl">Find open lobbies</h2>
+		<h2 class="my-4 text-3xl lg:text-5xl">Find open lobbies</h2>
 		<div
-			class="lobbybody c-shadow flex h-2/4 w-2/3 flex-col gap-2 overflow-y-auto bg-gray-950/50 p-2 shadow-gray-950/70 drop-shadow-lg"
+			class="lobbybody c-shadow flex h-2/4 w-full flex-col gap-2 overflow-y-auto bg-gray-950/50 p-2 shadow-gray-950/70 drop-shadow-lg sm:w-3/4 md:w-1/2 lg:w-2/3"
 		>
 			{#each data.lobbies as lobby, i}
 				<!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -123,7 +123,7 @@
 					<span class="flex items-center gap-4">
 						<p class="text-gray-400">{lobby.game_id}</p>
 						<p class="text-lg text-gray-200">{lobby.players.length} / {lobby.player_limit}</p>
-						<p class="max-w-96 overflow-hidden text-ellipsis whitespace-nowrap text-3xl">
+						<p class="max-w-96 overflow-hidden text-ellipsis whitespace-nowrap lg:text-3xl">
 							{lobby.game_name}
 						</p>
 					</span>
