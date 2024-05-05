@@ -6,6 +6,7 @@ const config = {
 		extend: {
 			fontFamily: {
 				'Minecraft': ['Minecraft', 'sans-serif'],
+				'MinecraftTen': ['MinecraftTen', 'sans-serif'],
 			}
 		}
 	},
