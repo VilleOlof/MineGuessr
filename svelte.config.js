@@ -6,7 +6,7 @@ import delegateEvents from "svelte-preprocess-delegate-events/preprocess";
 const config = {
 	// Consult https://kit.svelte.dev/docs/integrations#preprocessors
 	// for more information about preprocessors
-	preprocess: [vitePreprocess({}), delegateEvents()],
+	preprocess: [delegateEvents(), vitePreprocess({})],
 
 	kit: {
 		// adapter-auto only supports some environments, see https://kit.svelte.dev/docs/adapter-auto for a list.

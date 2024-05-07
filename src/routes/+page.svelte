@@ -1,205 +1,102 @@
 <script lang="ts">
-	import MenuInstruction from '$lib/Components/MenuInstruction.svelte';
-	import Button from '$lib/Components/Button.svelte';
-	import PopupWrapper from '$lib/Components/PopupWrapper.svelte';
-	import Stats from '$lib/Components/Stats.svelte';
-	import Info from '$lib/Components/Info.svelte';
-	import Suggestion from '$lib/Components/Suggestion.svelte';
-	import toast from 'svelte-french-toast';
-	import { GetDiscordAvatarUrl, toast_style } from '$lib';
-	import type { LayoutData } from './$types';
-	import Header from '$lib/Components/Header.svelte';
-	import { PUBLIC_MAP_URL } from '$env/static/public';
+	import { GetDiscordAvatarUrl } from '$lib';
+	import Map from '$lib/Components/Map.svelte';
+	import Button from '$lib/UI Components/Button/Button.svelte';
+	import SmallButton from '$lib/UI Components/Button/SmallButton.svelte';
+	import type { PageData } from './$types';
+	import { PUBLIC_MAP_URL, PUBLIC_WORLD_NAME } from '$env/static/public';
+	import { goto } from '$app/navigation';
+	import MainButtons from '$lib/Components/Homepage/MainButtons.svelte';
+	import SmallButtons from '$lib/Components/Homepage/SmallButtons.svelte';
+	import Discord from '$lib/Components/Homepage/Discord.svelte';
 
-	export let data: LayoutData;
+	export let data: PageData;
 
-	let show_info = false;
-	let show_stats = false;
-	let show_suggestion = false;
-
-	let login_count: number = 0;
-	function increment_login() {
-		login_count++;
-		if (login_count >= 5) {
-			window.location.href = '/panel';
-		}
-
-		setTimeout(() => {
-			login_count--;
-		}, 1000);
-	}
+	let info_open: boolean = false;
+	let report_open: boolean = false;
 </script>
 
+<Map fullscreen={true} stop_interaction={true} places={[]} />
+
 <div
-	class="container flex w-full flex-col items-center justify-start gap-6 p-2 text-white sm:w-3/4 lg:w-2/4"
+	class="absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center gap-8 overflow-hidden backdrop-blur-sm xl:flex-row-reverse xl:items-start xl:justify-between xl:p-8"
 >
-	<Header />
-
-	<p class="text-lg md:text-2xl">Guess the location from Minecraft world</p>
-
-	<div class="instructions flex flex-col items-start justify-start gap-1">
-		<MenuInstruction text="You're gonna get a randomized location" />
-		<MenuInstruction text="Your goal is to use the map to guess right" />
-		<MenuInstruction text="The closer to location, the more points you get!" />
-		<MenuInstruction text="Exactly like the real GeoGuessr, but for Minecraft!" />
+	<div class="m-8 flex flex-col items-center gap-2 xl:items-end">
+		<img src="/logo.svg" alt="MineGuessr" class="w-11/12 drop-shadow-lg xl:w-full" />
+		{#if PUBLIC_WORLD_NAME !== ''}
+			<p class="rounded-md bg-mc-text-black/80 px-4 text-2xl drop-shadow-xl xl:text-4xl">
+				World: {PUBLIC_WORLD_NAME}
+			</p>
+		{/if}
 	</div>
-
-	<div class="buttons flex items-center justify-between gap-4">
-		<!-- Dont really wanna copy the Button component but these need better screen size adjusting specifically-->
-		<button
-			on:click={() => (location.href = '/play')}
-			class="c-shadow flex items-center gap-2 rounded-sm bg-gray-700 px-4 py-1 text-sm shadow-cyan-400 transition-transform hover:-translate-x-1 hover:-translate-y-1 active:scale-90 sm:text-base md:text-2xl lg:text-3xl"
-		>
-			Play
-		</button>
-		<button
-			on:click={() => (location.href = '/play?daily=true')}
-			class="c-shadow flex items-center gap-2 rounded-sm bg-gray-700 px-4 py-1 text-sm shadow-cyan-400 transition-transform hover:-translate-x-1 hover:-translate-y-1 active:scale-90 sm:text-base md:text-2xl lg:text-3xl"
-		>
-			Daily
-		</button>
-		<button
-			on:click={() => {
-				if (data.user) {
-					location.href = '/mp';
-				} else {
-					toast.error('You need to be logged in to play multiplayer!', {
-						duration: 5000,
-						style: toast_style
-					});
-				}
-			}}
-			class:mp-disabled={!data.user}
-			class="c-shadow flex items-center gap-2 rounded-sm bg-gray-700 px-4 py-1 text-sm shadow-cyan-400 transition-transform hover:-translate-x-1 hover:-translate-y-1 active:scale-90 sm:text-base md:text-2xl lg:text-3xl"
-		>
-			Multiplayer
-		</button>
-		<button
-			on:click={() => (location.href = '/top')}
-			class="c-shadow flex items-center gap-2 rounded-sm bg-gray-700 px-4 py-1 text-sm shadow-cyan-400 transition-transform hover:-translate-x-1 hover:-translate-y-1 active:scale-90 sm:text-base md:text-2xl lg:text-3xl"
-		>
-			Top
-		</button>
-
-		<button
-			on:click={() => (show_info = true)}
-			class="c-shadow flex items-center gap-2 rounded-sm bg-gray-700 px-4 py-1 text-sm shadow-cyan-400 transition-transform hover:-translate-x-1 hover:-translate-y-1 active:scale-90 sm:text-base md:text-2xl lg:text-3xl"
-		>
-			?
-		</button>
-	</div>
-
-	<button
-		class="text-xl text-gray-300 underline underline-offset-4 transition-colors hover:text-cyan-400"
-		on:click={() => (show_suggestion = !show_suggestion)}
-		>Do you have suggestions on locations, or other?</button
-	>
 
 	<div
-		class="credits md:text-md absolute bottom-0 left-0 m-2 flex flex-col items-start text-gray-400"
+		id="menu"
+		class="flex h-fit w-full flex-col items-center gap-2 border-b-8 border-t-8 border-[#1e1e1f] bg-[#313233] py-6 sm:w-4/5 sm:border-l-8 sm:border-r-8 lg:w-3/5 xl:hidden"
 	>
-		<p>
-			Map from <a
-				href={PUBLIC_MAP_URL}
-				target="_blank"
-				class="font-bold text-cyan-600 underline underline-offset-2 transition-colors hover:text-cyan-400"
-				>{new URL(PUBLIC_MAP_URL).host}</a
-			>
-		</p>
+		<ul id="menubuttonlist" class="flex w-11/12 flex-col gap-2 text-4xl">
+			<MainButtons size={10} mp_enabled={data.user !== null} />
+		</ul>
 
-		<p>
-			Wanna host your own instance? Check it out on <a
-				href="https://github.com/VilleOlof/90gqguessr"
-				target="_blank"
-				class="font-bold text-cyan-600 underline underline-offset-2 transition-colors hover:text-cyan-400"
-				>Github</a
-			>
-		</p>
+		<ul id="smolmenubuttons" class="flex w-11/12 items-center justify-between gap-2">
+			<SmallButtons />
+		</ul>
+
+		<div id="login" class="flex w-11/12">
+			<Discord user={data.user} />
+		</div>
+	</div>
+
+	<div
+		id="desktop_menu"
+		class="hidden h-full w-full flex-col items-start justify-center gap-16 xl:flex 2xl:w-3/5 2xl:pl-16"
+	>
+		<span
+			id="bgskew"
+			class="absolute left-0 top-0 -z-10 h-[200rem] w-2/3 -translate-x-96 -translate-y-16 -rotate-12 border-8 border-[#1e1e1f] bg-[#313233] drop-shadow-lg 2xl:w-1/3 2xl:-translate-x-16"
+		></span>
+
+		<ul id="menubuttonlist" class="flex w-fit flex-col gap-2 text-7xl">
+			<MainButtons size={16} mp_enabled={data.user !== null} />
+		</ul>
+
+		<div class="bottom flex flex-col gap-4">
+			<ul id="smolmenubuttons" class="flex w-fit items-center justify-start gap-2">
+				<SmallButtons bind:info_open bind:report_open />
+			</ul>
+
+			<div id="login" class="flex w-11/12">
+				<Discord user={data.user} />
+			</div>
+		</div>
 	</div>
 </div>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<!-- svelte-ignore a11y-no-static-element-interactions -->
-<div class="absolute bottom-0 right-0 m-4 flex gap-2 text-gray-400">
-	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<svg
-		xmlns="http://www.w3.org/2000/svg"
-		height="24"
-		viewBox="0 -960 960 960"
-		width="24"
-		fill="currentColor"
-		role="button"
-		tabindex="0"
-		class="cursor-pointer transition-transform hover:scale-90 active:scale-105"
-		on:click={() => (show_stats = true)}
-		><path
-			d="M80-120v-80h800v80H80Zm40-120v-280h120v280H120Zm200 0v-480h120v480H320Zm200 0v-360h120v360H520Zm200 0v-600h120v600H720Z"
-		/></svg
-	>
-	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<p><span on:click={increment_login}>V</span>1.3.2</p>
+<div class="absolute bottom-0 left-0 flex w-full items-center justify-between p-2">
+	<p>
+		Map from <a
+			href={PUBLIC_MAP_URL}
+			target="_blank"
+			class=" text-green-500 underline underline-offset-2 transition-colors hover:text-green-400"
+			>{new URL(PUBLIC_MAP_URL).host}</a
+		>
+	</p>
+
+	<div class="flex gap-2">
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			height="24"
+			viewBox="0 -960 960 960"
+			width="24"
+			fill="currentColor"
+			role="button"
+			tabindex="0"
+			class="cursor-pointer transition-transform hover:scale-90 active:scale-105"
+			><path
+				d="M80-120v-80h800v80H80Zm40-120v-280h120v280H120Zm200 0v-480h120v480H320Zm200 0v-360h120v360H520Zm200 0v-600h120v600H720Z"
+			/></svg
+		>
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<p>V1.3.2</p>
+	</div>
 </div>
-
-{#if show_info}
-	<PopupWrapper title="Info" on:click={() => (show_info = false)}>
-		<Info />
-	</PopupWrapper>
-{:else if show_stats}
-	<PopupWrapper title="Statistics" on:click={() => (show_stats = false)} mini={true}>
-		<Stats />
-	</PopupWrapper>
-{:else if show_suggestion}
-	<PopupWrapper
-		title="Send in suggestions"
-		on:click={() => (show_suggestion = !show_suggestion)}
-		mini={true}
-	>
-		<Suggestion bind:open={show_suggestion} />
-	</PopupWrapper>
-{/if}
-
-<div class="discordLogin absolute left-0 top-0 m-4 flex flex-col items-start gap-4">
-	{#if data.user}
-		{@const pfp_url = GetDiscordAvatarUrl(data.user.user_id, data.user.avatar)}
-
-		<div class="flex items-center gap-4 text-3xl">
-			<img src={pfp_url} alt="" class="h-12 w-12 rounded-full outline outline-2 outline-gray-700" />
-			<p>
-				@{data.user.username}
-			</p>
-		</div>
-
-		<button
-			on:click={async () => {
-				await fetch('/discord/logout');
-				location.reload();
-			}}
-			class="c-shadow bg-gray-800 px-4 shadow-cyan-600 transition-transform hover:-translate-x-1 hover:-translate-y-1 active:scale-90"
-			>Log out</button
-		>
-	{:else}
-		<Button
-			on:click={async () => {
-				try {
-					const url = (await (await fetch('/discord/init')).json()).url;
-					location.href = url;
-				} catch (e) {
-					console.error(e);
-					toast.error('Something went wrong!', {
-						duration: 5000,
-						style: toast_style
-					});
-				}
-			}}
-		>
-			<img src="/discord.svg" alt="" class="h-8 w-8" />
-			Log in</Button
-		>
-	{/if}
-</div>
-
-<style>
-	:global(.mp-disabled) {
-		opacity: 0.5;
-	}
-</style>
