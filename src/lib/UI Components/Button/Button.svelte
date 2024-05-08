@@ -31,7 +31,7 @@
 		class="flex w-full flex-col border-[6px] border-[#28272a] text-[color:var(--mctc)] {classes}"
 	>
 		<span
-			class="z-10 flex items-center justify-start gap-2 border-4 border-[color:var(--mcbbc)] bg-[color:var(--mcbc)] px-6 py-2 transition-colors group-hover:bg-[color:var(--mchc)]"
+			class="z-10 flex w-full items-center justify-start gap-2 border-4 border-[color:var(--mcbbc)] bg-[color:var(--mcbc)] px-6 py-2 transition-colors group-hover:bg-[color:var(--mchc)]"
 			><slot /></span
 		>
 		<span id="shadow" class="h-2 w-full bg-[color:var(--mcsc)] transition-all group-active:h-0"

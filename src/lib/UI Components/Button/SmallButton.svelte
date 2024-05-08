@@ -25,7 +25,7 @@
 		class="flex w-fit flex-col border-[6px] border-[#28272a] text-xl text-[color:var(--mctc)] {classes}"
 	>
 		<span
-			class="z-10 flex items-center gap-2 border-4 border-[color:var(--mcbbc)] bg-[color:var(--mcbc)] px-6 py-1 transition-colors group-hover:bg-[color:var(--mchc)]"
+			class="z-10 flex items-center gap-2 border-4 border-[color:var(--mcbbc)] bg-[color:var(--mcbc)] px-3 py-1 transition-colors group-hover:bg-[color:var(--mchc)]"
 			><slot /></span
 		>
 		<span id="shadow" class="h-2 w-full bg-[color:var(--mcsc)] transition-all group-active:h-0"

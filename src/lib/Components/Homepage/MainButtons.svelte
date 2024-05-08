@@ -18,7 +18,15 @@
 <Button on:click={() => goto('/play?daily=true')}
 	><img src="/Earth.webp" alt="" style="height: {_size}; width: {_size}" /> Daily mode</Button
 >
-<Button on:click={() => goto('/mp')} classes={mp_enabled ? '' : 'mp-disabled'}
+<Button
+	on:click={() => {
+		if (!mp_enabled) {
+			// TODO: toast
+			return;
+		}
+		goto('/mp');
+	}}
+	classes={mp_enabled ? '' : 'mp-disabled'}
 	><img src="/Earth.webp" alt="" style="height: {_size}; width: {_size}" /> Multiplayer</Button
 >
 <Button on:click={() => goto('/top')}

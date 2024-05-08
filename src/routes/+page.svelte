@@ -1,19 +1,19 @@
 <script lang="ts">
-	import { GetDiscordAvatarUrl } from '$lib';
 	import Map from '$lib/Components/Map.svelte';
-	import Button from '$lib/UI Components/Button/Button.svelte';
-	import SmallButton from '$lib/UI Components/Button/SmallButton.svelte';
 	import type { PageData } from './$types';
 	import { PUBLIC_MAP_URL, PUBLIC_WORLD_NAME } from '$env/static/public';
-	import { goto } from '$app/navigation';
 	import MainButtons from '$lib/Components/Homepage/MainButtons.svelte';
 	import SmallButtons from '$lib/Components/Homepage/SmallButtons.svelte';
 	import Discord from '$lib/Components/Homepage/Discord.svelte';
+	import Info from '$lib/Components/Homepage/Info.svelte';
+	import Report from '$lib/Components/Homepage/Report.svelte';
 
 	export let data: PageData;
 
 	let info_open: boolean = false;
 	let report_open: boolean = false;
+
+	$: console.log(info_open, report_open);
 </script>
 
 <Map fullscreen={true} stop_interaction={true} places={[]} />
@@ -34,12 +34,12 @@
 		id="menu"
 		class="flex h-fit w-full flex-col items-center gap-2 border-b-8 border-t-8 border-[#1e1e1f] bg-[#313233] py-6 sm:w-4/5 sm:border-l-8 sm:border-r-8 lg:w-3/5 xl:hidden"
 	>
-		<ul id="menubuttonlist" class="flex w-11/12 flex-col gap-2 text-4xl">
+		<ul id="menubuttonlist" class="flex w-11/12 flex-col gap-2 text-3xl sm:text-4xl">
 			<MainButtons size={10} mp_enabled={data.user !== null} />
 		</ul>
 
-		<ul id="smolmenubuttons" class="flex w-11/12 items-center justify-between gap-2">
-			<SmallButtons />
+		<ul id="smolmenubuttons" class="flex w-11/12 flex-wrap items-center justify-between gap-2">
+			<SmallButtons bind:info_open bind:report_open />
 		</ul>
 
 		<div id="login" class="flex w-11/12">
@@ -71,6 +71,9 @@
 		</div>
 	</div>
 </div>
+
+<Info bind:info_open />
+<Report bind:report_open />
 
 <div class="absolute bottom-0 left-0 flex w-full items-center justify-between p-2">
 	<p>

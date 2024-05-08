@@ -21,31 +21,34 @@
 			<slot name="outerTitle" />
 		</span>
 
-		<span id="container_close" class="absolute -right-12 top-0 text-5xl">
+		<span
+			id="container_close"
+			class="absolute right-5 top-5 z-10 text-5xl lg:-right-12 lg:top-0 lg:z-0"
+		>
 			<button
 				on:click={() => (visible = false)}
-				class="border-mc-standard-border text-mc-text-black flex w-fit flex-col border-[6px] text-xl"
+				class="flex w-fit flex-col border-[6px] border-mc-standard-border text-xl text-mc-text-black"
 			>
 				<span
-					class="bg-mc-standard-bg border-4 border-white px-4 py-1 font-bold transition-colors hover:bg-[#b1b2b5]"
+					class="border-4 border-white bg-mc-standard-bg px-4 py-1 font-bold transition-colors hover:bg-[#b1b2b5]"
 					>X</span
 				>
-				<span id="shadow" class="bg-mc-standard-shadow h-2 w-full transition-all group-hover:h-0"
+				<span id="shadow" class="h-2 w-full bg-mc-standard-shadow transition-all group-hover:h-0"
 				></span>
 			</button>
 		</span>
 
 		<div
-			class="border-mc-standard-border flex max-h-[calc(100dvh-8rem)] w-fit max-w-7xl flex-col border-[6px] text-2xl"
+			class="flex max-h-[calc(100dvh-8rem)] w-fit max-w-7xl flex-col border-[6px] border-mc-standard-border text-2xl"
 		>
 			<span
-				class="bg-mc-standard-bg relative flex flex-col overflow-y-scroll border-4 border-white px-8 py-4 transition-colors group-active:bg-[#4bab30]"
+				class="relative flex flex-col overflow-y-scroll border-4 border-white bg-mc-standard-bg px-8 py-4 transition-colors group-active:bg-[#4bab30]"
 			>
 				<span class="text-6xl font-bold"><slot name="innerTitle" /></span>
 
 				<slot /></span
 			>
-			<span id="shadow" class="bg-mc-standard-shadow h-4 w-full"></span>
+			<span id="shadow" class="h-4 w-full bg-mc-standard-shadow"></span>
 		</div>
 	</span>
 {/if}
