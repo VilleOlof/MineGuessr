@@ -21,10 +21,7 @@
 			<slot name="outerTitle" />
 		</span>
 
-		<span
-			id="container_close"
-			class="absolute right-5 top-5 z-10 text-5xl lg:-right-12 lg:top-0 lg:z-0"
-		>
+		<span id="container_close" class="absolute -top-12 right-0 text-5xl lg:-right-12 lg:top-0">
 			<button
 				on:click={() => (visible = false)}
 				class="flex w-fit flex-col border-[6px] border-mc-standard-border text-xl text-mc-text-black"

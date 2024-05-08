@@ -7,11 +7,13 @@
 	import Discord from '$lib/Components/Homepage/Discord.svelte';
 	import Info from '$lib/Components/Homepage/Info.svelte';
 	import Report from '$lib/Components/Homepage/Report.svelte';
+	import Stats from '$lib/Components/Homepage/Stats.svelte';
 
 	export let data: PageData;
 
 	let info_open: boolean = false;
 	let report_open: boolean = false;
+	let stat_open: boolean = false;
 
 	$: console.log(info_open, report_open);
 </script>
@@ -74,6 +76,7 @@
 
 <Info bind:info_open />
 <Report bind:report_open />
+<Stats bind:stat_open />
 
 <div class="absolute bottom-0 left-0 flex w-full items-center justify-between p-2">
 	<p>
@@ -87,6 +90,7 @@
 
 	<div class="flex gap-2">
 		<!-- TODO: Add stat popup -->
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			height="24"
@@ -95,6 +99,7 @@
 			fill="currentColor"
 			role="button"
 			tabindex="0"
+			on:click={() => (stat_open = !stat_open)}
 			class="cursor-pointer transition-transform hover:scale-90 active:scale-105"
 			><path
 				d="M80-120v-80h800v80H80Zm40-120v-280h120v280H120Zm200 0v-480h120v480H320Zm200 0v-360h120v360H520Zm200 0v-600h120v600H720Z"
