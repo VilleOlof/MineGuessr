@@ -47,7 +47,7 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
 	id="map-container"
-	class="pointer-events-auto h-full w-full bg-slate-800 outline outline-4 outline-gray-900"
+	class="pointer-events-auto h-full w-full bg-mc-standard-bg"
 	bind:this={map_container}
 	on:click
 	on:mouseenter

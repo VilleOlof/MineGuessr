@@ -1,16 +1,17 @@
 <script lang="ts">
-	import Map from '$lib/Components/Map.svelte';
 	import Panorama from '$lib/Components/Panorama.svelte';
 	import { Game } from '$lib/Game';
 	import type { PageData } from './$types';
 	import Endscreen from '$lib/Components/Endscreen.svelte';
 	import { writable, type Writable } from 'svelte/store';
 	import confetti from 'canvas-confetti';
-	import GuessButton from '$lib/Components/GuessButton.svelte';
-	import XPBar from '$lib/Components/XPBar.svelte';
 	import { onMount, onDestroy } from 'svelte';
 	import { current_pos, GameType } from '$lib';
 	import * as THREE from 'three';
+	import MenuButton from '$lib/Components/MenuButton.svelte';
+	import Map from '$lib/Components/Map.svelte';
+	import GuessButton from '$lib/Components/GuessButton.svelte';
+	import XPBar from '$lib/Components/XPBar.svelte';
 
 	export let data: PageData;
 
@@ -77,44 +78,26 @@
 	<Panorama bind:index={$rounds[$curr_round].panorama_id} />
 {/if}
 
-<a
-	class="rounds absolute left-0 top-0 aspect-square h-auto w-16 transition-transform hover:-rotate-6 hover:scale-110 active:scale-90 sm:w-24"
-	title="Back to the menu"
-	href="/"
-	class:ontop={$show_end_map}
->
-	<img src="/Earth.webp" alt="Back" />
-</a>
-
-<Map fullscreen={$game_finished} stop_interaction={curr_round_finished} places={data.places}>
-	<div class="m-3">
+<Map places={data.places}>
+	<span slot="button" class="w-full">
 		<GuessButton
 			submit_guess={submit}
 			next_round={() => game.next_round()}
 			{show_guess}
 			{show_next}
 		/>
-	</div>
+	</span>
 </Map>
 
 {#if !$game_finished}
 	<XPBar {game} />
-
-	<div
-		class="pointer-events-none absolute bottom-0 left-0 z-10 hidden w-full items-start justify-center p-4 lg:bottom-0 lg:flex"
-	>
-		<GuessButton
-			submit_guess={submit}
-			next_round={() => game.next_round()}
-			{show_guess}
-			{show_next}
-		/>
-	</div>
 {/if}
 
 {#if $game_finished && !$show_end_map}
 	<Endscreen {data} {game} bind:show_end_map={$show_end_map} />
 {/if}
+
+<MenuButton />
 
 <p
 	class="pointer-events-none absolute bottom-0 left-0 m-1 text-sm text-white/80 md:text-base"
@@ -125,10 +108,7 @@
 
 <style>
 	:global(.xp-finished) {
-		background-color: rgb(149, 204, 101);
-	}
-	:global(.xp-not_finished) {
-		background-color: rgb(55 65 81);
+		background-color: rgb(99, 192, 17);
 	}
 	:global(.ontop) {
 		z-index: 10;

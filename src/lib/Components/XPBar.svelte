@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { GameType, format_time } from '$lib';
 	import type { Game } from '$lib/Game';
+	import EmptyContainer from '$lib/UI Components/Container/EmptyContainer.svelte';
 	import { step_time } from '$lib/XPBarUtil';
 	import { onDestroy, onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
@@ -40,60 +41,58 @@
 </script>
 
 <div
-	class="xpWrapper pointer-events-none absolute left-0 top-0 z-10 flex w-full flex-col items-center justify-start p-2"
+	class="xpWrapper pointer-events-none absolute left-0 top-0 z-10 flex w-full flex-col items-end gap-2 p-2"
 >
 	<div
-		class="xpbar pointer-events-auto relative flex h-8 w-1/2 bg-gray-900 p-1 shadow-lg md:w-1/4"
-		class:daily-game-text={game.game_type === GameType.Daily}
+		class="flex w-full flex-col-reverse items-end justify-center gap-4 sm:flex-row sm:items-center sm:justify-end"
 	>
-		{#each $rounds as round}
-			{@const percentage = 100 / $rounds.length}
-			<div
-				class="h-full outline outline-gray-900 transition-colors"
-				class:xp-finished={round.finished}
-				class:xp-not_finished={!round.finished}
-				style="width: {percentage}%;"
-			></div>
-		{/each}
+		<span class="flex flex-col items-center">
+			<p class="font-MinecraftTen text-5xl drop-shadow-[0_2px_2px_rgba(0,0,0,1)]">
+				{format_time($rounds[$curr_round].time / 1000)}
+			</p>
+			{#if game.game_type === GameType.Daily}
+				<p class="text-4xl text-[#fae742] drop-shadow-[2px_2px_1px_#141414]">Daily</p>
+			{/if}
+		</span>
+
+		<div class="pointer-events-auto relative flex h-16 w-[16rem] sm:h-20 sm:w-[20rem]">
+			<EmptyContainer full={true}>
+				<span class="flex h-full w-full gap-1 bg-white">
+					{#each $rounds as round, i}
+						{@const percentage = 100 / $rounds.length}
+						<div
+							class="flex h-full items-center justify-center transition-colors"
+							class:xp-finished={round.finished}
+							class:bg-mc-standard-bg={!round.finished}
+							style="width: {percentage}%;"
+						>
+							{#if i == 2}
+								<p
+									class="pointer-events-auto font-MinecraftTen text-5xl text-mc-text-black"
+									title="Round"
+								>
+									{$curr_round + 1}
+								</p>
+							{/if}
+						</div>
+					{/each}
+				</span>
+			</EmptyContainer>
+		</div>
 	</div>
-
-	<p
-		class="pointer-events-auto absolute flex items-center text-2xl drop-shadow-[0_2px_2px_rgba(0,0,0,1)]"
-		title="Round"
-	>
-		{$curr_round + 1}
-	</p>
-
-	<p class="text-3xl drop-shadow-lg">{format_time($rounds[$curr_round].time / 1000)}</p>
 
 	{#if $rounds[$curr_round].finished}
 		{@const round = $rounds[$curr_round]}
-
-		<p
-			class="m-2 bg-gray-800 px-2 py-1 text-2xl text-green-400 shadow-lg"
-			transition:fly={{ y: -30 }}
-		>
-			<span class="text-gray-300">+</span>
-			{round.score} <span class="text-gray-200">({Math.floor(round.distance)} blocks)</span>
-		</p>
+		<span transition:fly={{ y: -30 }} class="-z-10">
+			<EmptyContainer>
+				<p class="flex items-center gap-4 px-2 py-1 text-3xl text-mc-text-black">
+					<span style="color: rgb(99, 192, 17);"
+						><span class="text-mc-text-black">+</span>
+						<span class="drop-shadow-[2px_2px_1px_#141414]">{round.score}</span></span
+					>
+					<span>({Math.floor(round.distance)} blocks)</span>
+				</p>
+			</EmptyContainer>
+		</span>
 	{/if}
 </div>
-
-<style>
-	.daily-game-text::after {
-		content: 'Daily';
-		position: absolute;
-		top: 0;
-		right: 0;
-		transform: translate(50%, 30%) rotate(-7deg);
-		font-size: 2rem;
-		text-shadow: 2px 2px 1px #141414;
-		color: #fae742;
-	}
-
-	@media screen and (max-width: 640px) {
-		.daily-game-text::after {
-			font-size: 1.5rem;
-		}
-	}
-</style>

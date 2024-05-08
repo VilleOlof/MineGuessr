@@ -5,6 +5,7 @@ export type AdvancementToast = {
     description: string;
     src?: string;
     alt?: string;
+    duration?: number;
 }
 
 let toasters: Advancement[] = [];
@@ -39,9 +40,11 @@ export function toast(opts: AdvancementToast): void {
 
     toasters.push(adv);
 
+    if (!opts.duration) opts.duration = 5000;
+
     setTimeout(() => {
         remove(adv);
-    }, 5000);
+    }, opts.duration);
 }
 
 export function clear_toasts() {
