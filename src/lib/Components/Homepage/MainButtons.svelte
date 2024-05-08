@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { toast } from '$lib/AdvancementToast';
 	import Button from '$lib/UI Components/Button/Button.svelte';
 
 	export let size: 10 | 16;
@@ -21,7 +22,11 @@
 <Button
 	on:click={() => {
 		if (!mp_enabled) {
-			// TODO: toast
+			toast({
+				title: 'Multiplayer disabled',
+				description: 'You need to be logged in to play multiplayer'
+			});
+
 			return;
 		}
 		goto('/mp');

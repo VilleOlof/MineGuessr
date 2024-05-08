@@ -107,10 +107,15 @@
 								Game.draw_line_to_guess(round.location, round.guess_location, count);
 								Game.place_correct_marker(round.location, count);
 
+								const discord_pfp = GetDiscordAvatarUrl(
+									player.discord.user_id,
+									player.discord.avatar
+								);
+
 								let bluemap = get(curr_bluemap);
 								if (bluemap) {
 									let vec3 = new THREE.Vector3(round.guess_location.x, 100, round.guess_location.y);
-									UpdatePOIMarker(bluemap, vec3, count);
+									UpdatePOIMarker(bluemap, vec3, count, discord_pfp, ['discord_pin'], 'center');
 								}
 
 								count++;

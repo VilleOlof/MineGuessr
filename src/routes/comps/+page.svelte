@@ -115,6 +115,7 @@
 	></RadioGroup>
 
 	<div class="absolute left-1/2 top-0 m-2 -translate-x-1/2">
-		<Advancement src="/Earth.webp"></Advancement>
+		<Advancement title="MineGuessr" description="You played MineGuessr!" src="/Earth.webp"
+		></Advancement>
 	</div>
 </div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { toast } from '$lib/AdvancementToast';
 	import SmallButton from '$lib/UI Components/Button/SmallButton.svelte';
 	import Container from '$lib/UI Components/Container/Container.svelte';
 
@@ -15,11 +16,17 @@
 				body: JSON.stringify({ text })
 			});
 
-			// TODO: Toast
+			toast({
+				title: 'Success',
+				description: 'Suggestion submitted'
+			});
 		} catch (e) {
 			console.error(e);
 
-			// TODO: Toast
+			toast({
+				title: 'Error',
+				description: 'Failed to submit suggestion'
+			});
 		}
 
 		report_open = false;

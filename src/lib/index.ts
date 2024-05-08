@@ -37,6 +37,7 @@ export const GameType = {
 } as const;
 export type GameType = typeof GameType[keyof typeof GameType];
 
+// TODO: Make these arguments into an object
 /**
  * Adds a guess marker to the map
  * 
@@ -44,17 +45,23 @@ export type GameType = typeof GameType[keyof typeof GameType];
  * @param pos The position of the marker
  * @param index The index of the marker, often used together with a round index
  */
-export function UpdatePOIMarker(map: BlueMapApp, pos: THREE.Vector3, index?: number): string {
+export function UpdatePOIMarker(map: BlueMapApp, pos: THREE.Vector3, index?: number, icon?: string, classes?: string[], anchor: "bottom" | "center" = 'bottom'): string {
     const name = `current_pos${index !== undefined ? `_${index}` : ''}`;
+
+    console.log('Updating marker', name, pos);
+
+    let _classes = classes ?? [];
+    if (_classes.length === 0) _classes.push('current_pos');
+
     map.popupMarkerSet.updateMarkerFromData(name, {
         position: { x: pos.x + 0.5, y: pos.y, z: pos.z + 0.65 },
-        anchor: { x: 18.5, y: 36.5 },
+        anchor: anchor === 'bottom' ? { x: 18.5, y: 36.5 } : { x: 38, y: 38 },
         label: '',
         detail: '',
         sorting: 1000,
         listed: false,
-        icon: '/pin-red.svg',
-        classes: ['current_pos'],
+        icon: icon ?? '/pin-red.svg',
+        classes: _classes,
         minDistance: 0,
         maxDistance: 10000000,
         type: 'poi'

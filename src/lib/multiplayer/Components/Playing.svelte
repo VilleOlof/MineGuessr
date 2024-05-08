@@ -2,7 +2,7 @@
 	import { MPClient } from '../Client';
 	import Panorama from '$lib/Components/Panorama.svelte';
 	import Map from '$lib/Components/Map.svelte';
-	import { UpdatePOIMarker, current_pos, curr_bluemap } from '$lib';
+	import { UpdatePOIMarker, current_pos, curr_bluemap, GetDiscordAvatarUrl } from '$lib';
 	import * as THREE from 'three';
 	import { Game } from '$lib/Game';
 	import { get } from 'svelte/store';
@@ -43,15 +43,26 @@
 		const round_index = get(client.round_index);
 		const players = get(client.players);
 
+		const map = get(curr_bluemap);
+		if (map) {
+			const curr_pos = map.popupMarkerSet.markers.get('current_pos');
+			if (curr_pos) map.popupMarkerSet.remove(curr_pos);
+		}
+
 		let user_count: number = 0;
 		for (const [_, data] of Object.entries(players)) {
 			const round = data.rounds[round_index];
 			const line_marker = Game.draw_line_to_guess(round.location, round.guess_location, user_count);
 
+			const discord_pfp = GetDiscordAvatarUrl(data.discord.user_id, data.discord.avatar);
+
 			const user_guess_marker = UpdatePOIMarker(
 				get(curr_bluemap)!,
 				new THREE.Vector3(round.guess_location.x, 100, round.guess_location.y),
-				user_count
+				user_count,
+				discord_pfp,
+				['discord_pin'],
+				'center'
 			);
 
 			markers_to_clear.push(line_marker, user_guess_marker);

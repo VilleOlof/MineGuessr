@@ -8,14 +8,14 @@
 	import Info from '$lib/Components/Homepage/Info.svelte';
 	import Report from '$lib/Components/Homepage/Report.svelte';
 	import Stats from '$lib/Components/Homepage/Stats.svelte';
+	import SmallButton from '$lib/UI Components/Button/SmallButton.svelte';
+	import { toast } from '$lib/AdvancementToast';
 
 	export let data: PageData;
 
 	let info_open: boolean = false;
 	let report_open: boolean = false;
 	let stat_open: boolean = false;
-
-	$: console.log(info_open, report_open);
 </script>
 
 <Map fullscreen={true} stop_interaction={true} places={[]} />
@@ -65,6 +65,15 @@
 		<div class="bottom flex flex-col gap-4">
 			<ul id="smolmenubuttons" class="flex w-fit items-center justify-start gap-2">
 				<SmallButtons bind:info_open bind:report_open />
+				<SmallButton
+					on:click={() => {
+						toast({
+							title: 'Welcome!',
+							description: 'Welcome to MineGuessr! Have fun!',
+							src: `/Earth.webp`
+						});
+					}}>TOAST</SmallButton
+				>
 			</ul>
 
 			<div id="login" class="flex w-11/12">
@@ -89,7 +98,6 @@
 	</p>
 
 	<div class="flex gap-2">
-		<!-- TODO: Add stat popup -->
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
@@ -105,7 +113,6 @@
 				d="M80-120v-80h800v80H80Zm40-120v-280h120v280H120Zm200 0v-480h120v480H320Zm200 0v-360h120v360H520Zm200 0v-600h120v600H720Z"
 			/></svg
 		>
-		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<p>V1.3.2</p>
 	</div>
 </div>

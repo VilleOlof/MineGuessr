@@ -6,6 +6,8 @@
 	import { browser } from '$app/environment';
 	import { LatestUpdate, SendUpdatesToServer, Stats } from '$lib/Stats';
 	import type { LayoutData } from './$types';
+	import { afterNavigate } from '$app/navigation';
+	import { clear_toasts } from '$lib/AdvancementToast';
 
 	export let data: LayoutData;
 
@@ -30,6 +32,10 @@
 			$Stats = $Stats;
 		}
 	});
+
+	afterNavigate(() => {
+		clear_toasts();
+	});
 </script>
 
 <svelte:head>
@@ -46,6 +52,11 @@
 	class="siteWrapper no-scrollbar flex h-screen w-screen flex-col items-center justify-center overflow-hidden bg-gray-900 font-Minecraft text-gray-100"
 >
 	<slot />
+
+	<span
+		id="mc_adv_toaster"
+		class="pointer-events-none absolute z-50 flex h-full w-full flex-col items-center justify-start gap-2 pt-5 font-Minecraft text-gray-100"
+	></span>
 </main>
 
 {@html "<!-- What will today's adventure be? -->"}
@@ -73,6 +84,21 @@
 		padding: 0.5rem;
 		font-size: 1.5rem;
 		border-radius: 0.5rem;
+	}
+
+	:global(.discord_pin) {
+		width: 4rem;
+		height: 4rem;
+
+		padding: 0.5rem;
+	}
+
+	:global(.discord_pin > img) {
+		width: 100%;
+		height: 100%;
+
+		border-radius: 50%;
+		filter: drop-shadow(0 0 0.5rem #00000057);
 	}
 
 	:global(.current_pos > img) {

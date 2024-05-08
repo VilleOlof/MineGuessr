@@ -8,6 +8,8 @@
 </script>
 
 <Container bind:visible={stat_open}>
+	<h2 class="text-5xl">Statistics</h2>
+
 	<div class="rows flex flex-col rounded-sm [&>:nth-child(odd)]:bg-slate-800/25">
 		<StatField title="Total games" value={$Stats.games_played} />
 		<StatField title="Total games finished" value={$Stats.games_finished} />

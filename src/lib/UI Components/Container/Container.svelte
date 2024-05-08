@@ -17,10 +17,6 @@
 		class="absolute z-20 flex flex-col text-[#1d1e22]"
 		transition:fly={{ y: 100, duration: 200, delay: 100 }}
 	>
-		<span class="ml-10 text-6xl">
-			<slot name="outerTitle" />
-		</span>
-
 		<span id="container_close" class="absolute -top-12 right-0 text-5xl lg:-right-12 lg:top-0">
 			<button
 				on:click={() => (visible = false)}
