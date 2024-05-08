@@ -65,15 +65,6 @@
 		<div class="bottom flex flex-col gap-4">
 			<ul id="smolmenubuttons" class="flex w-fit items-center justify-start gap-2">
 				<SmallButtons bind:info_open bind:report_open />
-				<SmallButton
-					on:click={() => {
-						toast({
-							title: 'Welcome!',
-							description: 'Welcome to MineGuessr! Have fun!',
-							src: `/Earth.webp`
-						});
-					}}>TOAST</SmallButton
-				>
 			</ul>
 
 			<div id="login" class="flex w-11/12">
