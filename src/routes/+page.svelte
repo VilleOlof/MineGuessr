@@ -86,6 +86,7 @@
 	</p>
 
 	<div class="flex gap-2">
+		<!-- TODO: Add stat popup -->
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			height="24"
