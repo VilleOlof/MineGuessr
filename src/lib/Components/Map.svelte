@@ -125,89 +125,93 @@
 	<div
 		class:bigmap={enlarge_map}
 		class:no_m={enlarge_map}
-		class="mapcontainer pointer-events-auto absolute bottom-0 right-0 flex aspect-video h-auto w-full flex-col items-start justify-end gap-2 sm:m-2 sm:w-4/6 md:w-3/6 lg:w-2/6"
+		class="mapcontainer pointer-events-none absolute bottom-0 right-0 flex aspect-video h-auto w-full flex-col items-start justify-end gap-2 sm:m-2 sm:w-4/6 md:w-3/6 lg:w-2/6"
 	>
-		<span class="h-full w-full" class:hidden={minimize_map}>
-			<EmptyContainer full={true}>
-				<div class="mapWrapper relative h-full w-full">
-					<MapCore
-						bind:bluemap
-						on:mapInteraction={(event) => {
-							if (stop_interaction) return;
+		<span class="relative h-full w-full">
+			<span id="mapmid" class="pointer-events-auto h-full w-full" class:hidden={minimize_map}>
+				<EmptyContainer full={true}>
+					<div class="mapWrapper relative h-full w-full">
+						<MapCore
+							bind:bluemap
+							on:mapInteraction={(event) => {
+								if (stop_interaction) return;
 
-							let pos = GetPosFromInteraction(event);
-							if (pos) $current_pos = pos;
+								let pos = GetPosFromInteraction(event);
+								if (pos) $current_pos = pos;
 
-							if (!$current_pos) return;
+								if (!$current_pos) return;
 
-							if (bluemap) {
-								UpdatePOIMarker(bluemap, $current_pos);
-							}
-						}}
-					/>
+								if (bluemap) {
+									UpdatePOIMarker(bluemap, $current_pos);
+								}
+							}}
+						/>
 
-					<div
-						class="pointer-events-none absolute left-0 top-0 m-2 flex w-[96%] items-start justify-between gap-2 py-1 text-xl text-gray-200"
-					>
-						<div class="flex flex-col gap-2">
-							<div class="flex items-center gap-2">
-								<button
-									on:click={async (ev) => await ResizeMap(ev)}
-									title={enlarge_map ? 'Minimize map' : 'Enlarge map'}
-									class="pointer-events-auto h-full bg-black/70 p-1 transition-transform hover:scale-105 active:scale-95"
-								>
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										height="24"
-										viewBox="0 -960 960 960"
-										width="24"
-										fill="currentColor"
-										><path
-											d="M120-120v-200h80v120h120v80H120Zm520 0v-80h120v-120h80v200H640ZM120-640v-200h200v80H200v120h-80Zm640 0v-120H640v-80h200v200h-80Z"
-										/></svg
+						<div
+							class="pointer-events-none absolute left-0 top-0 m-2 flex w-[96%] items-start justify-between gap-2 py-1 text-xl text-gray-200"
+						>
+							<div class="flex flex-col gap-2">
+								<div class="flex items-center gap-2">
+									<button
+										on:click={async (ev) => await ResizeMap(ev)}
+										title={enlarge_map ? 'Minimize map' : 'Enlarge map'}
+										class="pointer-events-auto h-full bg-black/70 p-1 transition-transform hover:scale-105 active:scale-95"
 									>
-								</button>
-								<p class="bg-black/70 px-2">
-									{#if $current_pos}
-										x {$current_pos.x}, z {$current_pos.z}
-									{:else}
-										No position
-									{/if}
-								</p>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											height="24"
+											viewBox="0 -960 960 960"
+											width="24"
+											fill="currentColor"
+											><path
+												d="M120-120v-200h80v120h120v80H120Zm520 0v-80h120v-120h80v200H640ZM120-640v-200h200v80H200v120h-80Zm640 0v-120H640v-80h200v200h-80Z"
+											/></svg
+										>
+									</button>
+									<p class="bg-black/70 px-2">
+										{#if $current_pos}
+											x {$current_pos.x}, z {$current_pos.z}
+										{:else}
+											No position
+										{/if}
+									</p>
+								</div>
+								{#if places.length > 0}
+									<select
+										class="pointer-events-auto w-fit bg-black/70 p-1 px-2 text-gray-100"
+										bind:value={selected_place}
+										bind:this={place_element}
+										on:change={() => PlaceTeleport()}
+									>
+										<option value="0, 0" disabled selected>Places</option>
+										{#each places as place}
+											<option value={place.position.x + ', ' + place.position.y}
+												>{place.name}</option
+											>
+										{/each}
+									</select>
+								{/if}
 							</div>
-							{#if places.length > 0}
-								<select
-									class="pointer-events-auto w-fit bg-black/70 p-1 px-2 text-gray-100"
-									bind:value={selected_place}
-									bind:this={place_element}
-									on:change={() => PlaceTeleport()}
-								>
-									<option value="0, 0" disabled selected>Places</option>
-									{#each places as place}
-										<option value={place.position.x + ', ' + place.position.y}>{place.name}</option>
-									{/each}
-								</select>
-							{/if}
 						</div>
-
-						{#if !enlarge_map}
-							<span class="pointer-events-auto">
-								<SmallButton on:click={() => (minimize_map = true)}>
-									<img
-										src="left_arrow.png"
-										alt=""
-										style="image-rendering: pixelated;"
-										class="w-5 -rotate-90 py-1"
-									/>
-								</SmallButton>
-							</span>
-						{/if}
 					</div>
-				</div>
-			</EmptyContainer>
+				</EmptyContainer>
+			</span>
+
+			{#if !enlarge_map}
+				<span class="pointer-events-auto absolute bottom-0 right-0">
+					<SmallButton on:click={() => (minimize_map = !minimize_map)}>
+						<img
+							src="left_arrow.png"
+							alt=""
+							style="image-rendering: pixelated; {minimize_map ? 'transform: rotate(90deg);' : ''}"
+							class="w-5 -rotate-90 py-1"
+						/>
+					</SmallButton>
+				</span>
+			{/if}
 		</span>
 
-		{#if minimize_map}
+		<!-- {#if minimize_map}
 			<span class="flex w-full items-end justify-end">
 				<SmallButton on:click={() => (minimize_map = false)}>
 					<img
@@ -218,10 +222,12 @@
 					/>
 				</SmallButton>
 			</span>
-		{/if}
+		{/if} -->
 
 		{#if !enlarge_map}
-			<slot name="button" />
+			<span class="pointer-events-auto w-full">
+				<slot name="button" />
+			</span>
 		{/if}
 	</div>
 {/if}

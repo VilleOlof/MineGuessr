@@ -14,7 +14,7 @@
 </script>
 
 <Button on:click={() => goto('/play')}
-	><img src="/Earth.webp" alt="" style="height: {_size}; width: {_size}" /> Singeplayer</Button
+	><img src="/Earth.webp" alt="" style="height: {_size}; width: {_size}" /> Singleplayer</Button
 >
 <Button on:click={() => goto('/play?daily=true')}
 	><img src="/Earth.webp" alt="" style="height: {_size}; width: {_size}" /> Daily mode</Button
