@@ -211,19 +211,6 @@
 			{/if}
 		</span>
 
-		<!-- {#if minimize_map}
-			<span class="flex w-full items-end justify-end">
-				<SmallButton on:click={() => (minimize_map = false)}>
-					<img
-						src="left_arrow.png"
-						alt=""
-						style="image-rendering: pixelated;"
-						class="w-5 rotate-90 py-1"
-					/>
-				</SmallButton>
-			</span>
-		{/if} -->
-
 		{#if !enlarge_map}
 			<span class="pointer-events-auto w-full">
 				<slot name="button" />

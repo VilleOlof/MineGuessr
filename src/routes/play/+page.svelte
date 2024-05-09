@@ -78,7 +78,7 @@
 	<Panorama bind:index={$rounds[$curr_round].panorama_id} />
 {/if}
 
-<Map places={data.places}>
+<Map places={data.places} fullscreen={$game_finished} stop_interaction={curr_round_finished}>
 	<span slot="button" class="w-full">
 		<GuessButton
 			submit_guess={submit}
@@ -97,7 +97,14 @@
 	<Endscreen {data} {game} bind:show_end_map={$show_end_map} />
 {/if}
 
-<MenuButton />
+<MenuButton
+	override_onclick={$show_end_map
+		? () => {
+				show_end_map.set(false);
+				game.clear_markers();
+			}
+		: null}
+/>
 
 <p
 	class="pointer-events-none absolute bottom-0 left-0 m-1 text-sm text-white/80 md:text-base"

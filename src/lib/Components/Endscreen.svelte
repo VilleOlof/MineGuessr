@@ -1,10 +1,15 @@
 <script lang="ts">
-	import { Discord, format_time } from '$lib';
-	import type { Game } from '$lib/Game';
+	import { goto } from '$app/navigation';
+	import { PUBLIC_ORIGIN } from '$env/static/public';
+	import { Discord, GameType, format_time } from '$lib';
+	import { toast } from '$lib/AdvancementToast';
+	import MediumButton from '$lib/UI Components/Button/MediumButton.svelte';
+	import SmallButton from '$lib/UI Components/Button/SmallButton.svelte';
+	import EmptyContainer from '$lib/UI Components/Container/EmptyContainer.svelte';
 	import { GameModule } from '../../../shared/GameModule';
+	import type { Game } from '$lib/Game';
 	import type { LayoutData } from '../../routes/$types';
-	import Button from './Button.svelte';
-	import Share from './Share.svelte';
+	import { share } from '$lib/share';
 
 	export let data: LayoutData;
 
@@ -20,44 +25,80 @@
 <div
 	class="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-center backdrop-blur-sm"
 >
-	<div
-		class="end flex w-full flex-col items-center gap-4 bg-gray-900 px-2 py-6 sm:w-3/4 md:w-1/2 xl:w-2/5"
-	>
-		<h1 class="text-6xl font-bold">Result</h1>
+	<EmptyContainer>
+		<div class="flex flex-col items-center justify-start gap-6 px-4 py-4 md:px-10">
+			<div class="flex flex-col items-center">
+				<h1 class="text-5xl sm:text-6xl md:text-8xl">Game ended</h1>
 
-		{#if !data.user}
-			<p class="text-lg text-lime-300 md:text-2xl">
-				<button
-					on:click={Discord}
-					class="underline underline-offset-4 transition-colors hover:text-lime-500">Log in</button
-				> to get a spot on the leaderboard!
-			</p>
-		{/if}
+				{#if !data.user}
+					<p class="text-lg text-mc-text-black md:text-2xl">
+						<button
+							on:click={Discord}
+							class="underline underline-offset-2 transition-colors hover:text-lime-600"
+							>Log in</button
+						> to get a spot on the leaderboard!
+					</p>
+				{/if}
+			</div>
 
-		<p class="text-4xl">Total: {total_points}</p>
-		<p class="text-3xl">Time: {format_time(total_time / 1000)}s</p>
-
-		<div class="flex flex-col gap-2 text-2xl">
-			{#each $rounds as round, i}
-				<p>
-					<span class="text-gray-400">[{i + 1}]</span> -
-					<span class="text-cyan-400">{round.score}</span>
-					({Math.floor(round.distance)} blocks)
+			<div class="flex w-full items-end justify-evenly gap-4">
+				<p
+					style="color: rgb(99, 192, 17);"
+					class="font-MinecraftTen text-5xl drop-shadow-lg sm:text-6xl md:text-7xl"
+				>
+					{total_points}
 				</p>
-			{/each}
-		</div>
+				<p class="text-4xl sm:text-5xl md:text-6xl">{format_time(total_time / 1000)}</p>
+			</div>
 
-		<div class="buttons flex gap-4">
-			<Button on:click={() => (location.href = '/')}>Play again</Button>
-			<Button
-				on:click={() => {
-					show_end_map = true;
+			<div class="w-full">
+				{#each $rounds as round, i}
+					<div class="w-full text-3xl sm:text-4xl md:text-5xl">
+						<div class="flex w-full items-center justify-start gap-4">
+							<span class="w-fit text-2xl text-gray-500 sm:text-3xl md:text-4xl">{i + 1}</span>
+							<span style="color: rgb(85, 163, 16);" class="w-1/4 drop-shadow-sm"
+								>{round.score}</span
+							>
+							<span class="flex w-2/3 justify-end text-2xl sm:text-3xl md:text-4xl"
+								>{Math.floor(round.distance)} blocks</span
+							>
+						</div>
 
-					// Show all the guesses made
-					game.draw_all_guess_lines();
-				}}>Check map</Button
-			>
-			<Share game_id={game.game_id} {total_points} game_type={game.game_type} />
+						{#if i !== $rounds.length}
+							<div class="h-1 w-full rounded-md bg-mc-standard-border"></div>
+						{/if}
+					</div>
+				{/each}
+			</div>
+
+			<div class="w-full">
+				<!-- bit of an ugly way but these buttons kinda suck lmaooooo -->
+				<div class="hidden w-full items-center justify-evenly md:flex">
+					<MediumButton on:click={() => goto('/')}>Leave</MediumButton>
+					<MediumButton
+						on:click={() => {
+							show_end_map = true;
+
+							// Show all the guesses made
+							game.draw_all_guess_lines();
+						}}>Map</MediumButton
+					>
+					<SmallButton on:click={() => share(total_points, game)}>Share</SmallButton>
+				</div>
+
+				<div class="flex w-full items-center justify-evenly md:hidden">
+					<SmallButton on:click={() => goto('/')}>Leave</SmallButton>
+					<SmallButton
+						on:click={() => {
+							show_end_map = true;
+
+							// Show all the guesses made
+							game.draw_all_guess_lines();
+						}}>Map</SmallButton
+					>
+					<SmallButton on:click={() => share(total_points, game)}>Share</SmallButton>
+				</div>
+			</div>
 		</div>
-	</div>
+	</EmptyContainer>
 </div>

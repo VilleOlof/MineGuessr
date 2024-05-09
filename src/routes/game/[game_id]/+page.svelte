@@ -4,7 +4,6 @@
 	import type { PageData } from './$types';
 	import { GameType, curr_bluemap, format_time } from '$lib';
 	import Button from '$lib/Components/Button.svelte';
-	import Share from '$lib/Components/Share.svelte';
 	import type { GameModule } from '../../../../shared/GameModule';
 
 	export let data: PageData;
@@ -50,7 +49,7 @@
 						}
 					}}>Check the map</Button
 				>
-				<Share game_id={data.game_id} {total_points} game_type={game_instance.game_type} />
+				<!-- <Share game_id={data.game_id} {total_points} game_type={game_instance.game_type} /> -->
 			</div>
 
 			{#if data.user}
