@@ -6,6 +6,7 @@
 
 	export let show_guess: boolean;
 	export let show_next: boolean;
+	export let mp_wait: boolean = false;
 </script>
 
 {#if show_guess}
@@ -16,6 +17,14 @@
 	<Button on:click={() => next_round()}>
 		<span class="flex w-full items-center justify-center font-MinecraftTen text-3xl">Next</span>
 	</Button>
+{:else if mp_wait}
+	<span class="opacity-60">
+		<Button>
+			<span class="flex w-full items-center justify-center font-MinecraftTen text-3xl"
+				>Waiting for others</span
+			>
+		</Button>
+	</span>
 {:else}
 	<span class="opacity-60">
 		<Button>

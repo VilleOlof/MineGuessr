@@ -112,12 +112,3 @@
 >
 	{game.game_id}
 </p>
-
-<style>
-	:global(.xp-finished) {
-		background-color: rgb(99, 192, 17);
-	}
-	:global(.ontop) {
-		z-index: 10;
-	}
-</style>

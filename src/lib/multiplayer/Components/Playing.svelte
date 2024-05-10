@@ -11,6 +11,7 @@
 	import XpBarMp from './XPBar_MP.svelte';
 	import PlayerList from './PlayerList.svelte';
 	import type { Place } from '$lib/server/places';
+	import MenuButton from '$lib/Components/MenuButton.svelte';
 
 	export let client: MPClient;
 	export let places: Place[];
@@ -20,7 +21,9 @@
 	const self_guessed = client.self_guessed;
 	const self_next_round = client.self_next_round_ready;
 	const timelimit = client.current_timelimit;
+
 	const players_next_round = client.players_next_round;
+	const players_guessed = client.players_guessed;
 
 	let markers_to_clear: string[] = [];
 
@@ -102,48 +105,55 @@
 		Game.reset_view();
 	}
 
+	const g_hotkey = () => {
+		if (show_guess) {
+			client.guess_location(new THREE.Vector2($current_pos?.x, $current_pos?.z));
+		} else if (show_next) {
+			client.next_round();
+		}
+	};
+
+	function handle_keyup(ev: KeyboardEvent) {
+		switch (ev.key) {
+			case 'g': {
+				g_hotkey();
+
+				break;
+			}
+			case 'Enter': {
+				g_hotkey();
+
+				break;
+			}
+		}
+	}
+
 	onMount(() => {
 		addEventListener(MPClient.MPClientEvent.NEXT_ROUND, next_round);
+		addEventListener('keyup', handle_keyup);
 	});
 
 	onDestroy(() => {
 		removeEventListener(MPClient.MPClientEvent.NEXT_ROUND, next_round);
+		removeEventListener('keyup', handle_keyup);
 	});
 </script>
 
 <Panorama bind:index={$panorama} />
 
-<button
-	class="rounds absolute left-0 top-0 aspect-square h-auto w-16 transition-transform hover:-rotate-6 hover:scale-110 active:scale-90 sm:w-24"
-	title="Leave game"
-	on:click={() => client.fancy_leave_game()}
->
-	<img src="/Earth.webp" alt="Back" />
-</button>
-
-<Map fullscreen={false} stop_interaction={round_over || $self_guessed} {places}>
-	<div class="m-3">
+<Map {places} fullscreen={false} stop_interaction={round_over || $self_guessed}>
+	<span slot="button" class="w-full">
 		<GuessButton
 			submit_guess={guess}
 			next_round={() => client.next_round()}
 			{show_guess}
 			{show_next}
+			mp_wait={$self_guessed}
 		/>
-	</div>
+	</span>
 </Map>
 
 <XpBarMp {client} round={curr_self_round} />
-
-<div
-	class="pointer-events-none absolute bottom-0 left-0 z-10 hidden w-full items-start justify-center p-4 lg:bottom-0 lg:flex"
->
-	<GuessButton
-		submit_guess={guess}
-		next_round={() => client.next_round()}
-		{show_guess}
-		{show_next}
-	/>
-</div>
 
 <p
 	class="pointer-events-none absolute bottom-0 left-0 m-1 bg-black/50 px-2 text-base text-white/80 md:text-xl"
@@ -154,9 +164,11 @@
 
 <PlayerList
 	players={$players}
-	client_player_id={client.metadata.player_id}
 	next_round_checks={$players_next_round}
+	guessed_checks={$players_guessed}
 />
+
+<MenuButton override_onclick={() => client.fancy_leave_game()} />
 
 {#if $timelimit !== undefined && !$self_guessed && $state === 'playing'}
 	<div class="mp_danger pointer-events-none absolute z-20 h-screen w-screen animate-pulse"></div>

@@ -6,6 +6,7 @@
 	import { ROUNDS_PER_MATCH } from '../../../../shared';
 	import type { MPRound } from '../../../../shared/MP';
 	import { MPClient } from '../Client';
+	import EmptyContainer from '$lib/UI Components/Container/EmptyContainer.svelte';
 
 	export let round: MPRound;
 	export let client: MPClient;
@@ -73,51 +74,58 @@
 </script>
 
 <div
-	class="xpWrapper pointer-events-none absolute left-0 top-0 z-10 flex w-full flex-col items-center justify-start p-2"
+	class="xpWrapper pointer-events-none absolute left-0 top-0 z-10 flex w-full flex-col items-end gap-2 p-2"
 >
-	<div class="xpbar relative flex h-8 w-1/2 bg-gray-900 p-1 shadow-lg md:w-1/4">
-		{#key $round_index}
-			{#each client.get_rounds_completed() as state}
-				{@const percentage = 100 / ROUNDS_PER_MATCH}
-				<div
-					class="h-full outline outline-gray-900 transition-colors"
-					class:xp-finished={state}
-					class:xp-not_finished={!state}
-					style="width: {percentage}%;"
-				></div>
-			{/each}
-		{/key}
+	<div
+		class="flex w-full flex-col-reverse items-end justify-center gap-4 sm:flex-row sm:items-center sm:justify-end"
+	>
+		<span class="flex flex-col items-center">
+			<p class="font-MinecraftTen text-5xl drop-shadow-[0_2px_2px_rgba(0,0,0,1)]">
+				{#if $timelimit !== undefined}
+					<p class=" text-red-600 drop-shadow-lg">{format_time($timelimit / 1000)}</p>
+				{:else}
+					<p class="drop-shadow-lg">{format_time(round.time / 1000)}</p>
+				{/if}
+			</p>
+		</span>
+
+		<div class="pointer-events-auto relative flex h-16 w-[16rem] sm:h-20 sm:w-[20rem]">
+			<EmptyContainer full={true}>
+				<span class="flex h-full w-full gap-1 bg-white">
+					{#each client.get_rounds_completed() as state, i}
+						{@const percentage = 100 / ROUNDS_PER_MATCH}
+						<div
+							class="flex h-full items-center justify-center transition-colors"
+							class:xp-finished={state}
+							class:bg-mc-standard-bg={!state}
+							style="width: {percentage}%;"
+						>
+							{#if i == Math.floor(ROUNDS_PER_MATCH / 2)}
+								<p
+									class="pointer-events-auto font-MinecraftTen text-5xl text-mc-text-black"
+									title="Round"
+								>
+									{$round_index + 1}
+								</p>
+							{/if}
+						</div>
+					{/each}
+				</span>
+			</EmptyContainer>
+		</div>
 	</div>
 
-	<p
-		class="pointer-events-auto absolute flex items-center text-2xl drop-shadow-[0_2px_2px_rgba(0,0,0,1)]"
-		title="Runda"
-	>
-		{$round_index + 1}
-	</p>
-
-	{#if $timelimit !== undefined}
-		<p class="text-3xl text-red-600 drop-shadow-lg">{format_time($timelimit / 1000)}</p>
-	{:else}
-		<p class="text-3xl drop-shadow-lg">{format_time(round.time / 1000)}</p>
-	{/if}
-
 	{#if round.finished}
-		<p
-			class="m-2 bg-gray-800 px-2 py-1 text-2xl text-green-400 shadow-lg"
-			transition:fly={{ y: -30 }}
-		>
-			<span class="text-gray-300">+</span>
-			{round.score} <span class="text-gray-200">({Math.floor(round.distance)} blocks)</span>
-		</p>
+		<span transition:fly={{ y: -30 }} class="-z-10">
+			<EmptyContainer>
+				<p class="flex items-center gap-4 px-2 py-1 text-3xl text-mc-text-black">
+					<span style="color: rgb(99, 192, 17);"
+						><span class="text-mc-text-black">+</span>
+						<span class="drop-shadow-[2px_2px_1px_#141414]">{round.score}</span></span
+					>
+					<span>({Math.floor(round.distance)} blocks)</span>
+				</p>
+			</EmptyContainer>
+		</span>
 	{/if}
 </div>
-
-<style>
-	:global(.xp-finished) {
-		background-color: rgb(149, 204, 101);
-	}
-	:global(.xp-not_finished) {
-		background-color: rgb(55 65 81);
-	}
-</style>

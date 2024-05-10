@@ -80,6 +80,13 @@
 		-moz-box-shadow: 0 var(--offset) 0px 0px var(--tw-shadow-color);
 	}
 
+	:global(.xp-finished) {
+		background-color: rgb(99, 192, 17);
+	}
+	:global(.ontop) {
+		z-index: 10;
+	}
+
 	:global(.current_pos, .correct_pos) {
 		padding: 0.5rem;
 		font-size: 1.5rem;

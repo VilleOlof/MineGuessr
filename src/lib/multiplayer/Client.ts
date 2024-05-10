@@ -25,6 +25,7 @@ export class MPClient {
     public current_timelimit: Writable<number | undefined> = writable(undefined);
     public error_abort_reason: Writable<string | undefined> = writable(undefined);
     public players_next_round: Writable<{ [key: string]: boolean }> = writable({});
+    public players_guessed: Writable<{ [key: string]: boolean }> = writable({});
     // ###
 
     constructor(user_id: string, auth: string) {
@@ -236,6 +237,7 @@ export class MPClient {
             this.current_panorama.set(payload.panorama_id);
             this.self_next_round_ready.set(false);
             this.players_next_round.set({});
+            this.players_guessed.set({});
 
             this.state.set("playing");
 
@@ -249,6 +251,12 @@ export class MPClient {
             if (payload.player_id === this.metadata.player_id) {
                 this.self_guessed.set(true);
             }
+
+            this.players_guessed.update((players) => {
+                players[payload.player_id] = true;
+
+                return players;
+            });
         }],
         [request_type.ROUND_ENDED, (_payload) => {
             const payload = _payload as Payloads.RoundEnded;

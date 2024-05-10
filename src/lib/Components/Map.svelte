@@ -201,7 +201,7 @@
 				<span class="pointer-events-auto absolute bottom-0 right-0">
 					<SmallButton on:click={() => (minimize_map = !minimize_map)}>
 						<img
-							src="left_arrow.png"
+							src="/left_arrow.png"
 							alt=""
 							style="image-rendering: pixelated; {minimize_map ? 'transform: rotate(90deg);' : ''}"
 							class="w-5 -rotate-90 py-1"
