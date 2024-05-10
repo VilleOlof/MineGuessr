@@ -16,6 +16,9 @@
 	export let game: Game;
 	export let show_end_map: boolean;
 
+	export let is_game_screen: boolean = false;
+	export let game_screen_data: { username: string | undefined; date: Date } | null = null;
+
 	let rounds = game.rounds;
 
 	$: total_points = $rounds.reduce((acc: number, curr: GameModule.Round) => acc + curr.score, 0);
@@ -28,9 +31,11 @@
 	<EmptyContainer>
 		<div class="flex flex-col items-center justify-start gap-6 px-4 py-4 md:px-10">
 			<div class="flex flex-col items-center">
-				<h1 class="text-5xl sm:text-6xl md:text-8xl">Game ended</h1>
+				<h1 class="text-5xl sm:text-6xl md:text-8xl">
+					{is_game_screen ? 'Game results' : 'Game ended'}
+				</h1>
 
-				{#if !data.user}
+				{#if !data.user && !is_game_screen}
 					<p class="text-lg text-mc-text-black md:text-2xl">
 						<button
 							on:click={Discord}
@@ -52,7 +57,8 @@
 			</div>
 
 			<div class="w-full">
-				{#each $rounds as round, i}
+				<!-- For some reason the data from /game/:id is just reversed :rdshrug: -->
+				{#each is_game_screen ? $rounds.reverse() : $rounds as round, i}
 					<div class="w-full text-3xl sm:text-4xl md:text-5xl">
 						<div class="flex w-full items-center justify-start gap-4">
 							<span class="w-fit text-2xl text-gray-500 sm:text-3xl md:text-4xl">{i + 1}</span>
@@ -64,12 +70,34 @@
 							>
 						</div>
 
-						{#if i !== $rounds.length}
+						{#if i !== $rounds.length - 1}
 							<div class="h-1 w-full rounded-md bg-mc-standard-border"></div>
 						{/if}
 					</div>
 				{/each}
 			</div>
+
+			{#if game_screen_data}
+				<div class="flex flex-col items-center">
+					{#if game.game_type === GameType.Daily}
+						<p class="text-2xl text-[#fae742] drop-shadow-[2px_2px_1px_#141414] sm:text-3xl">
+							Daily mode ({game_screen_data.date.getFullYear()}/{game_screen_data.date.getMonth() +
+								1}/{game_screen_data.date.getDate()})
+						</p>
+					{:else}
+						<p class="text-lg">
+							{game_screen_data.date.toLocaleString()}
+						</p>
+					{/if}
+
+					<div class="flex gap-4 text-2xl">
+						<span class="text-mc-text-black/80">By:</span>
+						{game_screen_data.username ? `@${game_screen_data.username}` : '???'}
+					</div>
+
+					<p class="text-sm text-gray-400">{game.game_id}</p>
+				</div>
+			{/if}
 
 			<div class="w-full">
 				<!-- bit of an ugly way but these buttons kinda suck lmaooooo -->

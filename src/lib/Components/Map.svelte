@@ -43,7 +43,7 @@
 	}
 
 	function handle_keyup(ev: KeyboardEvent) {
-		if (['1', '2', '3', '4', '5', '6', '7', '8'].includes(ev.key)) {
+		if (['1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(ev.key)) {
 			let index = parseInt(ev.key);
 			if (isNaN(index) || places[index] === null) return;
 			let { x, y } = places[index].position;

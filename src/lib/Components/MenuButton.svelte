@@ -15,6 +15,6 @@
 			}
 		}}
 	>
-		<img src="left_arrow.png" alt="" style="image-rendering: pixelated;" class="w-6 py-1" />
+		<img src="/left_arrow.png" alt="Menu" style="image-rendering: pixelated;" class="w-6 py-1" />
 	</SmallButton>
 </div>
