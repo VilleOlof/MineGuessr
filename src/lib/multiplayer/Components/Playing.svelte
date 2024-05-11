@@ -76,7 +76,7 @@
 		const round = player.rounds[round_index];
 
 		const correct_marker = Game.place_correct_marker(round.location, user_count);
-		Game.move_camera_to_pos(round.location);
+		Game.lerp_camera_to_pos(round.location);
 
 		// current_pos is the user's guess
 		markers_to_clear.push(correct_marker, 'current_pos');

@@ -6,6 +6,7 @@ import type { Stat } from "@prisma/client";
 import toast from "svelte-french-toast";
 import { GameModule } from "../../shared/GameModule";
 import { uuidv4, type location_metadata } from "../../shared";
+import { lerp_camera } from "./camera_lerping";
 
 /**
  * Represents a game
@@ -178,7 +179,7 @@ export class Game {
         Game.draw_line_to_guess(current_round.location, guess);
         Game.place_correct_marker(current_round.location);
 
-        Game.move_camera_to_pos(current_round.location);
+        Game.lerp_camera_to_pos(current_round.location);
 
         await this.send_stats(current_round);
 
@@ -389,6 +390,24 @@ export class Game {
 
         controls.controls = map.mapControls;
 
+    }
+
+    static lerp_camera_to_pos(pos: THREE.Vector2) {
+        let map = get(curr_bluemap);
+
+        if (map === null) {
+            throw new Error("BlueMap is not initialized");
+        }
+
+        let map_viewer = map.mapViewer.map;
+        let controls = map.mapViewer.controlsManager;
+
+        if (map_viewer) {
+            let prev_y = controls.camera.position.y;
+            lerp_camera(controls, map, new THREE.Vector3(pos.x, prev_y, pos.y));
+        }
+
+        controls.controls = map.mapControls;
     }
 
     /**

@@ -8,6 +8,7 @@
 	import type { Place } from '$lib/server/places';
 	import { Game } from '$lib/Game';
 	import { onDestroy, onMount } from 'svelte';
+	import { clear_lerp } from '$lib/camera_lerping';
 
 	export let fullscreen: boolean = false;
 	export let stop_interaction: boolean = false;
@@ -20,11 +21,15 @@
 	onMount(() => {
 		addEventListener('next_round', force_close);
 		addEventListener('keyup', handle_keyup);
+
+		addEventListener('bluemapCameraMoved', clear_lerp);
 	});
 
 	onDestroy(() => {
 		removeEventListener('next_round', force_close);
 		removeEventListener('keyup', handle_keyup);
+
+		removeEventListener('bluemapCameraMoved', clear_lerp);
 	});
 
 	const force_close = (ev: Event) => ResizeMap(ev, false);
@@ -111,7 +116,7 @@
 			? [vector.x, vector.y]
 			: selected_place.split(',').map((c) => Number(c.trim()));
 
-		Game.move_camera_to_pos(new THREE.Vector2(x, z));
+		Game.lerp_camera_to_pos(new THREE.Vector2(x, z));
 
 		selected_place = '0, 0';
 	}
@@ -135,6 +140,8 @@
 							bind:bluemap
 							on:mapInteraction={(event) => {
 								if (stop_interaction) return;
+
+								clear_lerp();
 
 								let pos = GetPosFromInteraction(event);
 								if (pos) $current_pos = pos;
