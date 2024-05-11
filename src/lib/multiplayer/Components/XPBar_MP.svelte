@@ -92,24 +92,26 @@
 		<div class="pointer-events-auto relative flex h-16 w-[16rem] sm:h-20 sm:w-[20rem]">
 			<EmptyContainer full={true}>
 				<span class="flex h-full w-full gap-1 bg-white">
-					{#each client.get_rounds_completed() as state, i}
-						{@const percentage = 100 / ROUNDS_PER_MATCH}
-						<div
-							class="flex h-full items-center justify-center transition-colors"
-							class:xp-finished={state}
-							class:bg-mc-standard-bg={!state}
-							style="width: {percentage}%;"
-						>
-							{#if i == Math.floor(ROUNDS_PER_MATCH / 2)}
-								<p
-									class="pointer-events-auto font-MinecraftTen text-5xl text-mc-text-black"
-									title="Round"
-								>
-									{$round_index + 1}
-								</p>
-							{/if}
-						</div>
-					{/each}
+					{#key $round_index}
+						{#each client.get_rounds_completed() as state, i}
+							{@const percentage = 100 / ROUNDS_PER_MATCH}
+							<div
+								class="flex h-full items-center justify-center transition-colors"
+								class:xp-finished={state}
+								class:bg-mc-standard-bg={!state}
+								style="width: {percentage}%;"
+							>
+								{#if i == Math.floor(ROUNDS_PER_MATCH / 2)}
+									<p
+										class="pointer-events-auto font-MinecraftTen text-5xl text-mc-text-black"
+										title="Round"
+									>
+										{$round_index + 1}
+									</p>
+								{/if}
+							</div>
+						{/each}
+					{/key}
 				</span>
 			</EmptyContainer>
 		</div>

@@ -222,26 +222,26 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<WebSo
         if (game.all_players_guessed()) {
             ws_log(game_id, player_id, "all players guessed");
 
-            if (game.current_round + 1 === ROUNDS_PER_MATCH) {
-                GameHandler.end_game(game_id);
+            // if (game.current_round + 1 === ROUNDS_PER_MATCH) {
+            //     GameHandler.end_game(game_id);
 
-                const game_data = JSON.stringify({
-                    type: request_type.GAME_FINISHED,
-                    payload: {
-                        players: game.get_all_players_data()
-                    } as Payloads.GameFinished
-                });
+            //     const game_data = JSON.stringify({
+            //         type: request_type.GAME_FINISHED,
+            //         payload: {
+            //             players: game.get_all_players_data()
+            //         } as Payloads.GameFinished
+            //     });
 
-                ws_log(game_id, player_id, "game finished");
+            //     ws_log(game_id, player_id, "game finished");
 
-                server.publish(game_label, game_data);
+            //     server.publish(game_label, game_data);
 
-                // Clean up
-                game.self_destruct();
-                delete Ping.user_games[ws.data.uuid];
+            //     // Clean up
+            //     game.self_destruct();
+            //     delete Ping.user_games[ws.data.uuid];
 
-                return;
-            }
+            //     return;
+            // }
 
             const game_data = JSON.stringify({
                 type: request_type.ROUND_ENDED,
@@ -256,7 +256,7 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<WebSo
             return;
         }
     }],
-    [request_type.GOTO_NEXT_ROUND, (_, server, { player_id, game_id }) => {
+    [request_type.GOTO_NEXT_ROUND, (ws, server, { player_id, game_id }) => {
         if (!game_id) throw new Error("No game_id provided");
 
         const game = GameHandler.games[game_id];
@@ -276,6 +276,28 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<WebSo
         if (game.guess_timeout) {
             clearTimeout(game.guess_timeout);
             game.guess_timeout = null;
+        }
+
+        if (game.current_round + 1 === ROUNDS_PER_MATCH) {
+            const game_label = get_game_label(game_id);
+            GameHandler.end_game(game_id);
+
+            const game_data = JSON.stringify({
+                type: request_type.GAME_FINISHED,
+                payload: {
+                    players: game.get_all_players_data()
+                } as Payloads.GameFinished
+            });
+
+            ws_log(game_id, player_id, "game finished");
+
+            server.publish(game_label, game_data);
+
+            // Clean up
+            game.self_destruct();
+            delete Ping.user_games[ws.data.uuid];
+
+            return;
         }
 
         ws_next_round(game, server);

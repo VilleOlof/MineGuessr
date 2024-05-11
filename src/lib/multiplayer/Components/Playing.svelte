@@ -156,8 +156,8 @@
 <XpBarMp {client} round={curr_self_round} />
 
 <p
-	class="pointer-events-none absolute bottom-0 left-0 m-1 bg-black/50 px-2 text-base text-white/80 md:text-xl"
-	title="Spelkod"
+	class="pointer-events-none absolute bottom-0 left-0 m-1 rounded-sm bg-black/50 px-2 text-base text-white/80 md:text-xl"
+	title="Game code"
 >
 	{client.metadata.game_id}
 </p>
