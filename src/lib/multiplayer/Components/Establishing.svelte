@@ -2,6 +2,38 @@
 	import Progressbar from '$lib/UI Components/Progressbar.svelte';
 	import { onMount } from 'svelte';
 
+	const fun_facts: string[] = [
+		'You can use your arrow keys to move the map in the main menu!',
+		"Did you know that you can use the 'g' key to submit your guess?",
+		"Did you know that you can use the 'Enter' key to submit your guess?",
+		"Did you know that you can use the 'g' key to go to the next round?",
+		"Did you know that you can use the 'Enter' key to go to the next round?",
+		'i am speed',
+		'sus',
+		'glim glam is best pony',
+		'wtf is a glim glam',
+		'sub to @VilleOlof on YouTube!!!!',
+		'vroom vroom',
+		'*villager noises*',
+		"you can't spell 'minecraft' without 'guessr'!",
+		'some of these are lies :)',
+		'nice',
+		'you are doing great!',
+		'you are doing great! (no, really)',
+		'you are doing great! (no, really, you are)',
+		'you are doing great! (no, really, you are, i promise)',
+		'why are you still here?',
+		'on a scale from 1 to 10, how are you feeling?',
+		'remember to drink water!',
+		'breathe in, breathe out',
+		'lmao',
+		'creeper aw man',
+		'poggers',
+		'are you a floorwegian?',
+		'type 1 in chat if you see this',
+		'magic trick! quick, think of a number between 1 and 10!'
+	];
+
 	let progress: number = 0;
 
 	onMount(() => {
@@ -49,4 +81,8 @@
 	<h1 class="my-4 text-center text-2xl sm:text-4xl">Trying to talk with the server...</h1>
 
 	<Progressbar bind:value={progress} />
+
+	<p class="mt-4 text-center text-2xl text-gray-400 sm:text-4xl">
+		{fun_facts[Math.floor(Math.random() * fun_facts.length)]}
+	</p>
 </div>
