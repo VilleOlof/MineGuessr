@@ -105,14 +105,18 @@
 		</div>
 	</div>
 
-	<RadioGroup
-		items={[
-			['creative', 'Creative'],
-			['survival', 'Survival'],
-			['adventure', 'Adventure']
-		]}
-		value="creative"
-	></RadioGroup>
+	<div class="flex items-center gap-4">
+		<p class="font-MinecraftTen text-4xl text-mc-text-black">Radio</p>
+
+		<RadioGroup
+			items={[
+				['creative', 'Creative'],
+				['survival', 'Survival'],
+				['adventure', 'Adventure']
+			]}
+			value="creative"
+		></RadioGroup>
+	</div>
 
 	<div class="absolute left-1/2 top-0 m-2 -translate-x-1/2">
 		<Advancement title="MineGuessr" description="You played MineGuessr!" src="/Earth.webp"

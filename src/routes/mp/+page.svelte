@@ -4,7 +4,12 @@
 	import type { PageData } from './$types';
 	import { onDestroy, onMount } from 'svelte';
 	import { MPClient } from '$lib/multiplayer/Client';
-	import Button from '$lib/Components/Button.svelte';
+	import MenuButton from '$lib/Components/MenuButton.svelte';
+	import Input from '$lib/UI Components/Input.svelte';
+	import RadioGroup from '$lib/UI Components/RadioGroup.svelte';
+	import Button from '$lib/UI Components/Button/Button.svelte';
+	import SmallButton from '$lib/UI Components/Button/SmallButton.svelte';
+	import OpenLobbies from '$lib/multiplayer/Components/OpenLobbies.svelte';
 
 	export let data: PageData;
 	let interval: NodeJS.Timeout;
@@ -19,8 +24,12 @@
 		goto(`/mp/play?visibility=${visibility}&game_name=${game_name}&player_limit=${player_limit}`);
 	}
 
+	function join_game() {
+		if (game_code === '') return;
+		goto(`/mp/play?game_id=${game_code}`);
+	}
+
 	onMount(() => {
-		// Fetch lobbies every minute
 		interval = setInterval(async () => {
 			data.lobbies = await MPClient.get_lobbies();
 		}, 10 * 1000);
@@ -31,118 +40,83 @@
 	});
 </script>
 
-<div class="flex h-full w-full flex-col p-4 lg:flex-row lg:gap-4">
-	<div class="left flex w-full flex-col items-end gap-4">
-		<div class="info flex h-1/3 w-full flex-col items-center justify-center gap-4 p-4">
-			<span class="flex gap-4">
-				<!-- Would look nice with some custom icon or something for MP-->
-				<!-- <img src="/Earth.webp" alt="Minecraft Earth" class="h-24 w-24" /> -->
-				<h1 class="text-5xl lg:text-8xl">Multiplayer</h1>
-			</span>
+<div
+	class="flex h-full w-full flex-col items-center justify-start gap-8 overflow-y-scroll px-2 py-4 pt-20"
+>
+	<h1 class="font-MinecraftTen text-5xl sm:text-7xl lg:text-8xl">Multiplayer</h1>
 
-			<p class="text-center text-xl text-gray-300/80 lg:text-left">
-				Compete against other players<br />
-				to see who can guess the closest, the fastest!
-			</p>
-		</div>
-		<div class="info flex h-2/3 w-full flex-col items-center justify-center gap-4">
-			<h2 class="text-3xl lg:text-5xl">Create a new lobby</h2>
-
-			<div class="inputs flex flex-col gap-4 text-xl lg:text-3xl">
-				<span class="flex flex-col">
-					<p>Lobby name (?)</p>
-					<input class="bg-gray-700 px-2" type="text" placeholder="..." bind:value={game_name} />
-				</span>
-				<span class="flex justify-between gap-2">
-					<div class="flex flex-col">
-						<p>Game visibility</p>
-						<select class="bg-gray-700 px-2 py-1" bind:value={visibility}>
-							<option value="public">Public</option>
-							<option value="private">Private</option>
-						</select>
-					</div>
-
-					<div class="flex flex-col">
-						<p>Player limit</p>
-						<input
-							class="h-full w-32 bg-gray-700 px-2"
-							type="number"
-							min="2"
-							max="25"
-							bind:value={player_limit}
-						/>
-					</div>
-				</span>
-			</div>
-
-			<button
-				on:click={create_game}
-				class="c-shadow flex items-center gap-2 rounded-sm bg-gray-700 px-4 py-1 text-3xl shadow-cyan-400 transition-transform hover:-translate-x-1 hover:-translate-y-1 active:scale-90 lg:text-5xl"
+	<div
+		id="mp_content"
+		class="flex w-full flex-col items-start justify-start gap-4 lg:h-full lg:w-1/2 lg:flex-row lg:justify-center"
+	>
+		<div class="flex h-2/3 w-full flex-col items-center justify-between">
+			<div
+				id="mp_lobbycreate"
+				class="flex w-full flex-col items-center gap-2 px-4 md:w-3/4 lg:w-full"
 			>
-				Create
-			</button>
-		</div>
-	</div>
+				<p class="text-center text-4xl lg:text-5xl">Create new lobby</p>
 
-	<div class="right flex w-full flex-grow flex-col items-center justify-center lg:py-4">
-		<h2 class="text-2xl lg:text-5xl">Join with code</h2>
-		<div class="flex gap-4">
-			<input
-				class="bg-gray-700 px-2 lg:text-xl"
-				type="text"
-				placeholder="code..."
-				bind:value={game_code}
-				on:keydown={(e) => {
-					if (e.key === 'Enter') {
-						if (game_code === '') return;
-						goto(`/mp/play?game_id=${game_code}`);
-					}
-				}}
-			/>
-			<Button
-				on:click={() => {
-					if (game_code === '') return;
-					goto(`/mp/play?game_id=${game_code}`);
-				}}>Join</Button
-			>
-		</div>
-
-		<div class="my-6 h-1 w-1/2 rounded-lg bg-slate-50/10"></div>
-
-		<h2 class="my-4 text-3xl lg:text-5xl">Find open lobbies</h2>
-		<div
-			class="lobbybody c-shadow flex h-2/4 w-full flex-col gap-2 overflow-y-auto bg-gray-950/50 p-2 shadow-gray-950/70 drop-shadow-lg sm:w-3/4 md:w-1/2 lg:w-2/3"
-		>
-			{#each data.lobbies as lobby, i}
-				<!-- svelte-ignore a11y-no-static-element-interactions -->
-				<div
-					on:click={() => goto(`/mp/play?game_id=${lobby.game_id}`)}
-					on:keydown={() => goto(`/mp/play?game_id=${lobby.game_id}`)}
-					class="flex cursor-pointer items-center justify-between px-2 py-1 transition-colors hover:bg-gray-800"
-				>
-					<span class="flex items-center gap-4">
-						<p class="text-gray-400">{lobby.game_id}</p>
-						<p class="text-lg text-gray-200">{lobby.players.length} / {lobby.player_limit}</p>
-						<p class="max-w-96 overflow-hidden text-ellipsis whitespace-nowrap lg:text-3xl">
-							{lobby.game_name}
-						</p>
-					</span>
-
-					<button class="bg-gray-800 px-4 py-1">Join</button>
+				<div class="flex w-full items-center justify-between text-xl">
+					<p class="text-2xl">Name</p>
+					<span class="flex w-2/3 justify-end sm:w-full"
+						><Input bind:value={game_name} placeholder="..." /></span
+					>
 				</div>
 
-				{#if i + 1 !== data.lobbies.length}
-					<div class="h-1 w-full rounded-md bg-cyan-500/20"></div>
-				{/if}
-			{/each}
-		</div>
-	</div>
-</div>
+				<div class="flex w-full items-center justify-between text-xl">
+					<p class="text-2xl">Limit</p>
+					<span class="flex w-2/3 justify-end sm:w-full"
+						><Input bind:value={player_limit} placeholder="Player limit" type="number" /></span
+					>
+				</div>
 
-<a
-	class="rounds absolute left-0 top-0 m-2 aspect-square h-auto w-16 transition-transform hover:-rotate-6 hover:scale-110 active:scale-90 sm:w-24"
-	title="Back to the menu"
-	href="/"
->
-	<img src="/Earth.webp" alt="Back" />
-</a>
+				<div class="flex w-full items-center justify-between text-xl">
+					<p class="text-2xl">Visibility</p>
+					<RadioGroup
+						items={[
+							['public', 'Public'],
+							['private', 'Private']
+						]}
+						bind:value={visibility}
+					/>
+				</div>
+
+				<Button classes="text-2xl sm:text-3xl" on:click={create_game}>
+					<span class="flex w-full items-center justify-center">Create</span>
+				</Button>
+			</div>
+
+			<span class="flex w-full items-center justify-center lg:hidden">
+				<OpenLobbies lobbies={data.lobbies} />
+			</span>
+
+			<div id="mp_code_join" class="flex w-full flex-col items-center">
+				<h2 class="ml-2 hidden w-full justify-center text-center text-4xl lg:flex lg:text-5xl">
+					Join with code
+				</h2>
+
+				<div
+					class="flex w-full items-center justify-between gap-4 text-3xl md:w-3/4 lg:w-full lg:justify-center"
+				>
+					<span class="w-2/3"
+						><Input
+							bind:value={game_code}
+							placeholder="Game code..."
+							on:keydown={(e) => {
+								if (e.key === 'Enter') join_game();
+							}}
+						/></span
+					>
+
+					<SmallButton classes="text-base" on:click={join_game}>Join</SmallButton>
+				</div>
+			</div>
+		</div>
+
+		<span class="hidden h-full items-center justify-center lg:flex">
+			<OpenLobbies lobbies={data.lobbies} />
+		</span>
+	</div>
+
+	<MenuButton />
+</div>
