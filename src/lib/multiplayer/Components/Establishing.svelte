@@ -35,43 +35,44 @@
 	];
 
 	let progress: number = 0;
+	let random_change = Math.random() + 0.5;
 
 	onMount(() => {
 		setTimeout(() => {
 			progress = 12;
-		}, 101);
+		}, 101 * random_change);
 
 		setTimeout(() => {
 			progress = 31;
-		}, 260);
+		}, 260 * random_change);
 
 		setTimeout(() => {
 			progress = 47;
-		}, 330);
+		}, 330 * random_change);
 
 		setTimeout(() => {
 			progress = 47;
-		}, 330);
+		}, 330 * random_change);
 
 		setTimeout(() => {
 			progress = 63;
-		}, 1012);
+		}, 1012 * random_change);
 
 		setTimeout(() => {
 			progress = 79;
-		}, 1724);
+		}, 1724 * random_change);
 
 		setTimeout(() => {
 			progress = 97;
-		}, 2038);
+		}, 2038 * random_change);
 
 		setTimeout(() => {
 			progress = 98;
-		}, 2764);
+		}, 2764 * random_change);
 
 		setTimeout(() => {
 			progress = 99;
-		}, 3623);
+		}, 3623 * random_change);
 	});
 </script>
 
