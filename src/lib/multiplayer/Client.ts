@@ -3,9 +3,8 @@ import { ROUNDS_PER_MATCH, type GameModule, type location_metadata } from "../..
 import { ServerResponseMessage, Visibility, get_request_type_name, request_type, type Lobby, type MPRound, type Payloads, type PlayerData, type ServerResponse, type State, type WebsocketRequest } from "../../../shared/MP";
 import * as THREE from "three";
 import { PUBLIC_MP_DEV, PUBLIC_MP_URL } from "$env/static/public";
-import toast from "svelte-french-toast";
-import { toast_style } from "$lib";
 import { goto } from "$app/navigation";
+import { toast } from "$lib/AdvancementToast";
 
 export class MPClient {
     private ws: WebSocket;
@@ -186,7 +185,12 @@ export class MPClient {
             this.metadata.player_limit = payload.player_limit;
             this.state.set("lobby");
 
-            if (this.notifications_enabled) toast.success("Joined a game", MPClient.toast_options);
+            if (this.notifications_enabled) {
+                toast({
+                    title: "Joined a game",
+                    description: `Game: ${payload.game_name}`,
+                });
+            }
         }],
         [request_type.OTHER_PLAYER_JOINED, (_payload) => {
             const payload = _payload as Payloads.OtherPlayerJoined;
@@ -202,7 +206,12 @@ export class MPClient {
                 return players;
             });
 
-            if (this.notifications_enabled) toast.success(`${payload.discord.username} just joined`, MPClient.toast_options);
+            if (this.notifications_enabled) {
+                toast({
+                    title: "Player joined",
+                    description: `@${payload.discord.username} just joined`
+                })
+            }
         }],
         [request_type.OTHER_PLAYER_READY, (_payload) => {
             const payload = _payload as Payloads.OtherPlayerReady;
@@ -215,8 +224,18 @@ export class MPClient {
 
             if (this.notifications_enabled) {
                 const user = get(this.players)[payload.player_id].discord.username;
-                if (payload.ready) toast.success(`@${user} is ready`, MPClient.toast_options);
-                else toast.error(`@${user} is not ready`, MPClient.toast_options);
+                if (payload.ready) {
+                    toast({
+                        title: "Player ready",
+                        description: `@${user} is ready`
+                    });
+                }
+                else {
+                    toast({
+                        title: "Player not ready",
+                        description: `@${user} is not ready`
+                    });
+                }
             }
         }],
         [request_type.NEXT_ROUND, (_payload) => {
@@ -315,7 +334,12 @@ export class MPClient {
                 detail: payload
             }));
 
-            if (this.notifications_enabled) toast.error(`You have ${Math.floor(payload.time / 1000)} seconds left`, MPClient.toast_options);
+            if (this.notifications_enabled) {
+                toast({
+                    title: "Round timelimit",
+                    description: `You have ${Math.floor(payload.time / 1000)} seconds left`
+                });
+            }
         }],
         [request_type.GOTO_NEXT_ROUND_TIMELIMIT, (_payload) => {
             const payload = _payload as Payloads.GotoNextRoundTimelimit;
@@ -325,7 +349,12 @@ export class MPClient {
                 detail: payload
             }));
 
-            if (this.notifications_enabled) toast.error(`Next round begins in ${Math.floor(payload.time / 1000)}s`, MPClient.toast_options);
+            if (this.notifications_enabled) {
+                toast({
+                    title: "Next round",
+                    description: `Next round begins in ${Math.floor(payload.time / 1000)}s`
+                });
+            }
         }],
         [request_type.OTHER_PLAYER_LEFT, (_payload) => {
             const payload = _payload as Payloads.OtherPlayerLeft;
@@ -418,9 +447,4 @@ export module MPClient {
             };
         });
     }
-
-    export const toast_options = {
-        style: toast_style,
-        duration: 3000
-    } as const;
 }

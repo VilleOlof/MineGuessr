@@ -1,12 +1,10 @@
 import { writable, type Writable } from "svelte/store";
 import * as THREE from "three";
 import type { BlueMapApp } from "./BlueMap/BlueMapApp";
-import toast from "svelte-french-toast";
+import { toast } from "./AdvancementToast";
 
 export const current_pos: Writable<THREE.Vector3 | null> = writable(null);
 export let curr_bluemap: Writable<BlueMapApp | null> = writable(null);
-
-export const toast_style = 'background-color: rgb(28 36 54); color: white; font-family: Minecraft, sans-serif;';
 
 // Disable Vue DevTools
 // @ts-ignore
@@ -107,9 +105,9 @@ export async function Discord() {
         location.href = url;
     } catch (e) {
         console.error(e);
-        toast.error('Something went wrong!', {
-            duration: 5000,
-            style: toast_style
-        });
+        toast({
+            title: 'Failed to connect to Discord',
+            description: 'Please try again later',
+        })
     }
 }

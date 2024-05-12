@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { MPClient } from '../Client';
-	import Header from '$lib/Components/Header.svelte';
-	import toast from 'svelte-french-toast';
-	import { GetDiscordAvatarUrl, toast_style } from '$lib';
+	import { GetDiscordAvatarUrl } from '$lib';
 	import { get } from 'svelte/store';
 	import { PUBLIC_ORIGIN } from '$env/static/public';
+	import Button from '$lib/UI Components/Button/Button.svelte';
+	import { toast } from '$lib/AdvancementToast';
 
 	export let client: MPClient;
 	const players = client.players;
@@ -15,8 +15,9 @@
 		if (!client.metadata.game_id) return;
 		navigator.clipboard.writeText(`${PUBLIC_ORIGIN}/mp/play/?game_id=${client.metadata.game_id}`);
 
-		toast.success('Copied game link!', {
-			style: toast_style,
+		toast({
+			title: 'Success!',
+			description: 'Copied game link!',
 			duration: 2000
 		});
 	}
@@ -25,8 +26,9 @@
 		if (!client.metadata.game_id) return;
 		navigator.clipboard.writeText(client.metadata.game_id);
 
-		toast.success('Copied game code!', {
-			style: toast_style,
+		toast({
+			title: 'Success!',
+			description: 'Copied game code!',
 			duration: 2000
 		});
 	}
@@ -38,8 +40,9 @@
 			last_ready_change &&
 			new Date().getTime() - last_ready_change.getTime() < ready_change_cooldown
 		) {
-			toast.error('Changing ready status too quickly!', {
-				style: toast_style,
+			toast({
+				title: 'Hold on!',
+				description: 'Changing ready status too quickly!',
 				duration: 2000
 			});
 			return;
@@ -52,13 +55,17 @@
 	}
 </script>
 
-<Header />
+<!-- <Header /> -->
 
-<div class="flex flex-col text-slate-300">
+<img src="/logo.svg" alt="MineGUessr" class="mb-8 w-11/12 md:w-8/12 lg:w-6/12 xl:w-4/12" />
+
+<div class="flex flex-col text-mc-standard-bg">
+	<!-- <img src="/logo.svg" alt="MineGUessr" class="mb-8 w-11/12" /> -->
+
 	<h1 class="text-3xl text-white">Multiplayer Lobby</h1>
 
 	<div class="mb-4 flex items-center gap-4">
-		<p class=" text-xl text-cyan-400/80">{client.metadata.game_name}</p>
+		<p class="text-xl text-green-400/80">{client.metadata.game_name}</p>
 		<p>{Object.keys($players).length} / {client.metadata.player_limit}</p>
 	</div>
 
@@ -87,7 +94,7 @@
 					viewBox="0 -960 960 960"
 					width="24"
 					fill="currentColor"
-					class="h-full w-full hover:scale-95 hover:text-lime-400 active:scale-105"
+					class="h-full w-full hover:scale-95 hover:text-green-400 active:scale-105"
 					><path
 						d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"
 					/></svg
@@ -128,46 +135,40 @@
 		>
 	</p>
 
-	<div class="my-4 h-1 w-full rounded-md bg-slate-700"></div>
+	<div class="my-4 h-1 w-full rounded-md bg-mc-standard-shadow"></div>
 
 	<p class="mb-2 text-4xl">Players</p>
-	<ul class="bg-slate-600 px-2 py-1">
+	<ul class="bg-[#121214] px-3 py-2">
 		{#each Object.entries($players) as [_, data], i}
 			<li
 				class:mp_not_ready={!data.lobby_ready}
-				class="flex items-center justify-between text-xl text-white"
+				class="flex items-center justify-between text-2xl text-white"
 			>
-				<span class="flex gap-2">
+				<span class="flex items-center gap-2">
 					<img
 						src={GetDiscordAvatarUrl(data.discord.user_id, data.discord.avatar)}
 						alt=""
-						class="h-6 w-6 rounded-full"
+						class="h-7 w-7 rounded-full"
 					/>
 					@{data.discord.username}
 				</span>
 			</li>
 
 			{#if i !== Object.entries($players).length - 1}
-				<div class="my-1 h-1 w-full rounded-md bg-slate-500"></div>
+				<div class="my-3 h-1 w-full rounded-md bg-mc-standard-shadow/50"></div>
 			{/if}
 		{/each}
 	</ul>
 
-	<div class="my-4 h-1 w-full rounded-md bg-slate-700"></div>
+	<div class="my-4 h-1 w-full rounded-md bg-mc-standard-shadow"></div>
 
-	<div class="actions flex w-full gap-2 text-2xl text-white">
-		<button
-			on:click={() => client.fancy_leave_game()}
-			title="Leave game"
-			class="w-1/2 bg-slate-600 transition-all hover:scale-95 hover:bg-slate-500 active:scale-105"
-			>Leave</button
-		>
-		<button
-			on:click={ready}
-			title="Change ready status"
-			class="w-1/2 bg-slate-600 transition-all hover:scale-95 hover:bg-slate-500 active:scale-105"
-			>Ready</button
-		>
+	<div class="actions flex w-full gap-2 text-3xl text-white">
+		<Button on:click={() => client.fancy_leave_game()}>
+			<span class="flex w-full justify-center">Leave</span>
+		</Button>
+		<Button on:click={ready}>
+			<span class="flex w-full justify-center">Ready</span>
+		</Button>
 	</div>
 </div>
 

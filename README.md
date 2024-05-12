@@ -31,3 +31,4 @@ You can find documentation for the project [here](https://docs.90gqguessr.se).
       - Bedrock like style, buttons, simple colors, big screenshot backdrop in menus.
       - Mariokart 8 deluxe main menu format?
 [ ] - Double check all the features/ui in different browsers.
+[ ] - Sound effects

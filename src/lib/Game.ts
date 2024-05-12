@@ -1,12 +1,12 @@
-import { GameType, UpdatePOIMarker, curr_bluemap, current_pos, toast_style } from "$lib";
+import { GameType, UpdatePOIMarker, curr_bluemap, current_pos } from "$lib";
 import { get, writable, type Writable } from "svelte/store";
 import * as THREE from "three";
 import { Stats, type DBStats } from "./Stats";
 import type { Stat } from "@prisma/client";
-import toast from "svelte-french-toast";
 import { GameModule } from "../../shared/GameModule";
 import { uuidv4, type location_metadata } from "../../shared";
 import { lerp_camera } from "./camera_lerping";
+import { toast } from "./AdvancementToast";
 
 /**
  * Represents a game
@@ -439,8 +439,9 @@ export class Game {
         catch (e) {
             console.log(`Error while sending stats: ${e}`);
 
-            toast.error("Failed to send statistics to the server", {
-                style: toast_style
+            toast({
+                title: "Error",
+                description: "Could not send stats to server",
             });
         }
     }

@@ -1,18 +1,11 @@
 <script lang="ts">
-	import {
-		Discord,
-		format_time,
-		GetDiscordAvatarUrl,
-		PAGE_SIZE,
-		toast_style,
-		type TopGame
-	} from '$lib';
+	import { Discord, format_time, GetDiscordAvatarUrl, PAGE_SIZE, type TopGame } from '$lib';
 	import { onMount } from 'svelte';
-	import toast from 'svelte-french-toast';
 	import { writable, type Writable } from 'svelte/store';
 	import { queryParam, ssp } from 'sveltekit-search-params';
 	import type { PageData } from './$types';
 	import Label from '$lib/Components/Label.svelte';
+	import { toast } from '$lib/AdvancementToast';
 
 	export let data: PageData;
 
@@ -42,8 +35,10 @@
 	async function fetch_page(page: number | null): Promise<TopGame[]> {
 		loading = true;
 		if (!page) {
-			toast.error('Failed to load in data, try again later', {
-				style: toast_style
+			toast({
+				title: 'No page found!',
+				description: 'No page found, try again later!',
+				duration: 2000
 			});
 
 			loading = false;
@@ -52,15 +47,19 @@
 		const res = await fetch(`/top/get?page=${page}`);
 		loading = false;
 		if (res.status === 404) {
-			toast.error('No more pages found!', {
-				style: toast_style
+			toast({
+				title: 'No more pages found!',
+				description: 'No more pages found, try again later!',
+				duration: 2000
 			});
 			return [];
 		}
 
 		if (!res.ok) {
-			toast.error('Failed to load in data, try again later', {
-				style: toast_style
+			toast({
+				title: 'Error!',
+				description: 'An error occurred while fetching the data!',
+				duration: 2000
 			});
 			return [];
 		}
@@ -74,8 +73,10 @@
 		const new_page = ($page ?? 1) + pageIn;
 
 		if (new_page < 1 || new_page > data.pages) {
-			toast.error('No more pages found!', {
-				style: toast_style
+			toast({
+				title: 'Invalid page!',
+				description: 'Invalid page, try again later!',
+				duration: 2000
 			});
 			return;
 		}

@@ -1,58 +1,52 @@
 <script lang="ts">
-	import Header from '$lib/Components/Header.svelte';
+	import Progressbar from '$lib/UI Components/Progressbar.svelte';
+	import { onMount } from 'svelte';
+
+	let progress: number = 0;
+
+	onMount(() => {
+		setTimeout(() => {
+			progress = 12;
+		}, 101);
+
+		setTimeout(() => {
+			progress = 31;
+		}, 260);
+
+		setTimeout(() => {
+			progress = 47;
+		}, 330);
+
+		setTimeout(() => {
+			progress = 47;
+		}, 330);
+
+		setTimeout(() => {
+			progress = 63;
+		}, 1012);
+
+		setTimeout(() => {
+			progress = 79;
+		}, 1724);
+
+		setTimeout(() => {
+			progress = 97;
+		}, 2038);
+
+		setTimeout(() => {
+			progress = 98;
+		}, 2764);
+
+		setTimeout(() => {
+			progress = 99;
+		}, 3623);
+	});
 </script>
 
-<Header />
+<div class="flex w-full flex-col items-center justify-center px-2 md:w-1/2">
+	<img src="/logo.svg" alt="MineGuessr" class="mb-12 w-full md:w-5/6" />
 
-<h1 class="my-4 text-4xl">Trying to talk with the server...</h1>
+	<h1 class="my-4 text-center text-2xl sm:text-4xl">Trying to talk with the server...</h1>
 
-<div class="lds-ring">
-	<div></div>
-	<div></div>
-	<div></div>
-	<div></div>
+	<Progressbar bind:value={progress} />
 </div>
-
-<style>
-	/* https://loading.io/css/ */
-
-	.lds-ring {
-		display: inline-block;
-		position: relative;
-		width: 80px;
-		height: 80px;
-	}
-	.lds-ring div {
-		--color: #91ee5c;
-		--size: 128px;
-		--width: 16px;
-
-		box-sizing: border-box;
-		display: block;
-		position: absolute;
-		width: var(--size);
-		height: var(--size);
-		margin: var(--width);
-		border: var(--width) solid var(--color);
-		border-radius: 50%;
-		animation: lds-ring 1.5s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-		border-color: var(--color) transparent transparent transparent;
-	}
-	.lds-ring div:nth-child(1) {
-		animation-delay: -0.45s;
-	}
-	.lds-ring div:nth-child(2) {
-		animation-delay: -0.3s;
-	}
-	.lds-ring div:nth-child(3) {
-		animation-delay: -0.15s;
-	}
-	@keyframes lds-ring {
-		0% {
-			transform: rotate(0deg);
-		}
-		100% {
-			transform: rotate(360deg);
-		}
-	}
-</style>
