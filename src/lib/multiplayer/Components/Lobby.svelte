@@ -55,13 +55,9 @@
 	}
 </script>
 
-<!-- <Header /> -->
-
 <img src="/logo.svg" alt="MineGUessr" class="mb-8 w-11/12 md:w-8/12 lg:w-6/12 xl:w-4/12" />
 
 <div class="flex flex-col text-mc-standard-bg">
-	<!-- <img src="/logo.svg" alt="MineGUessr" class="mb-8 w-11/12" /> -->
-
 	<h1 class="text-3xl text-white">Multiplayer Lobby</h1>
 
 	<div class="mb-4 flex items-center gap-4">

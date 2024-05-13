@@ -1,0 +1,37 @@
+on:
+    release:
+        types: [created]
+
+jobs:
+    release_map_proxy:
+      name: release_map_proxy_${{ matrix.target }}
+      runs-on: ubuntu-latest
+      strategy:
+        fail-fast: false
+        matrix:
+          target: [x86_64-unknown-linux-musl]
+      steps:
+        - uses: actions/checkout@master
+        - name: Compile and release
+          uses: rust-build/rust-build.action@v1.4.5
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with:
+            RUSTTARGET: ${{ matrix.target }}
+            SRC_DIR: "./map_proxy"
+    release_image_converter:
+        name: release_image_converter_${{ matrix.target }}
+        runs-on: ubuntu-latest
+        strategy:
+          fail-fast: false
+          matrix:
+            target: [x86_64-pc-windows-gnu, x86_64-unknown-linux-musl]
+        steps:
+          - uses: actions/checkout@master
+          - name: Compile and release
+            uses: rust-build/rust-build.action@v1.4.5
+            env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            with:
+              RUSTTARGET: ${{ matrix.target }}
+              SRC_DIR: "./image_converter"

@@ -40,7 +40,7 @@ export function toast(opts: AdvancementToast): void {
 
     toasters.push(adv);
 
-    if (!opts.duration) opts.duration = 5000;
+    if (!opts.duration) opts.duration = 3000;
 
     setTimeout(() => {
         remove(adv);

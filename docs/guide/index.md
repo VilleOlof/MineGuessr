@@ -5,13 +5,10 @@ This will hopefully, guide you through setting up MineGuessr on your own world.
 ## **Prerequisites**
 
 The following are required to run MineGuessr:
-- [BlueMap](https://bluemap.bluecolored.de/) installed on your Minecraft server
-- [Rust](https://doc.rust-lang.org/cargo/getting-started/installation.html)
+- [BlueMap](https://bluemap.bluecolored.de/) (V3.x) installed on your Minecraft server
 - [Bun](https://bun.sh/) or [NodeJS](https://nodejs.org/en/download) + [Bun](https://bun.sh/)
 - [a Discord Application](https://discord.com/developers/applications) for OAuth2
 - **Experience with the command line and basic programming**
-
-*We don't provide any prebuilt binaries and everything needs to be built / ran from source*
 
 ## **Setup**
 
@@ -27,6 +24,9 @@ And then we will go over the different parts of the project.
 And set them up one by one, starting with the Map Proxy.  
 
 ## **Map Proxy**
+
+> [!CAUTION]
+> TODO: Rewrite this section to include that the binary is prebuilt in releases.
 
 > [!TIP]
 > But if you can change the CORS settings for your BlueMap Webserver, you can skip this step.  
@@ -46,14 +46,11 @@ The Map Proxy needs a `Config.toml` when building the binary.
 # Config.toml
 map_url = "https://bluecolored.de/bluemap" # URL to the BlueMap webserver
 port = 40401 # Port the Map Proxy will run on
-redis_url = "redis://localhost:6379/" # Redis URL for caching assets
+redis_url = "redis://localhost:6379/" # Optional Redis URL for caching assets
 cache_time = 3600 # How long caches stay valid in redis
 ```
 
 ### **Building and Running**
-
-> [!IMPORTANT]
-> A Redis server is required to run the Map Proxy.
 
 ```bash
 # Build the binary
@@ -173,14 +170,23 @@ bunx prisma db push
 
 ### **Building and Running**
 
-```bash
-# Build
+::: code-group
+
+```bash [NodeJS]
+# Build 
 npm run build
 # Start the website
-node -r dotenv/config build
-
-# Note, we haven't tested the website with Bun
+node -r dotenv/config ./build
 ```
+
+```bash [Bun]
+# Build
+bun run build
+# Start the website
+bun -r dotenv/config ./build
+```
+
+:::
 
 ## **Adding Locations**
 
@@ -200,6 +206,9 @@ These will be outputted as 6 images, one for each side of the cube.
 But normally these are in formats like `.png` or `.jpg`, and need to be converted to `.webp`.  
 
 ### Image Converter
+
+> [!CAUTION]
+> TODO: Rewrite this section to include that the binary is prebuilt in releases.
 
 Luckily, this repo contains a little Rust program to convert them automatically.  
 ```bash

@@ -32,4 +32,15 @@ You can find documentation for the project [here](https://docs.90gqguessr.se).
       - Mariokart 8 deluxe main menu format?  
 [ ] - Double check all the features/ui in different browsers.  
 [ ] - Sound effects  
-[ ] - Host a Hermitcraft bluemap & site for vid and to get the project recognized?  
+[ ] - Stuff  
+      [X] - make redis optional  
+      [X] - make proxy use runtime config  
+      [X] - add prebuilt rust binaries  
+      [X] - test website with bun  
+
+      [X] - this makes only bun a toolchain requirement  
+
+      [ ] - env to disable discord login, disables /top and /mp  
+            - Switch from .env to one .ts file that exports the env vars?  
+      [ ] - env to disable /mp  
+[ ] - Host a Hermitcraft bluemap & site for vid and to get the project recognized?    

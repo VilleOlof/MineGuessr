@@ -189,6 +189,7 @@ export class MPClient {
                 toast({
                     title: "Joined a game",
                     description: `Game: ${payload.game_name}`,
+                    duration: 1000
                 });
             }
         }],
@@ -209,7 +210,8 @@ export class MPClient {
             if (this.notifications_enabled) {
                 toast({
                     title: "Player joined",
-                    description: `@${payload.discord.username} just joined`
+                    description: `@${payload.discord.username} just joined`,
+                    duration: 750
                 })
             }
         }],
@@ -227,13 +229,15 @@ export class MPClient {
                 if (payload.ready) {
                     toast({
                         title: "Player ready",
-                        description: `@${user} is ready`
+                        description: `@${user} is ready`,
+                        duration: 750,
                     });
                 }
                 else {
                     toast({
                         title: "Player not ready",
-                        description: `@${user} is not ready`
+                        description: `@${user} is not ready`,
+                        duration: 750,
                     });
                 }
             }
