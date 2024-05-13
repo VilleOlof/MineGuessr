@@ -18,6 +18,7 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
             RUSTTARGET: ${{ matrix.target }}
+            ARCHIVE_NAME: "MineGuessr_${{ github.event.release.tag_name }}_map_proxy_${{ matrix.target }}.zip"
             SRC_DIR: "./map_proxy"
     release_image_converter:
         name: release_image_converter_${{ matrix.target }}
@@ -34,4 +35,5 @@ jobs:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             with:
               RUSTTARGET: ${{ matrix.target }}
+              ARCHIVE_NAME: "MineGuessr_${{ github.event.release.tag_name }}_image_converter_${{ matrix.target }}.zip"
               SRC_DIR: "./image_converter"
