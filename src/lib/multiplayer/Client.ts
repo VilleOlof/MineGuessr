@@ -2,7 +2,7 @@ import { get, writable, type Writable } from "svelte/store";
 import { ROUNDS_PER_MATCH, type GameModule, type location_metadata } from "../../../shared";
 import { ServerResponseMessage, Visibility, get_request_type_name, request_type, type Lobby, type MPRound, type Payloads, type PlayerData, type ServerResponse, type State, type WebsocketRequest } from "../../../shared/MP";
 import * as THREE from "three";
-import { PUBLIC_MP_DEV, PUBLIC_MP_URL } from "$env/static/public";
+import { env } from "$env/dynamic/public";
 import { goto } from "$app/navigation";
 import { toast } from "$lib/AdvancementToast";
 
@@ -10,7 +10,7 @@ export class MPClient {
     private ws: WebSocket;
 
     public metadata: MPClient.Metadata;
-    public client_debug: boolean = PUBLIC_MP_DEV === "true";
+    public client_debug: boolean = env.PUBLIC_MP_DEV === "true";
     public notifications_enabled: boolean = true;
 
     public state: Writable<State> = writable("establishing");
@@ -409,8 +409,8 @@ export module MPClient {
     } as const;
     export type MPClientEvent = typeof MPClientEvent[keyof typeof MPClientEvent];
 
-    export const SERVER_URL = `http${PUBLIC_MP_DEV === "true" ? '' : 's'}://${PUBLIC_MP_URL}`;
-    export const WS_URL = `ws${PUBLIC_MP_DEV === "true" ? '' : 's'}://${PUBLIC_MP_URL}`;
+    export const SERVER_URL = `http${env.PUBLIC_MP_DEV === "true" ? '' : 's'}://${env.PUBLIC_MP_URL}`;
+    export const WS_URL = `ws${env.PUBLIC_MP_DEV === "true" ? '' : 's'}://${env.PUBLIC_MP_URL}`;
 
     export async function get_lobbies(): Promise<Lobby[]> {
         try {

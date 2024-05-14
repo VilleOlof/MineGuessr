@@ -4,10 +4,15 @@ import { error } from '@sveltejs/kit';
 import prand from 'pure-rand';
 import { ROUNDS_PER_MATCH } from '../../../../shared';
 import { get_places } from '$lib/server/places';
+import { env } from '$env/dynamic/public';
 
 export const ssr = false;
 
 export async function load({ cookies, url }) {
+    if (env.PUBLIC_DISCORD_ENABLED !== 'true' || env.PUBLIC_MP_URL === undefined) {
+        error(404, "Not found");
+    }
+
     const auth_cookie = cookies.get("auth_session");
     if (!auth_cookie) {
         error(401, "Unauthorized");

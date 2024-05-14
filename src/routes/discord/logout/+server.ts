@@ -1,6 +1,11 @@
 import { auth } from '$lib/server/lucia.js';
+import { env } from "$env/dynamic/public";
 
 export async function GET({ locals, cookies }) {
+    if (env.PUBLIC_DISCORD_ENABLED !== 'true') {
+        return new Response("Not found", { status: 404 });
+    }
+
     const session = await locals.auth.validate();
     if (!session) {
         return new Response(null, { status: 401 });

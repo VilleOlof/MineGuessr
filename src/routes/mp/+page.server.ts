@@ -1,7 +1,12 @@
 import { MPClient } from "$lib/multiplayer/Client";
 import { error, type NumericRange } from "@sveltejs/kit";
+import { env } from "$env/dynamic/public";
 
 export async function load({ locals }) {
+    if (env.PUBLIC_DISCORD_ENABLED !== 'true' || env.PUBLIC_MP_URL === undefined) {
+        error(404, "Not found");
+    }
+
     const session = await locals.auth.validate();
     if (!session) {
         return error(403, "You must be logged in to view this page");

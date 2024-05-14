@@ -4,7 +4,8 @@ import { sveltekit } from "lucia/middleware";
 import { dev } from "$app/environment";
 import { prisma } from "@lucia-auth/adapter-prisma";
 import { DB } from "./db";
-import { DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, DISCORD_REDIRECT_URL } from "$env/static/private";
+import { env as priv_env } from "$env/dynamic/private";
+import { env } from "$env/dynamic/public";
 
 export const auth = lucia({
     env: dev ? "DEV" : "PROD",
@@ -21,11 +22,11 @@ export const auth = lucia({
     }
 });
 
-export const discordAuth = discord(auth, {
-    clientId: DISCORD_CLIENT_ID,
-    clientSecret: DISCORD_CLIENT_SECRET,
-    redirectUri: DISCORD_REDIRECT_URL,
+export const discordAuth = env.PUBLIC_DISCORD_ENABLED === 'true' ? discord(auth, {
+    clientId: priv_env.DISCORD_CLIENT_ID,
+    clientSecret: priv_env.DISCORD_CLIENT_SECRET,
+    redirectUri: priv_env.DISCORD_REDIRECT_URL,
     scope: ["identify"]
-});
+}) : null;
 
 export type Auth = typeof auth;

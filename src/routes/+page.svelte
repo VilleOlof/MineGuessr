@@ -1,15 +1,13 @@
 <script lang="ts">
 	import Map from '$lib/Components/Map.svelte';
 	import type { PageData } from './$types';
-	import { PUBLIC_MAP_URL, PUBLIC_WORLD_NAME } from '$env/static/public';
+	import { env } from '$env/dynamic/public';
 	import MainButtons from '$lib/Components/Homepage/MainButtons.svelte';
 	import SmallButtons from '$lib/Components/Homepage/SmallButtons.svelte';
 	import Discord from '$lib/Components/Homepage/Discord.svelte';
 	import Info from '$lib/Components/Homepage/Info.svelte';
 	import Report from '$lib/Components/Homepage/Report.svelte';
 	import Stats from '$lib/Components/Homepage/Stats.svelte';
-	import SmallButton from '$lib/UI Components/Button/SmallButton.svelte';
-	import { toast } from '$lib/AdvancementToast';
 
 	export let data: PageData;
 
@@ -25,9 +23,9 @@
 >
 	<div class="m-8 flex flex-col items-center gap-2 xl:items-end">
 		<img src="/logo.svg" alt="MineGuessr" class="w-11/12 drop-shadow-lg xl:w-full" />
-		{#if PUBLIC_WORLD_NAME !== ''}
+		{#if env.PUBLIC_WORLD_NAME !== undefined}
 			<p class="rounded-md bg-mc-text-black/80 px-4 text-2xl drop-shadow-xl xl:text-4xl">
-				World: {PUBLIC_WORLD_NAME}
+				World: {env.PUBLIC_WORLD_NAME}
 			</p>
 		{/if}
 	</div>
@@ -81,10 +79,10 @@
 <div class="absolute bottom-0 left-0 flex w-full items-center justify-between p-2">
 	<p>
 		Map from <a
-			href={PUBLIC_MAP_URL}
+			href={env.PUBLIC_MAP_URL}
 			target="_blank"
 			class=" text-green-500 underline underline-offset-2 transition-colors hover:text-green-400"
-			>{new URL(PUBLIC_MAP_URL).host}</a
+			>{new URL(env.PUBLIC_MAP_URL).host}</a
 		>
 	</p>
 

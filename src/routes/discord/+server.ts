@@ -1,10 +1,13 @@
-import { dev } from '$app/environment';
 import { logger } from '$lib/server/logger.js';
 import { auth, discordAuth } from '$lib/server/lucia.js';
 import { error, redirect } from '@sveltejs/kit';
-import { lucia } from 'lucia';
+import { env } from "$env/dynamic/public";
 
 export async function GET({ cookies, url, locals }) {
+    if (env.PUBLIC_DISCORD_ENABLED !== 'true') {
+        return new Response("Not found", { status: 404 });
+    }
+
     const code = url.searchParams.get("code");
     const state = url.searchParams.get("state");
 
@@ -21,7 +24,7 @@ export async function GET({ cookies, url, locals }) {
     }
 
     try {
-        const discordUserAuth = await discordAuth.validateCallback(code);
+        const discordUserAuth = await discordAuth!.validateCallback(code);
 
         const getUser = async () => {
             const existingUser = await discordUserAuth.getExistingUser();

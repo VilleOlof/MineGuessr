@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { env } from '$env/dynamic/public';
 	import { toast } from '$lib/AdvancementToast';
 	import Button from '$lib/UI Components/Button/Button.svelte';
 
@@ -19,24 +20,27 @@
 <Button on:click={() => goto('/play?daily=true')}
 	><img src="/Earth.webp" alt="" style="height: {_size}; width: {_size}" /> Daily mode</Button
 >
-<Button
-	on:click={() => {
-		if (!mp_enabled) {
-			toast({
-				title: 'Multiplayer disabled',
-				description: 'You need to be logged in to play multiplayer'
-			});
 
-			return;
-		}
-		goto('/mp');
-	}}
-	classes={mp_enabled ? '' : 'mp-disabled'}
-	><img src="/Earth.webp" alt="" style="height: {_size}; width: {_size}" /> Multiplayer</Button
->
-<Button on:click={() => goto('/top')}
-	><img src="/Earth.webp" alt="" style="height: {_size}; width: {_size}" /> Leaderboards</Button
->
+{#if env.PUBLIC_DISCORD_ENABLED === 'true'}
+	<Button
+		on:click={() => {
+			if (!mp_enabled) {
+				toast({
+					title: 'Multiplayer disabled',
+					description: 'You need to be logged in to play multiplayer'
+				});
+
+				return;
+			}
+			goto('/mp');
+		}}
+		classes={mp_enabled ? '' : 'mp-disabled'}
+		><img src="/Earth.webp" alt="" style="height: {_size}; width: {_size}" /> Multiplayer</Button
+	>
+	<Button on:click={() => goto('/top')}
+		><img src="/Earth.webp" alt="" style="height: {_size}; width: {_size}" /> Leaderboards</Button
+	>
+{/if}
 
 <style>
 	:global(.mp-disabled) {
