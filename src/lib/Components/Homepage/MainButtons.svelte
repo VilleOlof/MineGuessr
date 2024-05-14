@@ -21,7 +21,7 @@
 	><img src="/Earth.webp" alt="" style="height: {_size}; width: {_size}" /> Daily mode</Button
 >
 
-{#if env.PUBLIC_DISCORD_ENABLED === 'true'}
+{#if env.PUBLIC_DISCORD_ENABLED === 'true' && env.PUBLIC_MP_URL !== undefined}
 	<Button
 		on:click={() => {
 			if (!mp_enabled) {
@@ -37,6 +37,9 @@
 		classes={mp_enabled ? '' : 'mp-disabled'}
 		><img src="/Earth.webp" alt="" style="height: {_size}; width: {_size}" /> Multiplayer</Button
 	>
+{/if}
+
+{#if env.PUBLIC_DISCORD_ENABLED === 'true'}
 	<Button on:click={() => goto('/top')}
 		><img src="/Earth.webp" alt="" style="height: {_size}; width: {_size}" /> Leaderboards</Button
 	>

@@ -7,7 +7,6 @@ This will hopefully, guide you through setting up MineGuessr on your own world.
 The following are required to run MineGuessr:
 - [BlueMap](https://bluemap.bluecolored.de/) (V3.x) installed on your Minecraft server
 - [Bun](https://bun.sh/) or [NodeJS](https://nodejs.org/en/download) + [Bun](https://bun.sh/)
-- [a Discord Application](https://discord.com/developers/applications) for OAuth2
 - **Experience with the command line and basic programming**
 
 ## **Setup**
@@ -25,41 +24,31 @@ And set them up one by one, starting with the Map Proxy.
 
 ## **Map Proxy**
 
-> [!CAUTION]
-> TODO: Rewrite this section to include that the binary is prebuilt in releases.
-
 > [!TIP]
 > But if you can change the CORS settings for your BlueMap Webserver, you can skip this step.  
 
 If you can't change the CORS settings on your BlueMap server, you will need to run the Map Proxy.  
 This is a small Rust program that acts as a middleman between the website and the BlueMap server.
 
-
-```bash
-cd map_proxy # Directory for the map proxy
-```
+You can download a linux binary from the [releases page](https://github.com/VilleOlof/90gqguessr/releases) on Github.
 
 ### **Configuration**
 
-The Map Proxy needs a `Config.toml` when building the binary.  
+The Map Proxy needs a `Config.toml` when running.
 ```toml
 # Config.toml
 map_url = "https://bluecolored.de/bluemap" # URL to the BlueMap webserver
 port = 40401 # Port the Map Proxy will run on
-redis_url = "redis://localhost:6379/" # Optional Redis URL for caching assets
-cache_time = 3600 # How long caches stay valid in redis
-```
 
-### **Building and Running**
+# Optional, enables caching of assets
+redis_url = "redis://localhost:6379/"
+cache_time = 3600 # Default: 3600 if not set
+```
+### **Running**
 
 ```bash
-# Build the binary
-cargo build --release 
-# Start it
-./target/release/map_proxy.exe
-
-# Or simply:
-cargo r -r
+# Simply run the binary after setting up the config
+./map_proxy
 ```
 
 ## **The Website**
@@ -71,12 +60,12 @@ The website is built with SvelteKit & Prisma.
 We start by installing the dependencies:
 ::: code-group
 
-```bash [NodeJS]
-npm install
-```
-
 ```bash [Bun]
 bun install
+```
+
+```bash [NodeJS]
+npm install
 ```
 
 :::
@@ -108,16 +97,27 @@ PUBLIC_ORIGIN = "http://localhost:5173"
 # Port the website will run on in production
 PORT = 40400 
 
-# Multiplayer stuff, required fields
+# Multiplayer options
+
+# If no URL is set, multiplayer will be disabled
+# Multiplayer also requires the `PUBLIC_DISCORD_ENABLED` to be set to true
 PUBLIC_MP_URl = "localhost:40402" # Without http(s)://
-PUBLIC_MP_DEV = false
+# Optional, If the multiplayer client is in development mode
+PUBLIC_MP_DEV = false 
 
 # Discord OAuth2
+
+# If set to nothing or false, Discord OAuth2 will be disabled
+PUBLIC_DISCORD_ENABLED = true
+
 DISCORD_CLIENT_ID = ""
 DISCORD_CLIENT_SECRET = ""
 
 # This should be the same as `PUBLIC_ORIGIN` + `/discord`
 DISCORD_REDIRECT_URL = ""
+
+# Name of the world, will be shown in the main menu
+PUBLIC_WORLD_NAME = "World Name"
 ```
 
 #### **loc_metadata.json**
@@ -156,34 +156,35 @@ Add entries to this file to add more locations to the website.
 Then we'll setup the database:
 ::: code-group
 
+```bash [Bun]
+bunx prisma db push
+```
+
 ```bash [NodeJS]
 npx prisma db push
 ```
 
-```bash [Bun]
-bunx prisma db push
-```
+:::
+
 > [!NOTE]
 > This is a locally ran SQLite Database
-
-:::
 
 ### **Building and Running**
 
 ::: code-group
-
-```bash [NodeJS]
-# Build 
-npm run build
-# Start the website
-node -r dotenv/config ./build
-```
 
 ```bash [Bun]
 # Build
 bun run build
 # Start the website
 bun -r dotenv/config ./build
+```
+
+```bash [NodeJS]
+# Build 
+npm run build
+# Start the website
+node -r dotenv/config ./build
 ```
 
 :::
@@ -207,13 +208,11 @@ But normally these are in formats like `.png` or `.jpg`, and need to be converte
 
 ### Image Converter
 
-> [!CAUTION]
-> TODO: Rewrite this section to include that the binary is prebuilt in releases.
-
 Luckily, this repo contains a little Rust program to convert them automatically.  
+
+You can find prebuilt binaries for Windows & Linux in the [releases page](https://github.com/VilleOlof/90gqguessr/releases)
 ```bash
-cd image_converter
-cargo r -r -- -i "path/to/panorama_folders" -o "path/to/output_folder"
+./image_converter.exe -i "path/to/panorama_folders" -o "path/to/output_folder"
 ```
 
 You can optionally, pass a `-s` flag to specify a starting index for the panoramas.
@@ -259,10 +258,11 @@ bun run start
 ## **Discord OAuth2**
 
 The website uses Discord OAuth2 for user authentication.  
-You can find your `CLIENT_ID` & `CLIENT_SECRET` in your Discord Application under `OAuth2`.  
+You can find your `CLIENT_ID` & `CLIENT_SECRET` in your [Discord Application](https://discord.com/developers/applications) under `OAuth2`.  
 
 For the `REDIRECT_URL`, you'll have to add `{PUBLIC_ORIGIN}/discord` to the OAuth2 Redirects.  
 
+Discord OAuth2 is optional and enables multiplayer & leaderboards on the website.
 
 ## **Optional Configs**
 
