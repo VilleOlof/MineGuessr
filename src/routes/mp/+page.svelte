@@ -29,6 +29,11 @@
 		goto(`/mp/play?game_id=${game_code}`);
 	}
 
+	function enter_join(event: CustomEvent<any>) {
+		// stupid workaround
+		if ((event as unknown as KeyboardEvent).key === 'Enter') join_game();
+	}
+
 	onMount(() => {
 		interval = setInterval(async () => {
 			data.lobbies = await MPClient.get_lobbies();
@@ -110,9 +115,7 @@
 						><Input
 							bind:value={game_code}
 							placeholder="Game code..."
-							on:keydown={(e) => {
-								if (e.key === 'Enter') join_game();
-							}}
+							on:keydown={enter_join}
 						/></span
 					>
 
