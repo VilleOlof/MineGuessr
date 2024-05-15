@@ -12,7 +12,6 @@
 	>
 		<span id="shadow" class="h-2 w-full bg-[#242425]"></span>
 
-		<!-- TODO: Fix when no lobbies exist, kinda smol -->
 		<span class="h-full bg-[#313233] px-2 py-1 caret-[#3c8527] outline-none">
 			{#each lobbies as lobby, i}
 				<button
@@ -36,6 +35,14 @@
 					<div class="my-1 h-1 w-full bg-mc-standard-border"></div>
 				{/if}
 			{/each}
+
+			{#if lobbies.length === 0}
+				<div
+					class="flex h-full w-full items-center justify-center whitespace-nowrap px-1 text-3xl lg:text-5xl"
+				>
+					No open lobbies
+				</div>
+			{/if}
 		</span>
 	</div>
 </div>

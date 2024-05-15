@@ -43,7 +43,15 @@
 <div
 	class="flex h-full w-full flex-col items-center justify-start gap-8 overflow-y-scroll px-2 py-4 pt-20"
 >
-	<h1 class="font-MinecraftTen text-5xl sm:text-7xl lg:text-8xl">Multiplayer</h1>
+	<div class="flex gap-4">
+		<h1 class="font-MinecraftTen text-5xl sm:text-7xl lg:text-8xl">Multiplayer</h1>
+		<img
+			src="/multiplayer_icon.webp"
+			alt=""
+			class="h-full w-auto"
+			style="image-rendering: pixelated;"
+		/>
+	</div>
 
 	<div
 		id="mp_content"

@@ -15,10 +15,20 @@
 </script>
 
 <Button on:click={() => goto('/play')}
-	><img src="/Earth.webp" alt="" style="height: {_size}; width: {_size}" /> Singleplayer</Button
+	><img
+		src="/singeplayer_icon.webp"
+		alt=""
+		class="mr-2"
+		style="image-rendering: pixelated; height: {_size}; width: {_size}"
+	/> Singleplayer</Button
 >
 <Button on:click={() => goto('/play?daily=true')}
-	><img src="/Earth.webp" alt="" style="height: {_size}; width: {_size}" /> Daily mode</Button
+	><img
+		src="/daily_icon.webp"
+		alt=""
+		class="mr-2"
+		style="image-rendering: pixelated; height: {_size}; width: {_size}"
+	/> Daily mode</Button
 >
 
 {#if env.PUBLIC_DISCORD_ENABLED === 'true' && env.PUBLIC_MP_URL !== undefined}
@@ -35,13 +45,23 @@
 			goto('/mp');
 		}}
 		classes={mp_enabled ? '' : 'mp-disabled'}
-		><img src="/Earth.webp" alt="" style="height: {_size}; width: {_size}" /> Multiplayer</Button
+		><img
+			src="/multiplayer_icon.webp"
+			alt=""
+			class="mr-2"
+			style="image-rendering: pixelated; height: {_size}; width: {_size}"
+		/> Multiplayer</Button
 	>
 {/if}
 
 {#if env.PUBLIC_DISCORD_ENABLED === 'true'}
 	<Button on:click={() => goto('/top')}
-		><img src="/Earth.webp" alt="" style="height: {_size}; width: {_size}" /> Leaderboards</Button
+		><img
+			src="/leaderboard_icon.webp"
+			alt=""
+			class="mr-2"
+			style="image-rendering: pixelated; height: {_size}; width: {_size}"
+		/> Leaderboards</Button
 	>
 {/if}
 
