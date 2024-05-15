@@ -185,7 +185,7 @@ export class Game {
 
 
         if (this.game_type === GameType.Daily) {
-            document.cookie = `90gqguessr-latest_daily_id=${this.game_id}; path=/; expires=${new Date(Date.now() + 86400000).toUTCString()}`;
+            document.cookie = `MineGuessr-latest_daily_id=${this.game_id}; path=/; expires=${new Date(Date.now() + 86400000).toUTCString()}`;
         }
     }
 

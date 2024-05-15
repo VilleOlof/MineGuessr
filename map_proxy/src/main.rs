@@ -158,7 +158,7 @@ async fn internal_handler(
     // No cache, requesting data
     req.headers_mut().clear();
     req.headers_mut()
-        .insert(USER_AGENT, HeaderValue::from_static("90gqGuessr-proxy"));
+        .insert(USER_AGENT, HeaderValue::from_static("MineGuessr-proxy"));
 
     let mut res = client
         .request(req)

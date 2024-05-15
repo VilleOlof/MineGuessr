@@ -15,15 +15,15 @@ export async function load({ url, cookies }) {
     const today = get_today_unix();
 
     if (daily_mode) {
-        const user_latest_date = cookies.get('90gqguessr-latest_daily_date') ?? new Date(0).toISOString();
-        const user_game_id = cookies.get('90gqguessr-latest_daily_id');
+        const user_latest_date = cookies.get('MineGuessr-latest_daily_date') ?? new Date(0).toISOString();
+        const user_game_id = cookies.get('MineGuessr-latest_daily_id');
 
         const has_played = Game.check_daily(new Date(today), new Date(user_latest_date));
         if (has_played && user_game_id) {
             throw redirect(302, `/game/${user_game_id}`);
         }
 
-        cookies.set('90gqguessr-latest_daily_date', new Date(today).toISOString(), {
+        cookies.set('MineGuessr-latest_daily_date', new Date(today).toISOString(), {
             path: '/',
             expires: new Date(today + 86400000)
         });

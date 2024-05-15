@@ -22,7 +22,7 @@ export const StatsSchema = z.object({
 
 export type Stats = z.infer<typeof StatsSchema>;
 
-export const Stats: Writable<Stats> = persisted("90gqguessr-stats", {
+export const Stats: Writable<Stats> = persisted("MineGuessr-stats", {
     games_played: 0,
     games_finished: 0,
 
@@ -38,7 +38,7 @@ export const Stats: Writable<Stats> = persisted("90gqguessr-stats", {
 
     total_time: 0,
 });
-export const LatestUpdate: Writable<number | null> = persisted("90gqguessr-stats-update", null);
+export const LatestUpdate: Writable<number | null> = persisted("MineGuessr-stats-update", null);
 
 export function SendUpdatesToServer() {
     const sendStats = async (stats: Stats) => {

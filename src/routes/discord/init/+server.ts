@@ -9,7 +9,7 @@ export async function GET({ cookies }) {
 
     const [url, state] = await discordAuth!.getAuthorizationUrl();
 
-    cookies.set("90gqguessr-discord-state", state, {
+    cookies.set("MineGuessr-discord-state", state, {
         path: "/",
         httpOnly: true,
         secure: dev ? false : true,

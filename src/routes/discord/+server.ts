@@ -11,7 +11,7 @@ export async function GET({ cookies, url, locals }) {
     const code = url.searchParams.get("code");
     const state = url.searchParams.get("state");
 
-    const stateCookie = cookies.get("90gqguessr-discord-state");
+    const stateCookie = cookies.get("MineGuessr-discord-state");
 
     if (!code) {
         logger.error("Missing code in Discord callback");
