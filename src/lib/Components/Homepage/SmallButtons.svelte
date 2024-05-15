@@ -7,6 +7,6 @@
 
 <SmallButton on:click={() => (info_open = !info_open)}>Info</SmallButton>
 <SmallButton on:click={() => (report_open = !report_open)}>Report</SmallButton>
-<SmallButton on:click={() => (location.href = 'https://github.com/VilleOlof/90gqguessr')}
+<SmallButton on:click={() => (location.href = 'https://github.com/VilleOlof/MineGuessr')}
 	>Github</SmallButton
 >

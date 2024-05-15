@@ -13,11 +13,11 @@ The following are required to run MineGuessr:
 
 First, clone the repository:
 ```bash
-git clone https://github.com/VilleOlof/90gqguessr.git
+git clone https://github.com/VilleOlof/MineGuessr.git
 cd 90gqguessr
 ```
 
-*Or download directly from [Github](https://github.com/VilleOlof/90gqguessr)*
+*Or download directly from [Github](https://github.com/VilleOlof/MineGuessr)*
 
 And then we will go over the different parts of the project.  
 And set them up one by one, starting with the Map Proxy.  
@@ -30,7 +30,7 @@ And set them up one by one, starting with the Map Proxy.
 If you can't change the CORS settings on your BlueMap server, you will need to run the Map Proxy.  
 This is a small Rust program that acts as a middleman between the website and the BlueMap server.
 
-You can download a linux binary from the [releases page](https://github.com/VilleOlof/90gqguessr/releases) on Github.
+You can download a linux binary from the [releases page](https://github.com/VilleOlof/MineGuessr/releases) on Github.
 
 ### **Configuration**
 
@@ -210,7 +210,7 @@ But normally these are in formats like `.png` or `.jpg`, and need to be converte
 
 Luckily, this repo contains a little Rust program to convert them automatically.  
 
-You can find prebuilt binaries for Windows & Linux in the [releases page](https://github.com/VilleOlof/90gqguessr/releases)
+You can find prebuilt binaries for Windows & Linux in the [releases page](https://github.com/VilleOlof/MineGuessr/releases)
 ```bash
 ./image_converter.exe -i "path/to/panorama_folders" -o "path/to/output_folder"
 ```

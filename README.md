@@ -40,3 +40,4 @@ You can find documentation for the project [here](https://docs.90gqguessr.se).
       [X] - env to disable discord login, disables /top and /mp    
       [X] - env to disable /mp  
 [ ] - Host a Hermitcraft bluemap & site for vid and to get the project recognized?    
+[ ] - Move from `90gQGuessr.se` to `MineGuessr.com` and use `90gq.` & `hermitcraft.` for subdomains  

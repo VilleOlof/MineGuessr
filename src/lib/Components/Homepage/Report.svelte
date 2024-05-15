@@ -42,7 +42,7 @@
 		Make a
 		<a
 			class="underline transition-colors hover:text-cyan-400"
-			href="https://github.com/VilleOlof/90gqguessr/issues">Github</a
+			href="https://github.com/VilleOlof/MineGuessr/issues">Github</a
 		> issue if you want to suggest a feature or report a bug,
 	</p>
 

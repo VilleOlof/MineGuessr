@@ -23,7 +23,7 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/VilleOlof/90gqguessr' }
+      { icon: 'github', link: 'https://github.com/VilleOlof/MineGuessr' }
     ],
     search: {
       provider: 'local'
