@@ -3,6 +3,6 @@
 	export let color: string = '';
 </script>
 
-<div class="w-min rounded-md px-2" style="background-color: {color}">
+<div class="w-min rounded-md px-2 text-gray-300" style="background-color: {color}">
 	{label}
 </div>
