@@ -14,7 +14,7 @@ The following are required to run MineGuessr:
 First, clone the repository:
 ```bash
 git clone https://github.com/VilleOlof/MineGuessr.git
-cd 90gqguessr
+cd MineGuessr
 ```
 
 *Or download directly from [Github](https://github.com/VilleOlof/MineGuessr)*

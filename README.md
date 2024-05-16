@@ -2,7 +2,7 @@
 
 > Like GeoGuessr but for Minecraft.
 
-**Try it here: [90gqguessr.se](https://90gqguessr.se)**
+**Try it here: [90gq.mineguessr.com](https://90gq.mineguessr.com)**
 
 Guess the location of a random Minecraft world and see how close you can get!  
 This project is inspired by [GeoGuessr](https://www.geoguessr.com/), but for Minecraft.  
@@ -16,12 +16,12 @@ This project is inspired by [GeoGuessr](https://www.geoguessr.com/), but for Min
 
 ## Setup
 
-Head over to the [Setup Guide](https://docs.90gqguessr.se/guide/)  
+Head over to the [Setup Guide](https://mineguessr.com/guide/)  
 to get started with your own MineGuessr server!  
 
 # Documentation
 
-You can find documentation for the project [here](https://docs.90gqguessr.se).
+You can find documentation for the project [here](https://mineguessr.com).
 
 ## TODO BEFORE VID
 [X] - Some more customizations options so the site isnt out of the box generic.  

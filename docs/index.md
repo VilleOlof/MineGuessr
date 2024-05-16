@@ -15,7 +15,7 @@ hero:
       link: /guide/
     - theme: alt
       text: Try it out!
-      link: https://90gqguessr.se
+      link: https://90gq.mineguessr.com
 
 features:
   - title: On any Minecraft world
