@@ -10,12 +10,12 @@
 	<div
 		on:click={() => (visible = false)}
 		transition:fade={{ duration: 200, delay: 100 }}
-		class="blurryshader absolute left-0 top-0 z-10 h-full w-full bg-black/40"
+		class="blurryshader absolute left-0 top-0 z-10 h-full w-full overflow-hidden bg-black/40"
 	></div>
 
 	<span
 		class="absolute z-20 flex flex-col text-[#1d1e22]"
-		transition:fly={{ y: 100, duration: 200, delay: 100 }}
+		transition:fade={{ duration: 100, delay: 100 }}
 	>
 		<span id="container_close" class="absolute -top-12 right-0 text-5xl lg:-right-12 lg:top-0">
 			<button
@@ -32,10 +32,10 @@
 		</span>
 
 		<div
-			class="flex max-h-[calc(100dvh-8rem)] w-fit max-w-7xl flex-col border-[6px] border-mc-standard-border text-2xl"
+			class="flex max-h-[calc(100dvh-8rem)] w-fit max-w-7xl flex-col overflow-auto border-[6px] border-mc-standard-border text-2xl"
 		>
 			<span
-				class="relative flex flex-col overflow-y-scroll border-4 border-white bg-mc-standard-bg px-8 py-4 transition-colors group-active:bg-[#4bab30]"
+				class="relative flex flex-col overflow-y-auto border-4 border-white bg-mc-standard-bg px-8 py-4 transition-colors group-active:bg-[#4bab30]"
 			>
 				<span class="text-6xl font-bold"><slot name="innerTitle" /></span>
 
