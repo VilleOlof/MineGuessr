@@ -170,13 +170,11 @@
 							<div class="hidden w-full items-center justify-evenly md:flex">
 								<MediumButton on:click={() => goto('/')}>Leave</MediumButton>
 								<MediumButton on:click={map}>Map</MediumButton>
-								<!-- <SmallButton on:click={() => share(total_points, game)}>Share</SmallButton> -->
 							</div>
 
 							<div class="flex w-full items-center justify-evenly md:hidden">
 								<SmallButton on:click={() => goto('/')}>Leave</SmallButton>
 								<SmallButton on:click={map}>Map</SmallButton>
-								<!-- <SmallButton on:click={() => share(total_points, game)}>Share</SmallButton> -->
 							</div>
 						</div>
 					</div>

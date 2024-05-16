@@ -111,7 +111,7 @@
 							game.draw_all_guess_lines();
 						}}>Map</MediumButton
 					>
-					<SmallButton on:click={() => share(total_points, game)}>Share</SmallButton>
+					<SmallButton on:click={() => share(game)}>Share</SmallButton>
 				</div>
 
 				<div class="flex w-full items-center justify-evenly md:hidden">
@@ -124,7 +124,7 @@
 							game.draw_all_guess_lines();
 						}}>Map</SmallButton
 					>
-					<SmallButton on:click={() => share(total_points, game)}>Share</SmallButton>
+					<SmallButton on:click={() => share(game)}>Share</SmallButton>
 				</div>
 			</div>
 		</div>
