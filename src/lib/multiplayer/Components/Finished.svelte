@@ -2,7 +2,6 @@
 	import Map from '$lib/Components/Map.svelte';
 	import type { MPClient } from '../Client';
 	import type { PlayerData } from '../../../../shared/MP';
-	import Button from '$lib/Components/Button.svelte';
 	import { Game } from '$lib/Game';
 	import { GetDiscordAvatarUrl, UpdatePOIMarker, curr_bluemap, format_time } from '$lib';
 	import { get } from 'svelte/store';
@@ -15,40 +14,23 @@
 	import MenuButton from '$lib/Components/MenuButton.svelte';
 
 	export let client: MPClient;
+	export let self_username: string | undefined;
 
-	const players = client.players;
+	const pre_players = client.players;
+	const players = Object.entries($pre_players).sort(
+		(a, b) => get_player_total(b[1]) - get_player_total(a[1])
+	);
 
 	let selected_other_player: string | null = null;
 
 	let show_map: boolean = false;
-
-	function get_winner(players: { [key: string]: PlayerData }) {
-		let winner;
-		let max_score = 0;
-
-		for (const [_, player] of Object.entries(players)) {
-			for (const round of player.rounds) {
-				if (round.score > max_score) {
-					max_score = round.score;
-					winner = player;
-				}
-			}
-		}
-
-		if (!winner) {
-			throw new Error('No winner found');
-		}
-
-		return winner;
-	}
-	const winner = get_winner($players);
 
 	let markers_to_clear: string[] = [];
 	function map() {
 		show_map = true;
 
 		let count = 0;
-		for (const [_, player] of Object.entries($players)) {
+		for (const [_, player] of players) {
 			for (const round of player.rounds) {
 				let line = Game.draw_line_to_guess(round.location, round.guess_location, count);
 				let correct = Game.place_correct_marker(round.location, count);
@@ -117,6 +99,8 @@
 
 <!-- TODO: Better mobile transition within md, lg -->
 {#if !show_map}
+	{@const winner = players[0][1]}
+
 	<div
 		class="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-center backdrop-blur-sm"
 	>
@@ -206,14 +190,17 @@
 							<span
 								class="h-full w-full overflow-scroll bg-[#313233] px-2 py-1 caret-[#3c8527] outline-none"
 							>
-								{#each Object.entries($players).filter(([_, p]) => p.discord.user_id !== winner.discord.user_id) as [id, player], i}
+								{#each players.filter(([_, p]) => p.discord.user_id !== winner.discord.user_id) as [id, player], i}
 									<div>
 										<div class="flex items-center justify-between overflow-hidden">
 											<div
 												class="flex max-w-44 items-center gap-4 text-lg text-white lg:text-3xl xl:max-w-80"
 											>
 												<span class="text-base text-mc-standard-bg xl:text-4xl">{i + 2}</span>
-												<p class="overflow-hidden text-ellipsis whitespace-nowrap">
+												<p
+													class:self_user={player.discord.username === self_username}
+													class="overflow-hidden text-ellipsis whitespace-nowrap"
+												>
 													{player.discord.username}
 												</p>
 											</div>
@@ -256,7 +243,7 @@
 											</div>
 										{/if}
 
-										{#if i !== Object.entries($players).filter(([_, p]) => p.discord.user_id !== winner.discord.user_id).length - 1}
+										{#if i !== players.filter(([_, p]) => p.discord.user_id !== winner.discord.user_id).length - 1}
 											<div class="my-1 h-1 w-full bg-mc-standard-border"></div>
 										{/if}
 									</div>
@@ -278,3 +265,9 @@
 			}
 		: null}
 />
+
+<style>
+	:global(.self_user) {
+		color: rgb(99, 192, 17);
+	}
+</style>

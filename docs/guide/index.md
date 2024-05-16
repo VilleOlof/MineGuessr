@@ -116,6 +116,10 @@ DISCORD_CLIENT_SECRET = ""
 # This should be the same as `PUBLIC_ORIGIN` + `/discord`
 DISCORD_REDIRECT_URL = ""
 
+# Required for users "Avatar" to be shown
+# This is found under "Bot" for your application
+DISCORD_BOT_TOKEN = ""
+
 # Name of the world, will be shown in the main menu
 PUBLIC_WORLD_NAME = "World Name"
 ```

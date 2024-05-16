@@ -88,15 +88,11 @@ export function format_time(time: number) {
  * Gets the discord avatar url
  * 
  * @param user_id The user id
- * @param avatar_hash The avatar hash
+ * @param avatar_hash The avatar hash (DEPRECATED)
  * @returns The discord avatar url
  */
-export function GetDiscordAvatarUrl(user_id: string, avatar_hash: string | null) {
-    if (!avatar_hash) {
-        const random_index = Math.floor(Math.random() * 5);
-        return `https://cdn.discordapp.com/embed/avatars/${random_index}.png`;
-    }
-    return `https://cdn.discordapp.com/avatars/${user_id}/${avatar_hash}.png`;
+export function GetDiscordAvatarUrl(user_id: string, _: string | null) {
+    return `/discord/avatar/${user_id}`;
 }
 
 export async function Discord() {

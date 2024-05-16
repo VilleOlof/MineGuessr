@@ -68,7 +68,7 @@
 {:else if $state === 'playing' || $state === 'intermission'}
 	<Playing {client} places={data.places} />
 {:else if $state === 'finished'}
-	<Finished {client} />
+	<Finished {client} self_username={data.user?.username} />
 {:else if $state === 'aborted'}
 	<Aborted {client} />
 {:else if $state === 'error'}
