@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { PUBLIC_ORIGIN } from '$env/static/public';
+	import { env } from '$env/dynamic/public';
 	import { onMount } from 'svelte';
 	import '../app.pcss';
 	import { Toaster } from 'svelte-french-toast';
@@ -39,12 +39,17 @@
 </script>
 
 <svelte:head>
-	<title>MineGuessr</title>
+	{#if env.PUBLIC_WORLD_NAME}
+		<title>MineGuessr: {env.PUBLIC_WORLD_NAME}</title>
+		<meta property="og:title" content="MineGuessr: {env.PUBLIC_WORLD_NAME}" />
+	{:else}
+		<title>MineGuessr</title>
+		<meta property="og:title" content="MineGuessr" />
+	{/if}
 
-	<meta property="og:title" content="MineGuessr" />
 	<meta property="og:description" content="Like GeoGussr, but for Minecraft!" />
-	<meta property="og:image" content="{PUBLIC_ORIGIN}/Earth.webp" />
-	<meta property="og:url" content={PUBLIC_ORIGIN} />
+	<meta property="og:image" content="{env.PUBLIC_ORIGIN}/Earth.webp" />
+	<meta property="og:url" content={env.PUBLIC_ORIGIN} />
 	<meta content="#22c55e" name="theme-color" />
 </svelte:head>
 
