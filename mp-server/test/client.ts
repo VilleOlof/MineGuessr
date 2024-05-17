@@ -6,6 +6,8 @@ import type { GameModule } from "../../shared";
 let user_id = "test";
 let game_id: string;
 
+let current_round_index = 0;
+
 const socket = new WebSocket(`ws://localhost:40402`);
 socket.onerror = (event) => {
     console.error(event);
@@ -32,6 +34,7 @@ socket.onmessage = (event) => {
         case 2: {
             game_id = data.payload.game_id;
             console.log(`Joined game: ${game_id}`);
+            current_round_index = 0;
             break;
         }
         case 3: {
@@ -47,6 +50,7 @@ socket.onmessage = (event) => {
             const panorama_id = data.payload.panorama_id;
             const round_index = data.payload.round_index;
             console.log(`Started next round [${round_index + 1}] with panorama: ${panorama_id}`)
+            current_round_index = round_index;
 
             break;
         }
@@ -215,7 +219,8 @@ rl.on('line', async (input) => {
             send_message(
                 request_type.GUESS_LOCATION,
                 {
-                    location: new THREE.Vector2(x, z)
+                    location: new THREE.Vector2(x, z),
+                    round_index: current_round_index
                 } as Payloads.GuessLocation
             );
 
@@ -225,7 +230,9 @@ rl.on('line', async (input) => {
         case "next": {
             send_message(
                 request_type.GOTO_NEXT_ROUND,
-                {}
+                {
+                    round_index: current_round_index
+                } as Payloads.GotoNextRound
             );
 
             break;

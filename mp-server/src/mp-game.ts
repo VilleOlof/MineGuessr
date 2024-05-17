@@ -22,6 +22,8 @@ export class MPGame {
     private _state: State = "lobby";
 
     public set state(value: State) {
+        if (this._state === value) return;
+
         this._state = value;
 
         MPGame.MPEvents.emit(
@@ -62,6 +64,9 @@ export class MPGame {
 
     public constructor(panoramas: location_metadata[]) {
         this.state = "lobby";
+
+        if (panoramas.length < ROUNDS_PER_MATCH) throw new Error("Not enough panoramas");
+
         this.config.panoramas = panoramas;
 
         this.game_id = MPGame.generate_game_id();
@@ -215,6 +220,7 @@ export class MPGame {
         if (this.current_round >= ROUNDS_PER_MATCH) {
             throw new Error("No more rounds left");
         }
+        this.state = "playing";
 
         if (this.guess_timeout !== null) {
             clearTimeout(this.guess_timeout);
@@ -226,7 +232,6 @@ export class MPGame {
         }
 
         this.current_round++;
-        this.state = "playing";
 
         for (const player_id in this.players) {
             const [x, z] = this.config.panoramas[this.current_round].coordinates;

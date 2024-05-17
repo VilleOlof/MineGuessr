@@ -48,7 +48,13 @@ export module GameHandler {
         let game = new MPGame(payload.panoramas);
         game.config.visibility = payload.visibility;
 
-        if (payload.game_name) game.config.game_name = payload.game_name;
+        if (payload.game_name) {
+            game.config.game_name = payload.game_name;
+
+            if (game.config.game_name.length > 16) {
+                game.config.game_name = game.config.game_name.substring(0, 16) + "...";
+            }
+        }
         else game.config.game_name = random_game_name();
 
         if (payload.player_limit < MPGame.MIN_PLAYERS) {

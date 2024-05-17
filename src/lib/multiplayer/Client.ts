@@ -151,7 +151,8 @@ export class MPClient {
 
     public guess_location(location: THREE.Vector2) {
         this.send_message(request_type.GUESS_LOCATION, {
-            location
+            location,
+            round_index: get(this.round_index)
         } as Payloads.GuessLocation);
     }
 
@@ -159,7 +160,9 @@ export class MPClient {
         // Dont like setting it client side, but otherwise i have to update payloads
         this.self_next_round_ready.set(true);
 
-        this.send_message(request_type.GOTO_NEXT_ROUND, {});
+        this.send_message(request_type.GOTO_NEXT_ROUND, {
+            round_index: get(this.round_index)
+        } as Payloads.GotoNextRound);
     }
 
     private message_handler: Map<request_type, (_payload: Payloads.Any) => void> = new Map([

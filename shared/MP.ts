@@ -127,7 +127,8 @@ export module Payloads {
         round_index: number
     }
     export type GuessLocation = {
-        location: THREE.Vector2
+        location: THREE.Vector2,
+        round_index: number
     }
     export type OtherPlayerGuessed = {
         player_id: string,
@@ -135,7 +136,9 @@ export module Payloads {
     export type RoundEnded = {
         rounds: { [key: string]: MPRound }
     }
-    export type GotoNextRound = {};
+    export type GotoNextRound = {
+        round_index: number
+    };
     export type GameFinished = {
         players: { [key: string]: MPRound[] };
     }

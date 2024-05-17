@@ -72,15 +72,20 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<WebSo
                     const game = GameHandler.games[game_id];
                     const game_label = get_game_label(game_id);
 
-                    // Auto-start after a while
-                    game.inbetween_round_timeout = setTimeout(
-                        () => ws_next_round(game, server),
-                        MPGame.inbetween_round_time
-                    );
-                    server.publish(game_label, JSON.stringify({
-                        type: request_type.GOTO_NEXT_ROUND_TIMELIMIT,
-                        payload: { time: MPGame.inbetween_round_time } as Payloads.GotoNextRoundTimelimit
-                    }));
+                    if (game.inbetween_round_timeout === null) {
+                        // Auto-start after a while
+                        game.inbetween_round_timeout = setTimeout(
+                            () => {
+                                ws_next_round(game, server);
+                                game.inbetween_round_timeout = null;
+                            },
+                            MPGame.inbetween_round_time
+                        );
+                        server.publish(game_label, JSON.stringify({
+                            type: request_type.GOTO_NEXT_ROUND_TIMELIMIT,
+                            payload: { time: MPGame.inbetween_round_time } as Payloads.GotoNextRoundTimelimit
+                        }));
+                    }
 
                     break;
                 }
@@ -180,6 +185,10 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<WebSo
         const game = GameHandler.games[game_id];
         if (!game) throw new Error(`Game ${game_id} does not exist`);
 
+        if (payload.round_index !== game.current_round) {
+            throw new Error("Guessed in wrong round");
+        }
+
         const game_label = get_game_label(game_id);
         game.guess_location(player_id, payload.location);
 
@@ -222,27 +231,6 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<WebSo
         if (game.all_players_guessed()) {
             ws_log(game_id, player_id, "all players guessed");
 
-            // if (game.current_round + 1 === ROUNDS_PER_MATCH) {
-            //     GameHandler.end_game(game_id);
-
-            //     const game_data = JSON.stringify({
-            //         type: request_type.GAME_FINISHED,
-            //         payload: {
-            //             players: game.get_all_players_data()
-            //         } as Payloads.GameFinished
-            //     });
-
-            //     ws_log(game_id, player_id, "game finished");
-
-            //     server.publish(game_label, game_data);
-
-            //     // Clean up
-            //     game.self_destruct();
-            //     delete Ping.user_games[ws.data.uuid];
-
-            //     return;
-            // }
-
             const game_data = JSON.stringify({
                 type: request_type.ROUND_ENDED,
                 payload: {
@@ -256,11 +244,18 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<WebSo
             return;
         }
     }],
-    [request_type.GOTO_NEXT_ROUND, (ws, server, { player_id, game_id }) => {
+    [request_type.GOTO_NEXT_ROUND, (ws, server, { player_id, game_id, _payload }) => {
+        const payload = _payload as Payloads.GotoNextRound;
+
         if (!game_id) throw new Error("No game_id provided");
 
         const game = GameHandler.games[game_id];
         if (!game) throw new Error(`Game ${game_id} does not exist`);
+
+        if (payload.round_index !== game.current_round) {
+            throw new Error("Tried to go to next round in wrong round");
+        }
+
         game.ready_for_next_round(player_id);
 
         server.publish(get_game_label(game_id), JSON.stringify({

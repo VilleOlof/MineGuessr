@@ -72,7 +72,7 @@
 				<div class="flex w-full items-center justify-between text-xl">
 					<p class="text-2xl">Name</p>
 					<span class="flex w-2/3 justify-end sm:w-full"
-						><Input bind:value={game_name} placeholder="..." /></span
+						><Input bind:value={game_name} placeholder="..." maxlength="16" /></span
 					>
 				</div>
 
