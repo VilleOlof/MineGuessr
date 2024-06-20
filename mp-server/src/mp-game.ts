@@ -234,6 +234,11 @@ export class MPGame {
         this.current_round++;
 
         for (const player_id in this.players) {
+            if (this?.config?.panoramas?.[this?.current_round] === undefined) {
+                this.state = "aborted";
+                return;
+            }
+
             const [x, z] = this.config.panoramas[this.current_round].coordinates;
             const round = this.players[player_id].rounds[this.current_round];
 
