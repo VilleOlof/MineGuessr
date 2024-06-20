@@ -11,7 +11,12 @@ function get_game_label(game_id: string) {
     return `game_${game_id}`;
 }
 
-function ws_next_round(game: MPGame, server: Server) {
+function ws_next_round(game: MPGame, server: Server, request_round?: number) {
+    // If the user requests round is different than the game, dont continue
+    if (request_round && game.current_round !== request_round) {
+        return;
+    }
+
     game.next_round();
 
     const game_data = JSON.stringify({
@@ -295,7 +300,7 @@ export const message_handlers = new Map<request_type, (ws: ServerWebSocket<WebSo
             return;
         }
 
-        ws_next_round(game, server);
+        ws_next_round(game, server, payload.round_index);
     }],
     [request_type.PING, (ws, server) => {
         Ping.handle(ws, server);
