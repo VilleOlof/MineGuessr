@@ -101,7 +101,7 @@ PORT = 40400
 
 # If no URL is set, multiplayer will be disabled
 # Multiplayer also requires the `PUBLIC_DISCORD_ENABLED` to be set to true
-PUBLIC_MP_URl = "localhost:40402" # Without http(s)://
+PUBLIC_MP_URL = "localhost:40402" # Without http(s)://
 # Optional, If the multiplayer client is in development mode
 PUBLIC_MP_DEV = false 
 
