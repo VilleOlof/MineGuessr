@@ -17,9 +17,18 @@
 	export let self_username: string | undefined;
 
 	const pre_players = client.players;
-	const players = Object.entries($pre_players).sort(
-		(a, b) => get_player_total(b[1]) - get_player_total(a[1])
-	);
+
+	// sort players by score and then by time
+	const players = Object.entries($pre_players).sort((a, b) => {
+		const a_total = get_player_total(a[1]);
+		const b_total = get_player_total(b[1]);
+
+		if (a_total === b_total) {
+			return get_player_total_time(a[1]) - get_player_total_time(b[1]);
+		}
+
+		return b_total - a_total;
+	});
 
 	let selected_other_player: string | null = null;
 
