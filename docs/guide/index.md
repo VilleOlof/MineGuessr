@@ -5,9 +5,11 @@ This will hopefully, guide you through setting up MineGuessr on your own world.
 ## **Prerequisites**
 
 The following are required to run MineGuessr:
-- [BlueMap](https://bluemap.bluecolored.de/) (V3.x) installed on your Minecraft server
-- [Bun](https://bun.sh/) or [NodeJS](https://nodejs.org/en/download) + [Bun](https://bun.sh/)
+- [BlueMap](https://bluemap.bluecolored.de/) (V3.x+) installed on your Minecraft server
+- [Bun](https://bun.sh/) or ([NodeJS](https://nodejs.org/en/download) + [Bun](https://bun.sh/))
 - **Experience with the command line and basic programming**
+
+*A note on the bluemap version: I've only tested with V3 and V4. V5 should work, but I can't guarantee it.*
 
 ## **Setup**
 
