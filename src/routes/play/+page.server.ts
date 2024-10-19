@@ -35,7 +35,7 @@ export async function load({ url, cookies }) {
 
     const random = daily_mode ?
         () => prand.unsafeUniformIntDistribution(0, possible_locations.length - 1, rng) :
-        () => Math.floor(Math.random() * possible_locations.length - 1);
+        () => Math.floor(Math.random() * possible_locations.length);
 
     const locations = get_random_locations(ROUNDS_PER_MATCH, possible_locations, random);
     const places = get_places();
